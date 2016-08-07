@@ -20,5 +20,6 @@ package shiver.me.timbers.retrying;
  * @author Karl Bennett
  */
 interface OptionsService {
+
     Options withRetries(Integer retries);
 }

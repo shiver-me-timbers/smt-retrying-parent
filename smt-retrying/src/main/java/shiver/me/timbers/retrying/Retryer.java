@@ -21,19 +21,19 @@ package shiver.me.timbers.retrying;
  */
 public class Retryer implements RetryerService {
 
-    private final Choice choice;
+    private final Chooser choices;
 
     public Retryer() {
         this(new Options());
     }
 
     public Retryer(Options options) {
-        this.choice = options.choose();
+        this.choices = options.chooser();
     }
 
     @Override
     public <T> T retry(Until<T> until) {
-        final int retries = choice.getRetries();
+        final int retries = choices.choose().getRetries();
 
         final Thrower thrower = new Thrower();
         for (int i = 0; i < retries; i++) {

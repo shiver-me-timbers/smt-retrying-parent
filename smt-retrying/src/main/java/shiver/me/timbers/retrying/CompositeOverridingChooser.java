@@ -16,12 +16,23 @@
 
 package shiver.me.timbers.retrying;
 
-import org.junit.Test;
+/**
+ * @author Karl Bennett
+ */
+class CompositeOverridingChooser implements OverridingChooser {
 
-public class SpringRetryerTest {
+    private final DefaultChoices defaultChoices;
+    private final PropertyChoices propertyChoices;
+    private final Choices choices;
 
-    @Test
-    public void Can_create_a_spring_retryer() {
-        new SpringRetryer();
+    CompositeOverridingChooser(DefaultChoices defaultChoices, PropertyChoices propertyChoices, Choices choices) {
+        this.defaultChoices = defaultChoices;
+        this.propertyChoices = propertyChoices;
+        this.choices = choices;
+    }
+
+    @Override
+    public Choice choose() {
+        return defaultChoices.overrideWith(propertyChoices.overrideWith(choices)).choose();
     }
 }

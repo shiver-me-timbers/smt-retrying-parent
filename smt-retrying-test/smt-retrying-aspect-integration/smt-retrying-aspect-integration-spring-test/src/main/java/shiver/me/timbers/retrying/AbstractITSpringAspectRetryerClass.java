@@ -22,5 +22,5 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = SpringAspectRetryerConfiguration.class)
-public class AbstractITSpringAspectRetryerClass extends AbstractITAspectRetryerClass {
+public abstract class AbstractITSpringAspectRetryerClass extends AbstractITAspectRetryerClass {
 }

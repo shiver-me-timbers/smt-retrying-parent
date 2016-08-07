@@ -16,12 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
-import org.junit.Test;
-
-public class SpringRetryerTest {
-
-    @Test
-    public void Can_create_a_spring_retryer() {
-        new SpringRetryer();
-    }
+/**
+ * @author Karl Bennett
+ */
+interface OverridingChooser extends Chooser {
 }

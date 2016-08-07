@@ -26,6 +26,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static shiver.me.timbers.data.random.RandomIntegers.someIntegerBetween;
 
 public class RetryerTest {
@@ -39,16 +40,35 @@ public class RetryerTest {
     }
 
     @Test
+    public void A_retryer_defers_its_option_choosing_until_the_retry_is_attempted() throws Throwable {
+
+        final Options options = mock(Options.class);
+
+        final Chooser chooser = mock(Chooser.class);
+
+        // Given
+        given(options.chooser()).willReturn(chooser);
+
+        // When
+        new Retryer(options);
+
+        // Then
+        verifyZeroInteractions(chooser);
+    }
+
+    @Test
     public void Can_retry_a_failed_execution() throws Throwable {
 
         final Options options = mock(Options.class);
         final Until until = mock(Until.class);
 
+        final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
         final Object expected = new Object();
 
         // Given
-        given(options.choose()).willReturn(choice);
+        given(options.chooser()).willReturn(chooser);
+        given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(2);
         given(until.success()).willThrow(new Exception()).willReturn(expected);
 
@@ -66,11 +86,13 @@ public class RetryerTest {
         final Options options = mock(Options.class);
         final Until until = mock(Until.class);
 
+        final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
         final int retries = someIntegerBetween(1, 10);
 
         // Given
-        given(options.choose()).willReturn(choice);
+        given(options.chooser()).willReturn(chooser);
+        given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(new Exception());
 
@@ -91,13 +113,15 @@ public class RetryerTest {
         final Options options = mock(Options.class);
         final Until until = mock(Until.class);
 
+        final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
         final int retries = someIntegerBetween(1, 10);
 
         final RuntimeException exception = new RuntimeException();
 
         // Given
-        given(options.choose()).willReturn(choice);
+        given(options.chooser()).willReturn(chooser);
+        given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(exception);
         expectedException.expect(is(exception));
@@ -112,13 +136,15 @@ public class RetryerTest {
         final Options options = mock(Options.class);
         final Until until = mock(Until.class);
 
+        final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
         final int retries = someIntegerBetween(1, 10);
 
         final Error error = new Error();
 
         // Given
-        given(options.choose()).willReturn(choice);
+        given(options.chooser()).willReturn(chooser);
+        given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(error);
         expectedException.expect(is(error));
@@ -133,13 +159,15 @@ public class RetryerTest {
         final Options options = mock(Options.class);
         final Until until = mock(Until.class);
 
+        final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
         final int retries = someIntegerBetween(1, 10);
 
         final Exception exception = new Exception();
 
         // Given
-        given(options.choose()).willReturn(choice);
+        given(options.chooser()).willReturn(chooser);
+        given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(exception);
         expectedException.expect(RetriedToManyTimesException.class);

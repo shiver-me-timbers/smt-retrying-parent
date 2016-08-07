@@ -19,9 +19,7 @@ package shiver.me.timbers.retrying;
 /**
  * @author Karl Bennett
  */
-interface Choices {
-
-    Choice choose();
+interface Choices extends Chooser {
 
     Integer getRetries();
 }

@@ -16,12 +16,10 @@
 
 package shiver.me.timbers.retrying;
 
-import org.junit.Test;
+/**
+ * @author Karl Bennett
+ */
+interface Chooser {
 
-public class SpringRetryerTest {
-
-    @Test
-    public void Can_create_a_spring_retryer() {
-        new SpringRetryer();
-    }
+    Choice choose();
 }

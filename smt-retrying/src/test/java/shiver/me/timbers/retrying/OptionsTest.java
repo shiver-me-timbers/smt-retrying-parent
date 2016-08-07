@@ -19,7 +19,6 @@ package shiver.me.timbers.retrying;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -28,17 +27,17 @@ import static shiver.me.timbers.matchers.Matchers.hasField;
 
 public class OptionsTest {
 
-    private ManualChoices<Options> manualChoices;
     private DefaultChoices defaultChoices;
     private PropertyChoices propertyChoices;
+    private ManualChoices<Options> manualChoices;
     private Options options;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        manualChoices = mock(ManualChoices.class);
         defaultChoices = mock(DefaultChoices.class);
         propertyChoices = mock(PropertyChoices.class);
+        manualChoices = mock(ManualChoices.class);
         options = new Options(defaultChoices, propertyChoices, manualChoices);
     }
 
@@ -59,20 +58,16 @@ public class OptionsTest {
     public void Can_choose_the_final_options() {
 
         final Choices manualOptionsChoices = mock(Choices.class);
-        final Choices overriddenPropertyChoices = mock(Choices.class);
-        final Choices overriddenDefaultChoices = mock(Choices.class);
-        final Choice expected = mock(Choice.class);
 
         // Given
         given(manualChoices.apply(options)).willReturn(manualOptionsChoices);
-        given(propertyChoices.overrideWith(manualOptionsChoices)).willReturn(overriddenPropertyChoices);
-        given(defaultChoices.overrideWith(overriddenPropertyChoices)).willReturn(overriddenDefaultChoices);
-        given(overriddenDefaultChoices.choose()).willReturn(expected);
 
         // When
-        final Choice actual = options.choose();
+        final Chooser actual = options.chooser();
 
         // Then
-        assertThat(actual, is(expected));
+        assertThat(actual, hasField("defaultChoices", defaultChoices));
+        assertThat(actual, hasField("propertyChoices", propertyChoices));
+        assertThat(actual, hasField("choices", manualOptionsChoices));
     }
 }

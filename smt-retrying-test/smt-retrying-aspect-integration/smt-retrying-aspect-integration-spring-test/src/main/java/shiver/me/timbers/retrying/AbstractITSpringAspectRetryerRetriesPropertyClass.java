@@ -27,7 +27,7 @@ import shiver.me.timbers.retrying.property.DynamicPropertySource;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = SpringAspectRetryerConfiguration.class)
-public class AbstractITSpringAspectRetryerRetriesPropertyClass extends AbstractITAspectRetryerRetriesPropertyClass {
+public abstract class AbstractITSpringAspectRetryerRetriesPropertyClass extends AbstractITAspectRetryerRetriesPropertyClass {
 
     @Autowired
     private DynamicPropertySource dynamicPropertySource;
