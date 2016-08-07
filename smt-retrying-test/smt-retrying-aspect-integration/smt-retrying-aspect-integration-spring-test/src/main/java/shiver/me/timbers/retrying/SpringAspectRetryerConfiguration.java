@@ -16,18 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.factory.RetryerDefaultsClassFactory;
-import shiver.me.timbers.retrying.factory.RetryerRetriesClassFactory;
+import org.springframework.context.annotation.ComponentScan;
 
-public abstract class AbstractITAspectRetryerRetriesPropertyClass extends AbstractITAspectRetryerRetriesProperty {
-
-    @Override
-    public RetryerDefaultsClassFactory defaultsFactory() {
-        return new RetryerDefaultsClassFactory();
-    }
-
-    @Override
-    public RetryerRetriesClassFactory retriesFactory() {
-        return new RetryerRetriesClassFactory();
-    }
+@ComponentScan
+public class SpringAspectRetryerConfiguration extends SpringRetryerConfiguration {
 }

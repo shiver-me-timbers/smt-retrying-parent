@@ -16,18 +16,25 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.factory.RetryerDefaultsClassFactory;
-import shiver.me.timbers.retrying.factory.RetryerRetriesClassFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesClassFactory;
 
-public abstract class AbstractITAspectRetryerRetriesPropertyClass extends AbstractITAspectRetryerRetriesProperty {
+public class ITAutoProxySpringAspectRetryerClass extends AbstractITSpringAspectRetryerClass {
+
+    @Autowired
+    private AutoProxyRetryerDefaultsClassFactory defaultsFactory;
+
+    @Autowired
+    private AutoProxyRetryerRetriesClassFactory retriesFactory;
 
     @Override
-    public RetryerDefaultsClassFactory defaultsFactory() {
-        return new RetryerDefaultsClassFactory();
+    public AutoProxyRetryerDefaultsClassFactory defaultsFactory() {
+        return defaultsFactory;
     }
 
     @Override
-    public RetryerRetriesClassFactory retriesFactory() {
-        return new RetryerRetriesClassFactory();
+    public AutoProxyRetryerRetriesClassFactory retriesFactory() {
+        return retriesFactory;
     }
 }
