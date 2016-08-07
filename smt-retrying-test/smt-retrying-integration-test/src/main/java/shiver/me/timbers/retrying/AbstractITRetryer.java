@@ -19,6 +19,15 @@ package shiver.me.timbers.retrying;
 import org.junit.Test;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
+import java.util.concurrent.Callable;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 public abstract class AbstractITRetryer implements ITRetryer {
 
     private final AbstractITRetryerRetries retries = new AbstractITRetryerRetries() {
@@ -27,6 +36,24 @@ public abstract class AbstractITRetryer implements ITRetryer {
             return AbstractITRetryer.this.retries(retries);
         }
     };
+
+    @Test
+    public void Can_retry_a_failed_execution() throws Throwable {
+
+        final Callable callable = mock(Callable.class);
+
+        final Object expected = new Object();
+
+        // Given
+        given(callable.call()).willThrow(new Exception()).willReturn(expected);
+
+        // When
+        final Object actual = defaults().defaultsMethod(callable);
+
+        // Then
+        assertThat(actual, is(expected));
+        verify(callable, times(2)).call();
+    }
 
     @Test
     public void Can_set_the_number_of_retries() throws Throwable {

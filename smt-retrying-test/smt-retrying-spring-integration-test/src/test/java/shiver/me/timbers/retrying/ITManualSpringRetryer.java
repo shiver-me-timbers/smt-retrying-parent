@@ -16,20 +16,20 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerRetries;
 
-public class ITManualRetryer extends AbstractITRetryer {
+public class ITManualSpringRetryer extends AbstractITSpringRetryer {
 
     @Override
     public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults<>();
+        return new SpringManualRetryerDefaults();
     }
 
     @Override
     public RetryerRetries retries(int retries) {
-        return new ManualRetryerRetries(retries);
+        return new SpringManualRetryerRetries(retries);
     }
 }

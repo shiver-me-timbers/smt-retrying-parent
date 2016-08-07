@@ -16,20 +16,28 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
-import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import java.util.Iterator;
 
-public class ITManualRetryer extends AbstractITRetryer {
+/**
+ * @author Karl Bennett
+ */
+class ServiceClassLoader<T> {
 
-    @Override
-    public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults<>();
+    private final Class<T> type;
+    private final Class<? extends T> defaultType;
+
+    ServiceClassLoader(Class<T> type, Class<? extends T> defaultType) {
+        this.type = type;
+        this.defaultType = defaultType;
     }
 
-    @Override
-    public RetryerRetries retries(int retries) {
-        return new ManualRetryerRetries(retries);
+    @SuppressWarnings("unchecked")
+    Class<T> load() {
+        final Iterator<T> loaderIterator = java.util.ServiceLoader.load(type).iterator();
+        if (loaderIterator.hasNext()) {
+            return (Class<T>) loaderIterator.next().getClass();
+        }
+
+        return (Class<T>) defaultType;
     }
 }

@@ -19,7 +19,7 @@ package shiver.me.timbers.retrying;
 /**
  * @author Karl Bennett
  */
-public class Retryer {
+public class Retryer implements RetryerService {
 
     private final Choice choice;
 
@@ -31,6 +31,7 @@ public class Retryer {
         this.choice = options.choose();
     }
 
+    @Override
     public <T> T retry(Until<T> until) {
         final int retries = choice.getRetries();
 

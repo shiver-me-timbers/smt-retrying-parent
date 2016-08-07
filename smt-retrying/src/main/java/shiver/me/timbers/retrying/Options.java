@@ -27,7 +27,7 @@ package shiver.me.timbers.retrying;
  *
  * @author Karl Bennett
  */
-public class Options {
+public class Options implements OptionsService {
 
     private final DefaultChoices defaultChoices;
     private final PropertyChoices propertyChoices;
@@ -49,6 +49,7 @@ public class Options {
         this.manualChoices = manualChoices;
     }
 
+    @Override
     public Options withRetries(Integer retries) {
         this.retries = retries;
         return this;

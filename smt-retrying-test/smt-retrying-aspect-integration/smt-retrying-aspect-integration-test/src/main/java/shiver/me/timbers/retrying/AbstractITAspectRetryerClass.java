@@ -16,13 +16,18 @@
 
 package shiver.me.timbers.retrying;
 
+import shiver.me.timbers.retrying.factory.RetryerDefaultsClassFactory;
 import shiver.me.timbers.retrying.factory.RetryerRetriesClassFactory;
-import shiver.me.timbers.retrying.factory.RetryerRetriesFactory;
 
 public abstract class AbstractITAspectRetryerClass extends AbstractITAspectRetryer {
 
     @Override
-    public RetryerRetriesFactory retriesFactory() {
+    public RetryerDefaultsClassFactory defaultsFactory() {
+        return new RetryerDefaultsClassFactory();
+    }
+
+    @Override
+    public RetryerRetriesClassFactory retriesFactory() {
         return new RetryerRetriesClassFactory();
     }
 }

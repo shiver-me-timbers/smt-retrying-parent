@@ -16,20 +16,20 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
-import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
-
-public class ITManualRetryer extends AbstractITRetryer {
+/**
+ * @author Karl Bennett
+ */
+class OptionsServiceConfigurer implements Configurer<OptionsService, Retry> {
 
     @Override
-    public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults<>();
+    public void configure(OptionsService optionsService, Retry retry) {
+        configureRetries(optionsService, retry.value());
     }
 
-    @Override
-    public RetryerRetries retries(int retries) {
-        return new ManualRetryerRetries(retries);
+    private void configureRetries(OptionsService optionsService, int retries) {
+        if (retries < 0) {
+            return;
+        }
+        optionsService.withRetries(retries);
     }
 }

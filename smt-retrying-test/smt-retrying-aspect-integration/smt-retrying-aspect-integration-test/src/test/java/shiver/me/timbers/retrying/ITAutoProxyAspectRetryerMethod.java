@@ -20,18 +20,26 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsMethodFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesMethodFactory;
-import shiver.me.timbers.retrying.factory.RetryerRetriesFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = RetryerConfiguration.class)
-public class ITAutoProxyAspectRetryerMethod extends AbstractITAspectRetryerClass {
+public class ITAutoProxyAspectRetryerMethod extends AbstractITAspectRetryerMethod {
+
+    @Autowired
+    private AutoProxyRetryerDefaultsMethodFactory defaultsFactory;
 
     @Autowired
     private AutoProxyRetryerRetriesMethodFactory retriesFactory;
 
     @Override
-    public RetryerRetriesFactory retriesFactory() {
+    public AutoProxyRetryerDefaultsMethodFactory defaultsFactory() {
+        return defaultsFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerRetriesMethodFactory retriesFactory() {
         return retriesFactory;
     }
 }

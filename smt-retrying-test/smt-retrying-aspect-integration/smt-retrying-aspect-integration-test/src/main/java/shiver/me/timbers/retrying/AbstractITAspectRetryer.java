@@ -16,9 +16,15 @@
 
 package shiver.me.timbers.retrying;
 
+import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 public abstract class AbstractITAspectRetryer extends AbstractITRetryer implements RetryerFactoriesAware {
+
+    @Override
+    public RetryerDefaults defaults() {
+        return defaultsFactory().create();
+    }
 
     @Override
     public RetryerRetries retries(int retries) {
