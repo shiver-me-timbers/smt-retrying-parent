@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
+import org.junit.Test;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerRetries;
 
-public class ITManualSpringRetryerRetriesProperty extends AbstractITSpringRetryerRetriesProperty {
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
-    @Override
-    public RetryerDefaults defaults() {
-        return new SpringManualRetryerDefaults();
-    }
+public class RetryerDefaultsFactoryTest {
 
-    @Override
-    protected RetryerRetries overrideRetries(int retries) {
-        return new SpringManualRetryerRetries(retries);
+    @Test
+    public void Can_create_a_retryer_defaults() {
+
+        // Given
+        final RetryerDefaults expected = mock(RetryerDefaults.class);
+
+        // When
+        final RetryerDefaults actual = new RetryerDefaultsFactory(expected).create();
+
+        // Then
+        assertThat(actual, is(expected));
     }
 }

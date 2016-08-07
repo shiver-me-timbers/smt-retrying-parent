@@ -17,7 +17,7 @@
 package shiver.me.timbers.retrying;
 
 import org.junit.Test;
-import shiver.me.timbers.retrying.execution.RetyerRetries;
+import shiver.me.timbers.retrying.execution.RetryerRetries;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRuleAware;
 
 import java.util.concurrent.Callable;
@@ -29,15 +29,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
-import static shiver.me.timbers.data.random.RandomIntegers.someIntegerBetween;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
 
 public abstract class AbstractITRetryerRetriesProperty extends AbstractITRetryerRetries
     implements ITRetryerDefaults, RetryerPropertyRuleAware {
 
     @Override
-    public RetyerRetries retries(final int retries) {
-        return new RetyerRetries() {
+    public RetryerRetries retries(final int retries) {
+        return new RetryerRetries() {
             @Override
             public <T> T retryMethod(Callable<T> callable) throws Exception {
                 properties().setRetries(retries);
@@ -49,7 +48,7 @@ public abstract class AbstractITRetryerRetriesProperty extends AbstractITRetryer
     @Test
     public void Can_override_the_retries_property() throws Throwable {
 
-        final int retries = someIntegerBetween(1, 10);
+        final int retries = 8;
         final Callable callable = mock(Callable.class);
 
         final Throwable throwable = someThrowable();
@@ -69,5 +68,5 @@ public abstract class AbstractITRetryerRetriesProperty extends AbstractITRetryer
         verify(callable, times(retries)).call();
     }
 
-    protected abstract RetyerRetries overrideRetries(int retries);
+    protected abstract RetryerRetries overrideRetries(int retries);
 }

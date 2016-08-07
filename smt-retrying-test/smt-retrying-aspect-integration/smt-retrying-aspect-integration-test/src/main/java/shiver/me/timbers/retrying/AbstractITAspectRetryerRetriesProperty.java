@@ -18,18 +18,22 @@ package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerRetries;
 
-public class ITManualSpringRetryerRetriesProperty extends AbstractITSpringRetryerRetriesProperty {
+public abstract class AbstractITAspectRetryerRetriesProperty extends AbstractITRetryerRetriesProperty
+    implements RetryerRetriesFactoryAware, RetryerDefaultsFactoryAware {
 
     @Override
     public RetryerDefaults defaults() {
-        return new SpringManualRetryerDefaults();
+        return defaultsFactory().create();
+    }
+
+    @Override
+    public RetryerRetries retries(int retries) {
+        return retriesFactory().create(retries);
     }
 
     @Override
     protected RetryerRetries overrideRetries(int retries) {
-        return new SpringManualRetryerRetries(retries);
+        return retriesFactory().create(retries);
     }
 }

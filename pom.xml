@@ -106,6 +106,7 @@
     <modules>
         <module>smt-retrying</module>
         <module>smt-retrying-spring</module>
+        <module>smt-retrying-aspect</module>
         <module>smt-retrying-test</module>
     </modules>
 

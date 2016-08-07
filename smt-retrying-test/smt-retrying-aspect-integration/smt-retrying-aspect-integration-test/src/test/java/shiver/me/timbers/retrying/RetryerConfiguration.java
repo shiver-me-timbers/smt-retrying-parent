@@ -16,20 +16,18 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerRetries;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-public class ITManualSpringRetryerRetriesProperty extends AbstractITSpringRetryerRetriesProperty {
+@Configuration
+@ComponentScan
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+public class RetryerConfiguration {
 
-    @Override
-    public RetryerDefaults defaults() {
-        return new SpringManualRetryerDefaults();
-    }
-
-    @Override
-    protected RetryerRetries overrideRetries(int retries) {
-        return new SpringManualRetryerRetries(retries);
+    @Bean
+    public RetryerAspect waiterAspect() {
+        return new RetryerAspect();
     }
 }

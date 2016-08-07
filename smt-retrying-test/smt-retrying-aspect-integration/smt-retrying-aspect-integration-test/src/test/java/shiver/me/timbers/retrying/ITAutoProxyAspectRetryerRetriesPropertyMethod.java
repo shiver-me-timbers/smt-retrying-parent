@@ -17,17 +17,27 @@
 package shiver.me.timbers.retrying;
 
 import org.junit.Rule;
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
-import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsMethodFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesMethodFactory;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRule;
 import shiver.me.timbers.retrying.property.SystemPropertyManager;
 
-public class ITManualRetryerRetriesProperty extends AbstractITRetryerRetriesProperty {
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = RetryerConfiguration.class)
+public class ITAutoProxyAspectRetryerRetriesPropertyMethod extends AbstractITAspectRetryerRetriesPropertyMethod {
 
     @Rule
     public RetryerPropertyRule properties = new RetryerPropertyRule(new SystemPropertyManager());
+
+    @Autowired
+    private AutoProxyRetryerDefaultsMethodFactory defaultsFactory;
+
+    @Autowired
+    private AutoProxyRetryerRetriesMethodFactory retriesFactory;
 
     @Override
     public RetryerPropertyRule properties() {
@@ -35,12 +45,12 @@ public class ITManualRetryerRetriesProperty extends AbstractITRetryerRetriesProp
     }
 
     @Override
-    public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults();
+    public AutoProxyRetryerDefaultsMethodFactory defaultsFactory() {
+        return defaultsFactory;
     }
 
     @Override
-    protected RetryerRetries overrideRetries(int retries) {
-        return new ManualRetryerRetries(retries);
+    public AutoProxyRetryerRetriesMethodFactory retriesFactory() {
+        return retriesFactory;
     }
 }

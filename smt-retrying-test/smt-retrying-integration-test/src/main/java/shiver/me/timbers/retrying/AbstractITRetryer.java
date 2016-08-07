@@ -17,13 +17,13 @@
 package shiver.me.timbers.retrying;
 
 import org.junit.Test;
-import shiver.me.timbers.retrying.execution.RetyerRetries;
+import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 public abstract class AbstractITRetryer implements ITRetryer {
 
     private final AbstractITRetryerRetries retries = new AbstractITRetryerRetries() {
         @Override
-        public RetyerRetries retries(int retries) {
+        public RetryerRetries retries(int retries) {
             return AbstractITRetryer.this.retries(retries);
         }
     };

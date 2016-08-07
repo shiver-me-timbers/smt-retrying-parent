@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerRetries;
 
-public class ITManualSpringRetryerRetriesProperty extends AbstractITSpringRetryerRetriesProperty {
+public class RetryerDefaultsFactory {
 
-    @Override
-    public RetryerDefaults defaults() {
-        return new SpringManualRetryerDefaults();
+    private final RetryerDefaults retryerDefaults;
+
+    public RetryerDefaultsFactory(RetryerDefaults retryerDefaults) {
+        this.retryerDefaults = retryerDefaults;
     }
 
-    @Override
-    protected RetryerRetries overrideRetries(int retries) {
-        return new SpringManualRetryerRetries(retries);
+    public RetryerDefaults create() {
+        return retryerDefaults;
     }
 }

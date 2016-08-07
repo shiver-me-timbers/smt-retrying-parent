@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.execution;
 
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import org.springframework.stereotype.Component;
 
-public interface ITRetryerRetries {
-
-    void Can_set_the_number_of_retries() throws Throwable;
-
-    RetryerRetries retries(int retries);
+@Component
+public class RetryerDefaultsMethodComponent extends RetryerDefaultsMethod {
 }

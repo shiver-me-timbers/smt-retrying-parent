@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying.execution;
+package shiver.me.timbers.retrying.factory;
 
-import shiver.me.timbers.retrying.SpringOptions;
-import shiver.me.timbers.retrying.SpringRetryer;
+import org.junit.Test;
+import shiver.me.timbers.retrying.execution.RetryerDefaultsMethod;
 
-public class SpringManualRetyerRetries extends ManualRetyerRetries<SpringRetryer, SpringOptions> {
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
 
-    public SpringManualRetyerRetries(int retries) {
-        super(retries);
-    }
+public class RetryerDefaultsMethodFactoryTest {
 
-    @Override
-    public SpringRetryer retryer(SpringOptions options) {
-        return new SpringRetryer(options);
-    }
+    @Test
+    public void Can_create_a_retryer_defaults_method() {
 
-    @Override
-    public SpringOptions options() {
-        return new SpringOptions();
+        // When
+        final RetryerDefaultsMethodFactory actual = new RetryerDefaultsMethodFactory();
+
+        // Then
+        assertThat(actual.create(), instanceOf(RetryerDefaultsMethod.class));
     }
 }

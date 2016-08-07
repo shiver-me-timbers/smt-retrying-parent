@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import org.junit.Test;
+import shiver.me.timbers.retrying.execution.RetryerRetriesMethod;
 
-public interface ITRetryerRetries {
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
 
-    void Can_set_the_number_of_retries() throws Throwable;
+public class RetryerRetriesMethodFactoryTest {
 
-    RetryerRetries retries(int retries);
+    @Test
+    public void Can_create_a_retryer_retries_class_factory() {
+
+        // When
+        final RetryerRetriesMethodFactory actual = new RetryerRetriesMethodFactory();
+
+        // Then
+        assertThat(actual.create(8), instanceOf(RetryerRetriesMethod.class));
+    }
 }

@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+public interface LookupFactory<T> {
 
-public interface ITRetryerRetries {
+    T find(Object... args);
 
-    void Can_set_the_number_of_retries() throws Throwable;
-
-    RetryerRetries retries(int retries);
+    void add(T object, Object... args);
 }

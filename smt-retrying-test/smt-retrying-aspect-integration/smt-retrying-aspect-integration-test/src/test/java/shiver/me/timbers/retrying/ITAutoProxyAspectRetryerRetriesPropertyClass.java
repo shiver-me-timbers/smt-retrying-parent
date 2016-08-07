@@ -17,17 +17,27 @@
 package shiver.me.timbers.retrying;
 
 import org.junit.Rule;
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
-import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesClassFactory;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRule;
 import shiver.me.timbers.retrying.property.SystemPropertyManager;
 
-public class ITManualRetryerRetriesProperty extends AbstractITRetryerRetriesProperty {
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = RetryerConfiguration.class)
+public class ITAutoProxyAspectRetryerRetriesPropertyClass extends AbstractITAspectRetryerRetriesPropertyClass {
 
     @Rule
     public RetryerPropertyRule properties = new RetryerPropertyRule(new SystemPropertyManager());
+
+    @Autowired
+    private AutoProxyRetryerDefaultsClassFactory defaultsFactory;
+
+    @Autowired
+    private AutoProxyRetryerRetriesClassFactory retriesFactory;
 
     @Override
     public RetryerPropertyRule properties() {
@@ -35,12 +45,12 @@ public class ITManualRetryerRetriesProperty extends AbstractITRetryerRetriesProp
     }
 
     @Override
-    public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults();
+    public AutoProxyRetryerDefaultsClassFactory defaultsFactory() {
+        return defaultsFactory;
     }
 
     @Override
-    protected RetryerRetries overrideRetries(int retries) {
-        return new ManualRetryerRetries(retries);
+    public AutoProxyRetryerRetriesClassFactory retriesFactory() {
+        return retriesFactory;
     }
 }

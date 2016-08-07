@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying.execution;
+package shiver.me.timbers.retrying.factory;
 
-import java.util.concurrent.Callable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import shiver.me.timbers.retrying.execution.RetryerDefaultsMethod;
 
-public interface RetyerRetries {
+@Component
+public class AutoProxyRetryerDefaultsMethodFactory extends RetryerDefaultsMethodFactory {
 
-    <T> T retryMethod(Callable<T> callable) throws Exception;
+    @Autowired
+    public AutoProxyRetryerDefaultsMethodFactory(RetryerDefaultsMethod retryerDefaultsMethod) {
+        super(retryerDefaultsMethod);
+    }
 }

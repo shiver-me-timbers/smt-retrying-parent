@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.execution;
 
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import shiver.me.timbers.retrying.Retry;
 
-public interface ITRetryerRetries {
+import java.util.concurrent.Callable;
 
-    void Can_set_the_number_of_retries() throws Throwable;
+@Retry
+public class RetryerDefaultsMethod implements RetryerDefaults {
 
-    RetryerRetries retries(int retries);
+    @Override
+    public <T> T defaultsMethod(Callable<T> callable) throws Exception {
+        return callable.call();
+    }
 }

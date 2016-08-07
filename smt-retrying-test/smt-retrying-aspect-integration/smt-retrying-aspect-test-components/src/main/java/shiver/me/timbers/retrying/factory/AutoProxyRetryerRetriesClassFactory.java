@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import shiver.me.timbers.retrying.execution.RetryerRetriesClass;
 
-public interface ITRetryerRetries {
+@Component
+public class AutoProxyRetryerRetriesClassFactory extends RetryerRetriesClassFactory {
 
-    void Can_set_the_number_of_retries() throws Throwable;
-
-    RetryerRetries retries(int retries);
+    @Autowired
+    public AutoProxyRetryerRetriesClassFactory(RetryerRetriesClass canSetRetryerRetries) {
+        super(canSetRetryerRetries);
+    }
 }

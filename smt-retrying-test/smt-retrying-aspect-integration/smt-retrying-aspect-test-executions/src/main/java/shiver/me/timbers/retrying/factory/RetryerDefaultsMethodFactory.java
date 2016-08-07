@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import shiver.me.timbers.retrying.execution.RetryerDefaultsMethod;
 
-public interface ITRetryerRetries {
+public class RetryerDefaultsMethodFactory extends RetryerDefaultsFactory {
 
-    void Can_set_the_number_of_retries() throws Throwable;
+    public RetryerDefaultsMethodFactory() {
+        this(new RetryerDefaultsMethod());
+    }
 
-    RetryerRetries retries(int retries);
+    public RetryerDefaultsMethodFactory(RetryerDefaultsMethod retryerDefaultsMethod) {
+        super(retryerDefaultsMethod);
+    }
 }

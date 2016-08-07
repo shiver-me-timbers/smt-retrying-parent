@@ -16,13 +16,13 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.execution.ManualRetyerRetries;
-import shiver.me.timbers.retrying.execution.RetyerRetries;
+import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
+import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 public class ITManualRetryer extends AbstractITRetryer {
 
     @Override
-    public RetyerRetries retries(int retries) {
-        return new ManualRetyerRetries(retries);
+    public RetryerRetries retries(int retries) {
+        return new ManualRetryerRetries(retries);
     }
 }

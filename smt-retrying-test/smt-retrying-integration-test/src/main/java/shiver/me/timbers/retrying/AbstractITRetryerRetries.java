@@ -26,7 +26,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static shiver.me.timbers.data.random.RandomIntegers.someIntegerBetween;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
 
 public abstract class AbstractITRetryerRetries implements ITRetryerRetries {
@@ -34,7 +33,7 @@ public abstract class AbstractITRetryerRetries implements ITRetryerRetries {
     @Test
     public void Can_set_the_number_of_retries() throws Throwable {
 
-        final int retries = someIntegerBetween(1, 10);
+        final int retries = 8;
         final Callable callable = mock(Callable.class);
 
         final Throwable throwable = someThrowable();

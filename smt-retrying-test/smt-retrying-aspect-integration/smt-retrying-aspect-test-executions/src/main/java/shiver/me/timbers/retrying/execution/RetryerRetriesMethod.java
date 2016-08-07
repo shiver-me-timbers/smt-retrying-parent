@@ -16,29 +16,15 @@
 
 package shiver.me.timbers.retrying.execution;
 
-import shiver.me.timbers.retrying.Options;
-import shiver.me.timbers.retrying.Retryer;
-import shiver.me.timbers.retrying.Until;
+import shiver.me.timbers.retrying.Retry;
 
 import java.util.concurrent.Callable;
 
-public class ManualRetyerRetries<R extends Retryer, O extends Options> extends RetryerCreater<R, O>
-    implements RetyerRetries {
+public class RetryerRetriesMethod implements RetryerRetries {
 
-    private final int retries;
-
-    public ManualRetyerRetries(int retries) {
-        this.retries = retries;
-    }
-
-    @SuppressWarnings("unchecked")
+    @Retry(8)
     @Override
-    public <T> T retryMethod(final Callable<T> callable) {
-        return retryer((O) options().withRetries(retries)).retry(new Until<T>() {
-            @Override
-            public T success() throws Throwable {
-                return callable.call();
-            }
-        });
+    public <T> T retryMethod(Callable<T> callable) throws Exception {
+        return callable.call();
     }
 }

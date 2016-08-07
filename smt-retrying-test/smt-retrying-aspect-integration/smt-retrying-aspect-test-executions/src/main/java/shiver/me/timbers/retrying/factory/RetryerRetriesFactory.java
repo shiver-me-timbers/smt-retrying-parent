@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
-import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.SpringManualRetryerRetries;
 
-public class ITManualSpringRetryerRetriesProperty extends AbstractITSpringRetryerRetriesProperty {
+public class RetryerRetriesFactory {
 
-    @Override
-    public RetryerDefaults defaults() {
-        return new SpringManualRetryerDefaults();
+    private final LookupFactory<RetryerRetries> lookupFactory;
+
+    public RetryerRetriesFactory(RetryerRetries retryerRetries) {
+        this(new MapLookupFactory<RetryerRetries>());
+        add(retryerRetries, 8);
     }
 
-    @Override
-    protected RetryerRetries overrideRetries(int retries) {
-        return new SpringManualRetryerRetries(retries);
+    public RetryerRetriesFactory(LookupFactory<RetryerRetries> lookupFactory) {
+        this.lookupFactory = lookupFactory;
+    }
+
+    public RetryerRetries create(Integer retries) {
+        return lookupFactory.find(retries);
+    }
+
+    public void add(RetryerRetries retryerRetries, Integer retries) {
+        lookupFactory.add(retryerRetries, retries);
     }
 }
