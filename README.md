@@ -16,4 +16,4 @@ limitations under the License.
 smt-retrying-parent
 ===========
 
-Delete this.
+This project contains libraries that can be used to retry an execution until it finishes successfully.
