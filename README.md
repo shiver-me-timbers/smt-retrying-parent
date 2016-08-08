@@ -15,5 +15,6 @@ limitations under the License.
 -->
 smt-retrying-parent
 ===========
+[![Build Status](https://travis-ci.org/shiver-me-timbers/smt-retryer-parent.svg)](https://travis-ci.org/shiver-me-timbers/smt-retryer-parent) [![Coverage Status](https://coveralls.io/repos/shiver-me-timbers/smt-retryer-parent/badge.svg?branch=master&service=github)](https://coveralls.io/github/shiver-me-timbers/smt-retryer-parent?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.shiver-me-timbers/smt-retryer-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.shiver-me-timbers/smt-retryer-parent/)
 
 This project contains libraries that can be used to retry an execution until it finishes successfully.
