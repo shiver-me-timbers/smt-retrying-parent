@@ -16,10 +16,15 @@
 
 package shiver.me.timbers.retrying;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Karl Bennett
  */
 public class Retryer implements RetryerService {
+
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     private final Chooser choices;
 
@@ -41,6 +46,10 @@ public class Retryer implements RetryerService {
                 return until.success();
             } catch (Throwable e) {
                 thrower.register(e);
+                log.warn(
+                    "Retry attempt ({}) for execution ({}) because of exception ({}, {}).",
+                    i + 1, until, e.getClass(), e.getMessage()
+                );
             }
         }
 
