@@ -36,7 +36,7 @@ public class OptionsServiceFactoryTest {
 
     private Instantiater<OptionsService> instantiater;
     private Configurer<OptionsService, Retry> configurer;
-    private OptionsServiceFactory factory;
+    private Factory<OptionsService, Retry> factory;
 
     @Before
     @SuppressWarnings("unchecked")

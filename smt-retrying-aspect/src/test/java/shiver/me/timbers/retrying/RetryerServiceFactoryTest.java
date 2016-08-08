@@ -34,7 +34,7 @@ public class RetryerServiceFactoryTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     private Instantiater<RetryerService> instantiater;
-    private RetryerServiceFactory factory;
+    private Factory<RetryerService, OptionsService> factory;
 
     @Before
     @SuppressWarnings("unchecked")

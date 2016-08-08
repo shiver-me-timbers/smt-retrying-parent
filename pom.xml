@@ -47,9 +47,9 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <!--<modules>-->
-            <!--<module>smt-retrying-test</module>-->
-            <!--</modules>-->
+            <modules>
+                <module>smt-retrying-test</module>
+            </modules>
         </profile>
         <profile>
             <id>coverage</id>
@@ -107,7 +107,6 @@
         <module>smt-retrying</module>
         <module>smt-retrying-spring</module>
         <module>smt-retrying-aspect</module>
-        <module>smt-retrying-test</module>
     </modules>
 
     <scm>

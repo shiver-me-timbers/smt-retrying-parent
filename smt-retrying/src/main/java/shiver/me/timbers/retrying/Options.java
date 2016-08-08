@@ -59,14 +59,6 @@ public class Options implements OptionsService {
         return new CompositeOverridingChooser(defaultChoices, propertyChoices, manualChoices.apply(this));
     }
 
-    Choice choose() {
-        return defaultChoices.overrideWith(
-            propertyChoices.overrideWith(
-                manualChoices.apply(this)
-            )
-        ).choose();
-    }
-
     Integer getRetries() {
         return retries;
     }
