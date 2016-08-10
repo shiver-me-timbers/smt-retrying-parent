@@ -38,7 +38,7 @@ public class ITManualSpringRetryer extends AbstractITSpringRetryer {
     }
 
     @Override
-    public RetryerInterval interval(long duration, TimeUnit unit) {
+    public RetryerInterval interval(Long duration, TimeUnit unit) {
         return new SpringManualRetryerInterval(duration, unit);
     }
 }

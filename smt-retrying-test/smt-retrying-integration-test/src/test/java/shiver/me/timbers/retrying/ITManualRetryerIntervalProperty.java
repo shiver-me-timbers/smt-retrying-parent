@@ -16,29 +16,33 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.Rule;
 import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
 import shiver.me.timbers.retrying.execution.ManualRetryerInterval;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import shiver.me.timbers.retrying.junit.RetryerPropertyRule;
+import shiver.me.timbers.retrying.property.SystemPropertyManager;
 
 import java.util.concurrent.TimeUnit;
 
-public class ITManualRetryer extends AbstractITRetryer {
+public class ITManualRetryerIntervalProperty extends AbstractITRetryerIntervalProperty {
+
+    @Rule
+    public RetryerPropertyRule properties = new RetryerPropertyRule(new SystemPropertyManager());
+
+    @Override
+    public RetryerPropertyRule properties() {
+        return properties;
+    }
 
     @Override
     public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults<>();
+        return new ManualRetryerDefaults();
     }
 
     @Override
-    public RetryerRetries retries(int retries) {
-        return new ManualRetryerRetries(retries);
-    }
-
-    @Override
-    public RetryerInterval interval(Long duration, TimeUnit unit) {
-        return new ManualRetryerInterval(duration, unit);
+    protected RetryerInterval overrideInterval(Long duration, TimeUnit unit) {
+        return new ManualRetryerInterval<>(duration, unit);
     }
 }

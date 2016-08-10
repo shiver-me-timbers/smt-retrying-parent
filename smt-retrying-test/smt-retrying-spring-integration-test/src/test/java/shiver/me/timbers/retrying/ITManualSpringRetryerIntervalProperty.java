@@ -16,29 +16,22 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerInterval;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerInterval;
 
 import java.util.concurrent.TimeUnit;
 
-public class ITManualRetryer extends AbstractITRetryer {
+public class ITManualSpringRetryerIntervalProperty extends AbstractITSpringRetryerIntervalProperty {
 
     @Override
     public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults<>();
+        return new SpringManualRetryerDefaults();
     }
 
     @Override
-    public RetryerRetries retries(int retries) {
-        return new ManualRetryerRetries(retries);
-    }
-
-    @Override
-    public RetryerInterval interval(Long duration, TimeUnit unit) {
-        return new ManualRetryerInterval(duration, unit);
+    protected RetryerInterval overrideInterval(Long duration, TimeUnit unit) {
+        return new SpringManualRetryerInterval(duration, unit);
     }
 }

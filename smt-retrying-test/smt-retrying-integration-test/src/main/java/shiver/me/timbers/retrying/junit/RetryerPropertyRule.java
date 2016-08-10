@@ -18,6 +18,12 @@ package shiver.me.timbers.retrying.junit;
 
 import shiver.me.timbers.retrying.property.PropertyManager;
 
+import java.util.concurrent.TimeUnit;
+
+import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyConstants.RETRIES_PROPERTY;
+
 public class RetryerPropertyRule extends PropertyRule {
 
     public RetryerPropertyRule(PropertyManager propertyManager) {
@@ -30,6 +36,16 @@ public class RetryerPropertyRule extends PropertyRule {
     }
 
     public void setRetries(int retries) {
-        setProperty("smt.retryer.retries", String.valueOf(retries));
+        setProperty(RETRIES_PROPERTY, String.valueOf(retries));
+    }
+
+    public RetryerPropertyRule withInterval(Long duration, TimeUnit unit) {
+        setInterval(duration, unit);
+        return this;
+    }
+
+    public void setInterval(Long duration, TimeUnit unit) {
+        setProperty(INTERVAL_DURATION_PROPERTY, duration.toString());
+        setProperty(INTERVAL_UNIT_PROPERTY, unit.name());
     }
 }

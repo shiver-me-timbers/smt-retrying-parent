@@ -16,29 +16,26 @@
 
 package shiver.me.timbers.retrying;
 
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerInterval;
-import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
-import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 import java.util.concurrent.TimeUnit;
 
-public class ITManualRetryer extends AbstractITRetryer {
+public abstract class AbstractITAspectRetryerIntervalProperty extends AbstractITRetryerIntervalProperty
+    implements RetryerIntervalFactoryAware, RetryerDefaultsFactoryAware {
 
     @Override
     public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults<>();
-    }
-
-    @Override
-    public RetryerRetries retries(int retries) {
-        return new ManualRetryerRetries(retries);
+        return defaultsFactory().create();
     }
 
     @Override
     public RetryerInterval interval(Long duration, TimeUnit unit) {
-        return new ManualRetryerInterval(duration, unit);
+        return intervalFactory().create(duration, unit);
+    }
+
+    @Override
+    protected RetryerInterval overrideInterval(Long duration, TimeUnit unit) {
+        return intervalFactory().create(duration, unit);
     }
 }

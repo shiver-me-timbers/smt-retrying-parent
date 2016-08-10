@@ -24,7 +24,9 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * The {@code Options} can also be configured globally with the following properties.
  * <code>
- * smt.retryer.retries  # Integer
+ * smt.retryer.retries           # Integer
+ * smt.retryer.interval.duration # Long
+ * smt.retryer.interval.unit     # Name of one of the java.util.concurrent.TimeUnit enums
  * </code>
  *
  * @author Karl Bennett

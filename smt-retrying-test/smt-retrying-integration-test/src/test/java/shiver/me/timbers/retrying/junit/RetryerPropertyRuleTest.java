@@ -20,11 +20,18 @@ import org.junit.Before;
 import org.junit.Test;
 import shiver.me.timbers.retrying.property.PropertyManager;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
+import static shiver.me.timbers.data.random.RandomLongs.someLong;
+import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyConstants.RETRIES_PROPERTY;
 
 public class RetryerPropertyRuleTest {
 
@@ -38,19 +45,6 @@ public class RetryerPropertyRuleTest {
     }
 
     @Test
-    public void Can_set_the_retries_property() {
-
-        // Given
-        final int retries = someInteger();
-
-        // When
-        rule.setRetries(retries);
-
-        // Then
-        verify(propertyManager).setProperty("smt.retryer.retries", String.valueOf(retries));
-    }
-
-    @Test
     public void Can_build_property_rule_with_retries() {
 
         // Given
@@ -61,6 +55,22 @@ public class RetryerPropertyRuleTest {
 
         // Then
         assertThat(actual, is(rule));
-        verify(propertyManager).setProperty("smt.retryer.retries", String.valueOf(retries));
+        verify(propertyManager).setProperty(RETRIES_PROPERTY, String.valueOf(retries));
+    }
+
+    @Test
+    public void Can_build_property_rule_with_an_interval() {
+
+        // Given
+        final Long duration = someLong();
+        final TimeUnit unit = someEnum(TimeUnit.class);
+
+        // When
+        final RetryerPropertyRule actual = rule.withInterval(duration, unit);
+
+        // Then
+        assertThat(actual, is(rule));
+        verify(propertyManager).setProperty(INTERVAL_DURATION_PROPERTY, duration.toString());
+        verify(propertyManager).setProperty(INTERVAL_UNIT_PROPERTY, unit.name());
     }
 }
