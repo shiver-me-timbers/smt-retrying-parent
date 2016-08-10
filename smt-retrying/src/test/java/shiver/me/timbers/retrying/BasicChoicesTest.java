@@ -16,24 +16,44 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 
 public class BasicChoicesTest {
 
+    private Integer retries;
+    private Time interval;
+    private BasicChoices choices;
+
+    @Before
+    public void setUp() {
+        retries = someInteger();
+        interval = mock(Time.class);
+        choices = new BasicChoices(retries, interval);
+    }
+
     @Test
     public void Can_get_the_retries() {
 
-        // Given
-        final Integer expected = someInteger();
-
         // When
-        final Integer actual = new BasicChoices(expected).getRetries();
+        final Integer actual = choices.getRetries();
 
         // Then
-        assertThat(actual, is(expected));
+        assertThat(actual, is(retries));
+    }
+
+    @Test
+    public void Can_get_the_interval() {
+
+        // When
+        final Time actual = choices.getInterval();
+
+        // Then
+        assertThat(actual, is(interval));
     }
 }

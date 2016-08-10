@@ -78,6 +78,7 @@ public class RetryerTest {
         // Then
         assertThat(actual, is(expected));
         verify(until, times(2)).success();
+        verify(choice).sleepForInterval();
     }
 
     @Test
@@ -105,6 +106,7 @@ public class RetryerTest {
 
         // Then
         verify(until, times(retries)).success();
+        verify(choice, times(retries)).sleepForInterval();
     }
 
     @Test

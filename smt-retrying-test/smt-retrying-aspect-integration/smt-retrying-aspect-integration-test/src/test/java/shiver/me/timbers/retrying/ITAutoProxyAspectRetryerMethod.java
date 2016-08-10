@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsMethodFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalMethodFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesMethodFactory;
+import shiver.me.timbers.retrying.factory.RetryerIntervalFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = RetryerConfiguration.class)
@@ -33,6 +35,9 @@ public class ITAutoProxyAspectRetryerMethod extends AbstractITAspectRetryerMetho
     @Autowired
     private AutoProxyRetryerRetriesMethodFactory retriesFactory;
 
+    @Autowired
+    private AutoProxyRetryerIntervalMethodFactory intervalFactory;
+
     @Override
     public AutoProxyRetryerDefaultsMethodFactory defaultsFactory() {
         return defaultsFactory;
@@ -41,5 +46,10 @@ public class ITAutoProxyAspectRetryerMethod extends AbstractITAspectRetryerMetho
     @Override
     public AutoProxyRetryerRetriesMethodFactory retriesFactory() {
         return retriesFactory;
+    }
+
+    @Override
+    public RetryerIntervalFactory intervalFactory() {
+        return intervalFactory;
     }
 }

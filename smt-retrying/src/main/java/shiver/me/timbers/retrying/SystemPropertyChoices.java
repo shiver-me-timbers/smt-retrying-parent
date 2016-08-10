@@ -19,11 +19,20 @@ package shiver.me.timbers.retrying;
 /**
  * @author Karl Bennett
  */
-class SystemPropertyChoices extends AbstractOverridingChoices implements PropertyChoices {
+class SystemPropertyChoices extends AbstractPropertyChoices implements PropertyChoices {
 
     @Override
-    public Integer getRetries() {
-        final String retries = System.getProperty(RETRIES_PROPERTY);
-        return retries == null ? null : Integer.valueOf(retries);
+    String getRetriesProperty() {
+        return System.getProperty(RETRIES_PROPERTY);
+    }
+
+    @Override
+    String getIntervalDurationProperty() {
+        return System.getProperty(INTERVAL_DURATION_PROPERTY);
+    }
+
+    @Override
+    String getIntervalUnitProperty() {
+        return System.getProperty(INTERVAL_UNIT_PROPERTY);
     }
 }

@@ -16,10 +16,14 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Karl Bennett
  */
 interface OptionsService {
 
-    Options withRetries(Integer retries);
+    OptionsService withRetries(Integer retries);
+
+    OptionsService withInterval(Long duration, TimeUnit unit);
 }

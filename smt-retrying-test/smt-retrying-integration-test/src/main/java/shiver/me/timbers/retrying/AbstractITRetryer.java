@@ -17,9 +17,11 @@
 package shiver.me.timbers.retrying;
 
 import org.junit.Test;
+import shiver.me.timbers.retrying.execution.RetryerInterval;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -34,6 +36,13 @@ public abstract class AbstractITRetryer implements ITRetryer {
         @Override
         public RetryerRetries retries(int retries) {
             return AbstractITRetryer.this.retries(retries);
+        }
+    };
+
+    private final AbstractITRetryerInterval interval = new AbstractITRetryerInterval() {
+        @Override
+        public RetryerInterval interval(long duration, TimeUnit unit) {
+            return AbstractITRetryer.this.interval(duration, unit);
         }
     };
 
@@ -56,7 +65,14 @@ public abstract class AbstractITRetryer implements ITRetryer {
     }
 
     @Test
+    @Override
     public void Can_set_the_number_of_retries() throws Throwable {
         retries.Can_set_the_number_of_retries();
+    }
+
+    @Test
+    @Override
+    public void Can_set_the_interval() throws Throwable {
+        interval.Can_set_the_interval();
     }
 }

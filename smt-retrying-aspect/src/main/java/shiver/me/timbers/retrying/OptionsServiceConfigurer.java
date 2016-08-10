@@ -24,12 +24,20 @@ class OptionsServiceConfigurer implements Configurer<OptionsService, Retry> {
     @Override
     public void configure(OptionsService optionsService, Retry retry) {
         configureRetries(optionsService, retry.value());
+        configureInterval(optionsService, retry.interval());
     }
 
-    private void configureRetries(OptionsService optionsService, int retries) {
+    private static void configureRetries(OptionsService optionsService, int retries) {
         if (retries < 0) {
             return;
         }
         optionsService.withRetries(retries);
+    }
+
+    private static void configureInterval(OptionsService optionsService, Interval interval) {
+        if (interval.duration() < 0) {
+            return;
+        }
+        optionsService.withInterval(interval.duration(), interval.unit());
     }
 }

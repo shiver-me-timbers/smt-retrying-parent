@@ -21,5 +21,5 @@ package shiver.me.timbers.retrying;
  */
 interface ManualChoices<T> {
 
-    Choices apply(T choices);
+    Choices apply(T values);
 }

@@ -21,4 +21,6 @@ package shiver.me.timbers.retrying;
  */
 interface PropertyChoices extends OverridingChoices {
     String RETRIES_PROPERTY = "smt.retryer.retries";
+    String INTERVAL_DURATION_PROPERTY = "smt.retryer.interval.duration";
+    String INTERVAL_UNIT_PROPERTY = "smt.retryer.interval.unit";
 }

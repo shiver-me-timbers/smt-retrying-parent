@@ -22,13 +22,19 @@ package shiver.me.timbers.retrying;
 class BasicChoices extends AbstractChoices implements Choices {
 
     private final Integer retries;
+    private final Time interval;
 
-    BasicChoices(Integer retries) {
+    BasicChoices(Integer retries, Time interval) {
         this.retries = retries;
+        this.interval = interval;
     }
 
     @Override
     public Integer getRetries() {
         return retries;
+    }
+
+    public Time getInterval() {
+        return interval;
     }
 }

@@ -16,15 +16,23 @@
 
 package shiver.me.timbers.retrying;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 /**
  * @author Karl Bennett
  */
 class StaticDefaultChoices extends AbstractOverridingChoices implements DefaultChoices {
 
-    public static final Integer DEFAULT_RETRIES = 5;
+    static final Integer DEFAULT_RETRIES = 5;
+    static final Time DEFAULT_INTERVAL = new Time(100L, MILLISECONDS);
 
     @Override
     public Integer getRetries() {
         return DEFAULT_RETRIES;
+    }
+
+    @Override
+    public Time getInterval() {
+        return DEFAULT_INTERVAL;
     }
 }

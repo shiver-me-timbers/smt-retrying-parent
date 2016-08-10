@@ -16,5 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
-public interface RetryerFactoriesAware extends RetryerDefaultsFactoryAware, RetryerRetriesFactoryAware {
+public interface RetryerFactoriesAware extends
+    RetryerDefaultsFactoryAware,
+    RetryerRetriesFactoryAware,
+    RetryerIntervalFactoryAware {
 }

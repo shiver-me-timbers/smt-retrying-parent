@@ -22,6 +22,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * Add this annotation to any class or method to wrap the method call within a {@link Retryer}. Annotating at the class
@@ -40,4 +41,6 @@ public @interface Retry {
      * Set many times to retry the method till it succeeds.
      */
     int value() default -1;
+
+    Interval interval() default @Interval(duration = -1, unit = MILLISECONDS);
 }

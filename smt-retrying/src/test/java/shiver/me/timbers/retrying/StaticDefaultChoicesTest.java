@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_INTERVAL;
 import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_RETRIES;
 
 public class StaticDefaultChoicesTest {
@@ -32,5 +33,15 @@ public class StaticDefaultChoicesTest {
 
         // Then
         assertThat(actual, is(DEFAULT_RETRIES));
+    }
+
+    @Test
+    public void Can_get_default_interval() {
+
+        // When
+        final Time actual = new StaticDefaultChoices().getInterval();
+
+        // Then
+        assertThat(actual, is(DEFAULT_INTERVAL));
     }
 }

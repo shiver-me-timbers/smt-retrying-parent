@@ -22,4 +22,6 @@ package shiver.me.timbers.retrying;
 interface Choices extends Chooser {
 
     Integer getRetries();
+
+    Time getInterval();
 }

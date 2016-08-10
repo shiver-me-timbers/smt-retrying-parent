@@ -17,6 +17,7 @@
 package shiver.me.timbers.retrying.factory;
 
 import org.junit.Test;
+import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerDefaultsMethod;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -28,9 +29,9 @@ public class RetryerDefaultsMethodFactoryTest {
     public void Can_create_a_retryer_defaults_method() {
 
         // When
-        final RetryerDefaultsMethodFactory actual = new RetryerDefaultsMethodFactory();
+        final RetryerDefaults actual = new RetryerDefaultsMethodFactory().create();
 
         // Then
-        assertThat(actual.create(), instanceOf(RetryerDefaultsMethod.class));
+        assertThat(actual, instanceOf(RetryerDefaultsMethod.class));
     }
 }

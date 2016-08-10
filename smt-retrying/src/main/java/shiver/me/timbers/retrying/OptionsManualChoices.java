@@ -22,7 +22,7 @@ package shiver.me.timbers.retrying;
 class OptionsManualChoices implements ManualChoices<Options> {
 
     @Override
-    public BasicChoices apply(Options choices) {
-        return new BasicChoices(choices.getRetries());
+    public BasicChoices apply(Options options) {
+        return new BasicChoices(options.getRetries(), options.getInterval());
     }
 }

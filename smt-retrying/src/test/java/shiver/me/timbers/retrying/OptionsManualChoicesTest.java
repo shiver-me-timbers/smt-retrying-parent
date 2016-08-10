@@ -32,14 +32,17 @@ public class OptionsManualChoicesTest {
         final Options options = mock(Options.class);
 
         final int retries = someInteger();
+        final Time interval = mock(Time.class);
 
         // Given
         given(options.getRetries()).willReturn(retries);
+        given(options.getInterval()).willReturn(interval);
 
         // When
         final BasicChoices actual = new OptionsManualChoices().apply(options);
 
         // Then
         assertThat(actual.getRetries(), is(retries));
+        assertThat(actual.getInterval(), is(interval));
     }
 }

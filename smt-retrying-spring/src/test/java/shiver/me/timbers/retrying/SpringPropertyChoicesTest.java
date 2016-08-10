@@ -24,12 +24,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
+import static shiver.me.timbers.data.random.RandomStrings.someString;
+import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.RETRIES_PROPERTY;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,34 +45,51 @@ public class SpringPropertyChoicesTest {
     @Test
     public void Can_get_the_retries_property() {
 
-        final Integer expected = someInteger();
-
         final Environment environment = mock(Environment.class);
+        final String expected = someString();
 
         // Given
         given(context.getEnvironment()).willReturn(environment);
-        given(environment.getProperty(RETRIES_PROPERTY)).willReturn(expected.toString());
+        given(environment.getProperty(RETRIES_PROPERTY)).willReturn(expected);
 
         // When
-        final Integer actual = propertyChoices.getRetries();
+        final String actual = propertyChoices.getRetriesProperty();
 
         // Then
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
-    public void Can_get_no_retries_property() {
+    public void Can_get_the_interval_duration_property() {
 
         final Environment environment = mock(Environment.class);
+        final String expected = someString();
 
         // Given
         given(context.getEnvironment()).willReturn(environment);
-        given(environment.getProperty(RETRIES_PROPERTY)).willReturn(null);
+        given(environment.getProperty(INTERVAL_DURATION_PROPERTY)).willReturn(expected);
 
         // When
-        final Integer actual = propertyChoices.getRetries();
+        final String actual = propertyChoices.getIntervalDurationProperty();
 
         // Then
-        assertThat(actual, nullValue());
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void Can_get_the_interval_unit_property() {
+
+        final Environment environment = mock(Environment.class);
+        final String expected = someString();
+
+        // Given
+        given(context.getEnvironment()).willReturn(environment);
+        given(environment.getProperty(INTERVAL_UNIT_PROPERTY)).willReturn(expected);
+
+        // When
+        final String actual = propertyChoices.getIntervalUnitProperty();
+
+        // Then
+        assertThat(actual, is(expected));
     }
 }

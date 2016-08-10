@@ -24,9 +24,11 @@ import static java.lang.String.format;
 class Choice {
 
     private final int retries;
+    private final Time interval;
 
-    public Choice(int retries) {
+    Choice(int retries, Time interval) {
         this.retries = validateRetries(retries);
+        this.interval = interval;
     }
 
     private static int validateRetries(int retries) {
@@ -40,5 +42,9 @@ class Choice {
 
     int getRetries() {
         return retries;
+    }
+
+    void sleepForInterval() throws InterruptedException {
+        Thread.sleep(interval.toMillis());
     }
 }

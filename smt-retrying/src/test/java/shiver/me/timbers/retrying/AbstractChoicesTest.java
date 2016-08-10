@@ -19,6 +19,7 @@ package shiver.me.timbers.retrying;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
 import static shiver.me.timbers.matchers.Matchers.hasField;
 
@@ -29,6 +30,7 @@ public class AbstractChoicesTest {
 
         // Given
         final Integer retries = somePositiveInteger();
+        final Time interval = mock(Time.class);
 
         // When
         final Choice actual = new AbstractChoices() {
@@ -36,9 +38,15 @@ public class AbstractChoicesTest {
             public Integer getRetries() {
                 return retries;
             }
+
+            @Override
+            public Time getInterval() {
+                return interval;
+            }
         }.choose();
 
         // Then
         assertThat(actual, hasField("retries", retries));
+        assertThat(actual, hasField("interval", interval));
     }
 }

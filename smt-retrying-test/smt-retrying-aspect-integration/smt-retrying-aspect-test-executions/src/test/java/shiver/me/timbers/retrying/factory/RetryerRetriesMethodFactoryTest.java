@@ -17,6 +17,7 @@
 package shiver.me.timbers.retrying.factory;
 
 import org.junit.Test;
+import shiver.me.timbers.retrying.execution.RetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerRetriesMethod;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -28,9 +29,9 @@ public class RetryerRetriesMethodFactoryTest {
     public void Can_create_a_retryer_retries_class_factory() {
 
         // When
-        final RetryerRetriesMethodFactory actual = new RetryerRetriesMethodFactory();
+        final RetryerRetries actual = new RetryerRetriesMethodFactory().create(8);
 
         // Then
-        assertThat(actual.create(8), instanceOf(RetryerRetriesMethod.class));
+        assertThat(actual, instanceOf(RetryerRetriesMethod.class));
     }
 }

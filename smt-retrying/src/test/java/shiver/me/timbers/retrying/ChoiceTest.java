@@ -16,47 +16,78 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.springframework.util.StopWatch;
 
 import static java.lang.String.format;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomIntegers.someNegativeInteger;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
+import static shiver.me.timbers.data.random.RandomLongs.someLongBetween;
 
 public class ChoiceTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+    private Integer retries;
+    private Time interval;
+
+    @Before
+    public void setUp() {
+        retries = somePositiveInteger();
+        interval = mock(Time.class);
+    }
 
     @Test
     public void Can_get_the_number_of_retries() {
 
-        // Given
-        final int expected = somePositiveInteger();
-
         // When
-        final int actual = new Choice(expected).getRetries();
+        final int actual = new Choice(retries, interval).getRetries();
 
         // Then
-        assertThat(actual, is(expected));
+        assertThat(actual, is(retries));
     }
 
     @Test
-    public void Cannot_only_set_a_retries_value_of_zero() {
+    public void Can_sleep_for_the_interval() throws InterruptedException {
+
+        final Time interval = mock(Time.class);
+        final StopWatch stopWatch = new StopWatch();
+
+        final Long duration = someLongBetween(200L, 300L);
+
+        // Given
+        given(interval.toMillis()).willReturn(duration);
+        stopWatch.start();
+
+        // When
+        new Choice(retries, interval).sleepForInterval();
+
+        // Then
+        stopWatch.stop();
+        assertThat(stopWatch.getLastTaskTimeMillis(), greaterThanOrEqualTo(duration));
+    }
+
+    @Test
+    public void Cannot_set_a_retries_value_of_zero() {
 
         // Given
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("The retries value must be greater than 1. The value (0) is invalid.");
 
         // When
-        new Choice(0);
+        new Choice(0, interval);
     }
 
     @Test
-    public void Cannot_only_set_a_negative_retries() {
+    public void Cannot_set_a_negative_retries() {
 
         final Integer retries = someNegativeInteger();
 
@@ -67,6 +98,6 @@ public class ChoiceTest {
         );
 
         // When
-        new Choice(retries);
+        new Choice(retries, interval);
     }
 }

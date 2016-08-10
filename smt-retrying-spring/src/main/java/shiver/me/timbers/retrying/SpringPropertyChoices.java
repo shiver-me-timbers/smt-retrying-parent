@@ -24,15 +24,24 @@ import org.springframework.context.ApplicationContext;
  * @author Karl Bennett
  */
 @Configurable
-class SpringPropertyChoices extends AbstractOverridingChoices implements PropertyChoices {
+class SpringPropertyChoices extends AbstractPropertyChoices implements PropertyChoices {
 
     @Autowired
     private ApplicationContext applicationContext;
 
     @Override
-    public Integer getRetries() {
-        final String retries = getProperty(RETRIES_PROPERTY);
-        return retries == null ? null : Integer.valueOf(retries);
+    String getRetriesProperty() {
+        return getProperty(RETRIES_PROPERTY);
+    }
+
+    @Override
+    String getIntervalDurationProperty() {
+        return getProperty(INTERVAL_DURATION_PROPERTY);
+    }
+
+    @Override
+    String getIntervalUnitProperty() {
+        return getProperty(INTERVAL_UNIT_PROPERTY);
     }
 
     private String getProperty(String key) {

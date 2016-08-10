@@ -97,6 +97,11 @@
             <artifactId>smt-random</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.shiver-me-timbers</groupId>
+            <artifactId>smt-matchers</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <packaging>jar</packaging>

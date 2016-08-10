@@ -28,15 +28,22 @@ import static shiver.me.timbers.matchers.Matchers.hasField;
 public class AbstractOverridingChoicesTest {
 
     private int retries;
+    private Time interval;
     private AbstractOverridingChoices abstractChoices;
 
     @Before
     public void setUp() {
         retries = someInteger();
+        interval = mock(Time.class);
         abstractChoices = new AbstractOverridingChoices() {
             @Override
             public Integer getRetries() {
                 return retries;
+            }
+
+            @Override
+            public Time getInterval() {
+                return interval;
             }
         };
     }
@@ -47,15 +54,18 @@ public class AbstractOverridingChoicesTest {
         final Choices choices = mock(Choices.class);
 
         final int retries = someInteger();
+        final Time interval = mock(Time.class);
 
         // Given
         given(choices.getRetries()).willReturn(retries);
+        given(choices.getInterval()).willReturn(interval);
 
         // When
         final Choices actual = abstractChoices.overrideWith(choices);
 
         // Then
         assertThat(actual, hasField("retries", retries));
+        assertThat(actual, hasField("interval", interval));
     }
 
     @Test
@@ -65,11 +75,13 @@ public class AbstractOverridingChoicesTest {
 
         // Given
         given(choices.getRetries()).willReturn(null);
+        given(choices.getInterval()).willReturn(null);
 
         // When
         final Choices actual = abstractChoices.overrideWith(choices);
 
         // Then
         assertThat(actual, hasField("retries", retries));
+        assertThat(actual, hasField("interval", interval));
     }
 }

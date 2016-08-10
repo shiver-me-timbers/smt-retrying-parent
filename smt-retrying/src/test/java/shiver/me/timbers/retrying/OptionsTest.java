@@ -19,18 +19,23 @@ package shiver.me.timbers.retrying;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
+import static shiver.me.timbers.data.random.RandomLongs.someLong;
 import static shiver.me.timbers.matchers.Matchers.hasField;
+import static shiver.me.timbers.matchers.Matchers.hasProperty;
 
 public class OptionsTest {
 
     private DefaultChoices defaultChoices;
     private PropertyChoices propertyChoices;
     private ManualChoices<Options> manualChoices;
-    private Options options;
+    private OptionsService options;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -48,10 +53,25 @@ public class OptionsTest {
         final Integer retries = someInteger();
 
         // When
-        final Options actual = options.withRetries(retries);
+        final OptionsService actual = options.withRetries(retries);
 
         // Then
         assertThat(actual, hasField("retries", retries));
+    }
+
+    @Test
+    public void Can_set_the_interval_time_between_retries() {
+
+        // Given
+        final Long duration = someLong();
+        final TimeUnit unit = someEnum(TimeUnit.class);
+
+        // When
+        final OptionsService actual = options.withInterval(duration, unit);
+
+        // Then
+        assertThat(actual, hasProperty("interval.duration", duration));
+        assertThat(actual, hasProperty("interval.unit", unit));
     }
 
     @Test
@@ -60,10 +80,10 @@ public class OptionsTest {
         final Choices manualOptionsChoices = mock(Choices.class);
 
         // Given
-        given(manualChoices.apply(options)).willReturn(manualOptionsChoices);
+        given(manualChoices.apply((Options) options)).willReturn(manualOptionsChoices);
 
         // When
-        final Chooser actual = options.chooser();
+        final Chooser actual = ((Options) options).chooser();
 
         // Then
         assertThat(actual, hasField("defaultChoices", defaultChoices));

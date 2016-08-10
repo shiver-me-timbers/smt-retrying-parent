@@ -16,39 +16,77 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
+import static shiver.me.timbers.data.random.RandomStrings.someString;
+import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.RETRIES_PROPERTY;
 
 public class SystemPropertyChoicesTest {
 
-    @Test
-    public void Can_get_the_retries_property() {
+    @Before
+    public void setUp() {
+        clearAllRetryerProperties();
+    }
 
-        final Integer expected = someInteger();
+    @After
+    public void tearDown() {
+        clearAllRetryerProperties();
+    }
 
-        // Given
-        System.setProperty(RETRIES_PROPERTY, expected.toString());
-
-        // When
-        final Integer actual = new SystemPropertyChoices().getRetries();
-
-        // Then
+    private static void clearAllRetryerProperties() {
         System.clearProperty(RETRIES_PROPERTY);
-        assertThat(actual, equalTo(expected));
+        System.clearProperty(INTERVAL_DURATION_PROPERTY);
+        System.clearProperty(INTERVAL_UNIT_PROPERTY);
     }
 
     @Test
-    public void Can_get_no_retries_property() {
+    public void Can_get_the_retries_property() {
+
+        final String expected = someString();
+
+        // Given
+        System.setProperty(RETRIES_PROPERTY, expected);
 
         // When
-        final Integer actual = new SystemPropertyChoices().getRetries();
+        final String actual = new SystemPropertyChoices().getRetriesProperty();
 
         // Then
-        assertThat(actual, nullValue());
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void Can_get_the_interval_duration_property() {
+
+        final String expected = someString();
+
+        // Given
+        System.setProperty(INTERVAL_DURATION_PROPERTY, expected);
+
+        // When
+        final String actual = new SystemPropertyChoices().getIntervalDurationProperty();
+
+        // Then
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void Can_get_the_interval_unit_property() {
+
+        final String expected = someString();
+
+        // Given
+        System.setProperty(INTERVAL_UNIT_PROPERTY, expected);
+
+        // When
+        final String actual = new SystemPropertyChoices().getIntervalUnitProperty();
+
+        // Then
+        assertThat(actual, is(expected));
     }
 }

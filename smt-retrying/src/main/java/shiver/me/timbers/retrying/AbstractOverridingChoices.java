@@ -23,11 +23,15 @@ abstract class AbstractOverridingChoices extends AbstractChoices implements Over
 
     @Override
     public Choices overrideWith(Choices choices) {
-        return new BasicChoices(overrideRetries(choices));
+        return new BasicChoices(overrideRetries(choices), overrideInterval(choices));
     }
 
     private Integer overrideRetries(Choices choices) {
         return override(getRetries(), choices.getRetries());
+    }
+
+    private Time overrideInterval(Choices choices) {
+        return override(getInterval(), choices.getInterval());
     }
 
     private <T> T override(T current, T override) {

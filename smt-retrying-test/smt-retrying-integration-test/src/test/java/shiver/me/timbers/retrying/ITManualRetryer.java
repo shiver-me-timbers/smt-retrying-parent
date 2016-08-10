@@ -17,9 +17,13 @@
 package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
+import shiver.me.timbers.retrying.execution.ManualRetryerInterval;
 import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
+import shiver.me.timbers.retrying.execution.RetryerInterval;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
+
+import java.util.concurrent.TimeUnit;
 
 public class ITManualRetryer extends AbstractITRetryer {
 
@@ -31,5 +35,10 @@ public class ITManualRetryer extends AbstractITRetryer {
     @Override
     public RetryerRetries retries(int retries) {
         return new ManualRetryerRetries(retries);
+    }
+
+    @Override
+    public RetryerInterval interval(long duration, TimeUnit unit) {
+        return new ManualRetryerInterval(duration, unit);
     }
 }

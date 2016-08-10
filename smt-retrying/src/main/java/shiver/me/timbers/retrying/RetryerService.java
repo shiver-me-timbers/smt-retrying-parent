@@ -20,5 +20,5 @@ package shiver.me.timbers.retrying;
  * @author Karl Bennett
  */
 interface RetryerService {
-    <T> T retry(Until<T> until);
+    <T> T retry(Until<T> until) throws InterruptedException;
 }

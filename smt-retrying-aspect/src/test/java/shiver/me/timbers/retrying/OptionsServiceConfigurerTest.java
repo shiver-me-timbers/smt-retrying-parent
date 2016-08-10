@@ -19,11 +19,17 @@ package shiver.me.timbers.retrying;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+import static shiver.me.timbers.data.random.RandomEnums.someEnum;
+import static shiver.me.timbers.data.random.RandomIntegers.someNegativeInteger;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
+import static shiver.me.timbers.data.random.RandomLongs.someLongBetween;
+import static shiver.me.timbers.data.random.RandomLongs.someNegativeLong;
 
 public class OptionsServiceConfigurerTest {
 
@@ -41,15 +47,22 @@ public class OptionsServiceConfigurerTest {
         final Retry retry = mock(Retry.class);
 
         final Integer retries = somePositiveInteger();
+        final Interval interval = mock(Interval.class);
+        final Long intervalDuration = someLongBetween(1L, 1000L);
+        final TimeUnit intervalUnit = someEnum(TimeUnit.class);
 
         // Given
         given(retry.value()).willReturn(retries);
+        given(retry.interval()).willReturn(interval);
+        given(interval.duration()).willReturn(intervalDuration);
+        given(interval.unit()).willReturn(intervalUnit);
 
         // When
         configurer.configure(optionsService, retry);
 
         // Then
         verify(optionsService).withRetries(retries);
+        verify(optionsService).withInterval(intervalDuration, intervalUnit);
     }
 
     @Test
@@ -58,8 +71,13 @@ public class OptionsServiceConfigurerTest {
         final OptionsService optionsService = mock(OptionsService.class);
         final Retry retry = mock(Retry.class);
 
+        final Interval interval = mock(Interval.class);
+
         // Given
-        given(retry.value()).willReturn(-1);
+        given(retry.value()).willReturn(someNegativeInteger());
+        given(retry.interval()).willReturn(interval);
+        given(interval.duration()).willReturn(someNegativeLong());
+        given(interval.unit()).willReturn(someEnum(TimeUnit.class));
 
         // When
         configurer.configure(optionsService, retry);

@@ -37,9 +37,10 @@ public class Retryer implements RetryerService {
     }
 
     @Override
-    public <T> T retry(Until<T> until) {
-        final int retries = choices.choose().getRetries();
+    public <T> T retry(Until<T> until) throws InterruptedException {
+        final Choice choice = choices.choose();
 
+        final int retries = choice.getRetries();
         final Thrower thrower = new Thrower();
         for (int i = 0; i < retries; i++) {
             try {
@@ -51,6 +52,7 @@ public class Retryer implements RetryerService {
                     i + 1, until, e.getClass(), e.getMessage()
                 );
             }
+            choice.sleepForInterval();
         }
 
         final Throwable throwable = thrower.registeredThrowable();

@@ -16,6 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * This class is used to customise the options for the {@link Retryer}. With this you can set the number of times the
  * execution should be retried.
@@ -34,6 +36,7 @@ public class Options implements OptionsService {
     private final ManualChoices<Options> manualChoices;
 
     private Integer retries;
+    private Time interval;
 
     public Options() {
         this(new StaticDefaultChoices(), new SystemPropertyChoices(), new OptionsManualChoices());
@@ -55,11 +58,21 @@ public class Options implements OptionsService {
         return this;
     }
 
+    @Override
+    public Options withInterval(Long duration, TimeUnit unit) {
+        this.interval = new Time(duration, unit);
+        return this;
+    }
+
     Chooser chooser() {
         return new CompositeOverridingChooser(defaultChoices, propertyChoices, manualChoices.apply(this));
     }
 
     Integer getRetries() {
         return retries;
+    }
+
+    Time getInterval() {
+        return interval;
     }
 }
