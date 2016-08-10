@@ -31,6 +31,7 @@ import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomIntegers.someNegativeInteger;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLongBetween;
+import static shiver.me.timbers.data.random.RandomLongs.someNegativeLong;
 
 public class ChoiceTest {
 
@@ -95,6 +96,22 @@ public class ChoiceTest {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage(
             format("The retries value must be greater than 1. The value (%s) is invalid.", retries)
+        );
+
+        // When
+        new Choice(retries, interval);
+    }
+
+    @Test
+    public void Cannot_set_a_negative_interval_duration() {
+
+        final Time interval = mock(Time.class);
+
+        // Given
+        given(interval.toMillis()).willReturn(someNegativeLong());
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage(
+            format("The interval value must be greater than 0. The value (%s) is invalid.", interval)
         );
 
         // When

@@ -34,4 +34,12 @@ class Time {
     long toMillis() {
         return unit.toMillis(duration);
     }
+
+    @Override
+    public String toString() {
+        return "Time{" +
+            "duration=" + duration +
+            ", unit=" + unit +
+            '}';
+    }
 }

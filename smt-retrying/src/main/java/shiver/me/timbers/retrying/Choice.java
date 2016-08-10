@@ -28,7 +28,7 @@ class Choice {
 
     Choice(int retries, Time interval) {
         this.retries = validateRetries(retries);
-        this.interval = interval;
+        this.interval = validateInterval(interval);
     }
 
     private static int validateRetries(int retries) {
@@ -37,6 +37,15 @@ class Choice {
         }
         throw new IllegalArgumentException(
             format("The retries value must be greater than 1. The value (%s) is invalid.", retries)
+        );
+    }
+
+    private static Time validateInterval(Time interval) {
+        if (interval.toMillis() >= 0) {
+            return interval;
+        }
+        throw new IllegalArgumentException(
+            format("The interval value must be greater than 0. The value (%s) is invalid.", interval)
         );
     }
 

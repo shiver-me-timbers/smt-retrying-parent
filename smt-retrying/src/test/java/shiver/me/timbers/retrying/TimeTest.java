@@ -16,10 +16,12 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.String.format;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
@@ -27,17 +29,34 @@ import static shiver.me.timbers.data.random.RandomLongs.someLong;
 
 public class TimeTest {
 
+    private Long duration;
+    private TimeUnit unit;
+    private Time time;
+
+    @Before
+    public void setUp() {
+        duration = someLong();
+        unit = someEnum(TimeUnit.class);
+        time = new Time(duration, unit);
+    }
+
     @Test
     public void Can_convert_time_to_milliseconds() {
 
-        // Given
-        final Long duration = someLong();
-        final TimeUnit unit = someEnum(TimeUnit.class);
-
         // When
-        final long actual = new Time(duration, unit).toMillis();
+        final long actual = time.toMillis();
 
         // Then
         assertThat(actual, equalTo(unit.toMillis(duration)));
+    }
+
+    @Test
+    public void Can_to_string_time() {
+
+        // When
+        final String actual = time.toString();
+
+        // Then
+        assertThat(actual, equalTo(format("Time{duration=%s, unit=%s}", duration, unit.name())));
     }
 }
