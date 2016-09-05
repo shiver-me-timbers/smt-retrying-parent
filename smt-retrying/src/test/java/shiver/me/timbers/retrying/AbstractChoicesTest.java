@@ -18,6 +18,8 @@ package shiver.me.timbers.retrying;
 
 import org.junit.Test;
 
+import java.util.Set;
+
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
@@ -31,6 +33,8 @@ public class AbstractChoicesTest {
         // Given
         final Integer retries = somePositiveInteger();
         final Time interval = mock(Time.class);
+        @SuppressWarnings("unchecked")
+        final Set<Class<? extends Throwable>> includes = mock(Set.class);
 
         // When
         final Choice actual = new AbstractChoices() {
@@ -43,10 +47,16 @@ public class AbstractChoicesTest {
             public Time getInterval() {
                 return interval;
             }
+
+            @Override
+            public Set<Class<? extends Throwable>> getIncludes() {
+                return includes;
+            }
         }.choose();
 
         // Then
         assertThat(actual, hasField("retries", retries));
         assertThat(actual, hasField("interval", interval));
+        assertThat(actual, hasField("includes", includes));
     }
 }

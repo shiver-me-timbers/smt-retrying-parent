@@ -16,7 +16,11 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.Arrays.asList;
 
 /**
  * This class is used to customise the options for the {@link Retryer}. With this you can set the number of times the
@@ -39,6 +43,7 @@ public class Options implements OptionsService {
 
     private Integer retries;
     private Time interval;
+    private Set<Class<? extends Throwable>> includes;
 
     public Options() {
         this(new StaticDefaultChoices(), new SystemPropertyChoices(), new OptionsManualChoices());
@@ -66,6 +71,12 @@ public class Options implements OptionsService {
         return this;
     }
 
+    @Override
+    public Options includes(Class<? extends Throwable>... includes) {
+        this.includes = new HashSet<>(asList(includes));
+        return this;
+    }
+
     Chooser chooser() {
         return new CompositeOverridingChooser(defaultChoices, propertyChoices, manualChoices.apply(this));
     }
@@ -76,5 +87,9 @@ public class Options implements OptionsService {
 
     Time getInterval() {
         return interval;
+    }
+
+    Set<Class<? extends Throwable>> getIncludes() {
+        return includes;
     }
 }

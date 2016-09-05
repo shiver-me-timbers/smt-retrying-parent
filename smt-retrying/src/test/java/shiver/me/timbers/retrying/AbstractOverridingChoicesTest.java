@@ -19,6 +19,9 @@ package shiver.me.timbers.retrying;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.Set;
+
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -29,12 +32,15 @@ public class AbstractOverridingChoicesTest {
 
     private int retries;
     private Time interval;
+    private Set<Class<? extends Throwable>> includes;
     private AbstractOverridingChoices abstractChoices;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setUp() {
         retries = someInteger();
         interval = mock(Time.class);
+        includes = mock(Set.class);
         abstractChoices = new AbstractOverridingChoices() {
             @Override
             public Integer getRetries() {
@@ -44,6 +50,11 @@ public class AbstractOverridingChoicesTest {
             @Override
             public Time getInterval() {
                 return interval;
+            }
+
+            @Override
+            public Set<Class<? extends Throwable>> getIncludes() {
+                return includes;
             }
         };
     }
@@ -55,10 +66,13 @@ public class AbstractOverridingChoicesTest {
 
         final int retries = someInteger();
         final Time interval = mock(Time.class);
+        @SuppressWarnings("unchecked")
+        final Set<Class<? extends Throwable>> includes = mock(Set.class);
 
         // Given
         given(choices.getRetries()).willReturn(retries);
         given(choices.getInterval()).willReturn(interval);
+        given(choices.getIncludes()).willReturn(includes);
 
         // When
         final Choices actual = abstractChoices.overrideWith(choices);
@@ -66,16 +80,18 @@ public class AbstractOverridingChoicesTest {
         // Then
         assertThat(actual, hasField("retries", retries));
         assertThat(actual, hasField("interval", interval));
+        assertThat(actual, hasField("includes", includes));
     }
 
     @Test
-    public void Will_not_override_with_empty_choices() {
+    public void Will_not_override_with_null_choices() {
 
         final Choices choices = mock(Choices.class);
 
         // Given
         given(choices.getRetries()).willReturn(null);
         given(choices.getInterval()).willReturn(null);
+        given(choices.getIncludes()).willReturn(null);
 
         // When
         final Choices actual = abstractChoices.overrideWith(choices);
@@ -83,5 +99,21 @@ public class AbstractOverridingChoicesTest {
         // Then
         assertThat(actual, hasField("retries", retries));
         assertThat(actual, hasField("interval", interval));
+        assertThat(actual, hasField("includes", includes));
+    }
+
+    @Test
+    public void Will_not_override_with_empty_include() {
+
+        final Choices choices = mock(Choices.class);
+
+        // Given
+        given(choices.getIncludes()).willReturn(Collections.<Class<? extends Throwable>>emptySet());
+
+        // When
+        final Choices actual = abstractChoices.overrideWith(choices);
+
+        // Then
+        assertThat(actual, hasField("includes", includes));
     }
 }

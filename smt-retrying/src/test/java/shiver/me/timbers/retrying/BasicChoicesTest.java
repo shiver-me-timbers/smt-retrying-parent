@@ -19,6 +19,8 @@ package shiver.me.timbers.retrying;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Set;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -29,12 +31,15 @@ public class BasicChoicesTest {
     private Integer retries;
     private Time interval;
     private BasicChoices choices;
+    private Set<Class<? extends Throwable>> includes;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setUp() {
         retries = someInteger();
         interval = mock(Time.class);
-        choices = new BasicChoices(retries, interval);
+        includes = mock(Set.class);
+        choices = new BasicChoices(retries, interval, includes);
     }
 
     @Test
@@ -55,5 +60,15 @@ public class BasicChoicesTest {
 
         // Then
         assertThat(actual, is(interval));
+    }
+
+    @Test
+    public void Can_get_the_includes() {
+
+        // When
+        final Set<Class<? extends Throwable>> actual = choices.getIncludes();
+
+        // Then
+        assertThat(actual, is(includes));
     }
 }

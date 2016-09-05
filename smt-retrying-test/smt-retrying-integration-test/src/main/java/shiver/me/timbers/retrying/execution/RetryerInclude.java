@@ -14,32 +14,14 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.execution;
 
-import java.util.Set;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import java.util.concurrent.Callable;
 
 /**
  * @author Karl Bennett
  */
-class StaticDefaultChoices extends AbstractOverridingChoices implements DefaultChoices {
+public interface RetryerInclude {
 
-    static final Integer DEFAULT_RETRIES = 5;
-    static final Time DEFAULT_INTERVAL = new Time(100L, MILLISECONDS);
-
-    @Override
-    public Integer getRetries() {
-        return DEFAULT_RETRIES;
-    }
-
-    @Override
-    public Time getInterval() {
-        return DEFAULT_INTERVAL;
-    }
-
-    @Override
-    public Set<Class<? extends Throwable>> getIncludes() {
-        throw new UnsupportedOperationException();
-    }
+    <T> T includeMethod(Callable<T> callable) throws InterruptedException;
 }

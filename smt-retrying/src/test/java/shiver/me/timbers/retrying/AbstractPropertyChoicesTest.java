@@ -16,20 +16,33 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
+import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.matchers.Matchers.hasField;
 import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.random.RandomExceptions.someThrowable;
 
 public class AbstractPropertyChoicesTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void Can_get_the_retries_property() {
@@ -51,6 +64,11 @@ public class AbstractPropertyChoicesTest {
 
             @Override
             String getIntervalUnitProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIncludesProperty() {
                 throw new UnsupportedOperationException();
             }
         }.getRetries();
@@ -76,6 +94,11 @@ public class AbstractPropertyChoicesTest {
 
             @Override
             String getIntervalUnitProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIncludesProperty() {
                 throw new UnsupportedOperationException();
             }
         }.getRetries();
@@ -107,6 +130,11 @@ public class AbstractPropertyChoicesTest {
             String getIntervalUnitProperty() {
                 return unit.name();
             }
+
+            @Override
+            String getIncludesProperty() {
+                throw new UnsupportedOperationException();
+            }
         }.getInterval();
 
         // Then
@@ -132,6 +160,11 @@ public class AbstractPropertyChoicesTest {
             @Override
             String getIntervalUnitProperty() {
                 return someEnum(TimeUnit.class).name();
+            }
+
+            @Override
+            String getIncludesProperty() {
+                throw new UnsupportedOperationException();
             }
         }.getInterval();
 
@@ -161,9 +194,143 @@ public class AbstractPropertyChoicesTest {
             String getIntervalUnitProperty() {
                 return null;
             }
+
+            @Override
+            String getIncludesProperty() {
+                throw new UnsupportedOperationException();
+            }
         }.getInterval();
 
         // Then
         assertThat(actual, nullValue());
+    }
+
+    @Test
+    public void Can_get_the_includes_property() {
+
+        // Given
+        final Class<? extends Throwable> throwable1 = someThrowable().getClass();
+        final Class<? extends Throwable> throwable2 = someThrowable().getClass();
+        final Class<? extends Throwable> throwable3 = someThrowable().getClass();
+
+        // When
+        final Set<Class<? extends Throwable>> actual = new AbstractPropertyChoices() {
+            @Override
+            String getRetriesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalDurationProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalUnitProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIncludesProperty() {
+                return format("%s,%s,%s", throwable1.getName(), throwable2.getName(), throwable3.getName());
+            }
+        }.getIncludes();
+
+        // Then
+        assertThat(actual, equalTo((Set) new HashSet<>(asList(throwable1, throwable2, throwable3))));
+    }
+
+    @Test
+    public void Can_get_a_null_includes_property() {
+
+        // When
+        final Set<Class<? extends Throwable>> actual = new AbstractPropertyChoices() {
+            @Override
+            String getRetriesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalDurationProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalUnitProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIncludesProperty() {
+                return null;
+            }
+        }.getIncludes();
+
+        // Then
+        assertThat(actual, empty());
+    }
+
+    @Test
+    public void Can_get_an_empty_includes_property() {
+
+        // When
+        final Set<Class<? extends Throwable>> actual = new AbstractPropertyChoices() {
+            @Override
+            String getRetriesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalDurationProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalUnitProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIncludesProperty() {
+                return "";
+            }
+        }.getIncludes();
+
+        // Then
+        assertThat(actual, empty());
+    }
+
+    @Test
+    public void Cannot_get_an_invalid_includes_property() {
+
+        final String invalidThrowable = someAlphanumericString(10);
+
+        // Given
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage(format("Could not load the throwable class (%s).", invalidThrowable));
+        expectedException.expectCause(isA(ClassNotFoundException.class));
+
+        // When
+        new AbstractPropertyChoices() {
+            @Override
+            String getRetriesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalDurationProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalUnitProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIncludesProperty() {
+                return format("%s,%s", someThrowable().getClass().getName(), invalidThrowable);
+            }
+        }.getIncludes();
     }
 }

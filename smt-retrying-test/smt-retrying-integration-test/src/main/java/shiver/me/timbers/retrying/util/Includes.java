@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.util;
 
-/**
- * @author Karl Bennett
- */
-class SystemPropertyChoices extends AbstractPropertyChoices implements PropertyChoices {
 
-    @Override
-    String getRetriesProperty() {
-        return System.getProperty(RETRIES_PROPERTY);
+import shiver.me.timbers.retrying.Options;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static shiver.me.timbers.retrying.util.Classes.toClasses;
+
+public class Includes {
+
+    public static Options addIncludes(Options options, Throwable... includes) {
+        return addIncludes(options, asList(includes));
     }
 
-    @Override
-    String getIntervalDurationProperty() {
-        return System.getProperty(INTERVAL_DURATION_PROPERTY);
-    }
-
-    @Override
-    String getIntervalUnitProperty() {
-        return System.getProperty(INTERVAL_UNIT_PROPERTY);
-    }
-
-    @Override
-    String getIncludesProperty() {
-        return System.getProperty(INCLUDES_PROPERTY);
+    @SuppressWarnings("unchecked")
+    public static Options addIncludes(Options options, List<Throwable> includes) {
+        options.includes(toClasses(includes).toArray(new Class[includes.size()]));
+        return options;
     }
 }

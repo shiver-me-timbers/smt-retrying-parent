@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.random;
 
-/**
- * @author Karl Bennett
- */
-interface PropertyChoices extends OverridingChoices {
-    String RETRIES_PROPERTY = "smt.retryer.retries";
-    String INTERVAL_DURATION_PROPERTY = "smt.retryer.interval.duration";
-    String INTERVAL_UNIT_PROPERTY = "smt.retryer.interval.unit";
-    String INCLUDES_PROPERTY = "smt.retryer.includes";
+import static shiver.me.timbers.data.random.RandomThings.someThing;
+
+public class RandomExceptions {
+
+    public static Throwable someThrowable() {
+        return someThing(new RuntimeException(), new IllegalArgumentException(), new Error());
+    }
+
+    public static Throwable someOtherThrowable() {
+        return someThing(new IllegalStateException(), new ClassCastException(), new IllegalAccessError());
+    }
 }

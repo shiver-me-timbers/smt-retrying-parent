@@ -22,6 +22,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.util.StopWatch;
 
+import java.util.Set;
+
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
@@ -37,20 +39,24 @@ public class ChoiceTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+
     private Integer retries;
     private Time interval;
+    private Set<Class<? extends Throwable>> includes;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setUp() {
         retries = somePositiveInteger();
         interval = mock(Time.class);
+        includes = mock(Set.class);
     }
 
     @Test
     public void Can_get_the_number_of_retries() {
 
         // When
-        final int actual = new Choice(retries, interval).getRetries();
+        final int actual = new Choice(retries, interval, includes).getRetries();
 
         // Then
         assertThat(actual, is(retries));
@@ -69,7 +75,7 @@ public class ChoiceTest {
         stopWatch.start();
 
         // When
-        new Choice(retries, interval).sleepForInterval();
+        new Choice(retries, interval, includes).sleepForInterval();
 
         // Then
         stopWatch.stop();
@@ -84,7 +90,7 @@ public class ChoiceTest {
         expectedException.expectMessage("The retries value must be greater than 1. The value (0) is invalid.");
 
         // When
-        new Choice(0, interval);
+        new Choice(0, interval, includes);
     }
 
     @Test
@@ -99,7 +105,7 @@ public class ChoiceTest {
         );
 
         // When
-        new Choice(retries, interval);
+        new Choice(retries, interval, includes);
     }
 
     @Test
@@ -115,6 +121,6 @@ public class ChoiceTest {
         );
 
         // When
-        new Choice(retries, interval);
+        new Choice(retries, interval, includes);
     }
 }

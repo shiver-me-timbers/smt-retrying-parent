@@ -23,6 +23,6 @@ class OptionsManualChoices implements ManualChoices<Options> {
 
     @Override
     public BasicChoices apply(Options options) {
-        return new BasicChoices(options.getRetries(), options.getInterval());
+        return new BasicChoices(options.getRetries(), options.getInterval(), options.getIncludes());
     }
 }

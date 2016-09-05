@@ -16,6 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.Set;
+
 /**
  * @author Karl Bennett
  */
@@ -24,4 +26,6 @@ interface Choices extends Chooser {
     Integer getRetries();
 
     Time getInterval();
+
+    Set<Class<? extends Throwable>> getIncludes();
 }

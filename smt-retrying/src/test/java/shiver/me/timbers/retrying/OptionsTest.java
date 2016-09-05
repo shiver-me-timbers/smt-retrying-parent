@@ -19,8 +19,10 @@ package shiver.me.timbers.retrying;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -29,6 +31,7 @@ import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
 import static shiver.me.timbers.matchers.Matchers.hasField;
 import static shiver.me.timbers.matchers.Matchers.hasProperty;
+import static shiver.me.timbers.retrying.random.RandomExceptions.someThrowable;
 
 public class OptionsTest {
 
@@ -72,6 +75,21 @@ public class OptionsTest {
         // Then
         assertThat(actual, hasProperty("interval.duration", duration));
         assertThat(actual, hasProperty("interval.unit", unit));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void Can_set_the_included_exceptions_that_should_cause_a_retry() {
+
+        // Given
+        final Class<? extends Throwable> throwable1 = someThrowable().getClass();
+        final Class<? extends Throwable> throwable2 = someThrowable().getClass();
+
+        // When
+        final OptionsService actual = options.includes(throwable1, throwable2);
+
+        // Then
+        assertThat(actual, hasField("includes", new HashSet<>(asList(throwable1, throwable2))));
     }
 
     @Test

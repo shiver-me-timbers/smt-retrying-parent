@@ -23,6 +23,6 @@ abstract class AbstractChoices implements Choices {
 
     @Override
     public Choice choose() {
-        return new Choice(getRetries(), getInterval());
+        return new Choice(getRetries(), getInterval(), getIncludes());
     }
 }

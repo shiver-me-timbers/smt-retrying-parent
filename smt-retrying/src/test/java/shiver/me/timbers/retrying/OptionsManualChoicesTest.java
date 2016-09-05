@@ -18,6 +18,8 @@ package shiver.me.timbers.retrying;
 
 import org.junit.Test;
 
+import java.util.Set;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -27,16 +29,19 @@ import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 public class OptionsManualChoicesTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void Can_apply_the_manual_chices_set_in_the_options() {
 
         final Options options = mock(Options.class);
 
         final int retries = someInteger();
         final Time interval = mock(Time.class);
+        final Set<Class<? extends Throwable>> includes = mock(Set.class);
 
         // Given
         given(options.getRetries()).willReturn(retries);
         given(options.getInterval()).willReturn(interval);
+        given(options.getIncludes()).willReturn(includes);
 
         // When
         final BasicChoices actual = new OptionsManualChoices().apply(options);
@@ -44,5 +49,6 @@ public class OptionsManualChoicesTest {
         // Then
         assertThat(actual.getRetries(), is(retries));
         assertThat(actual.getInterval(), is(interval));
+        assertThat(actual.getIncludes(), is(includes));
     }
 }

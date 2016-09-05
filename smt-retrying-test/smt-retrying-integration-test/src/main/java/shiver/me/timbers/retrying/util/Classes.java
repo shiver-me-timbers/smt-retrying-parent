@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.util;
 
-/**
- * @author Karl Bennett
- */
-interface PropertyChoices extends OverridingChoices {
-    String RETRIES_PROPERTY = "smt.retryer.retries";
-    String INTERVAL_DURATION_PROPERTY = "smt.retryer.interval.duration";
-    String INTERVAL_UNIT_PROPERTY = "smt.retryer.interval.unit";
-    String INCLUDES_PROPERTY = "smt.retryer.includes";
+import java.util.ArrayList;
+import java.util.List;
+
+public class Classes {
+
+    public static List<Class> toClasses(List objects) {
+        final List<Class> classes = new ArrayList<>(objects.size());
+        for (Object object : objects) {
+            classes.add(object.getClass());
+        }
+        return classes;
+    }
 }

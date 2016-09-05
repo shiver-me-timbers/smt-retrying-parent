@@ -16,6 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.Set;
+
 import static java.lang.String.format;
 
 /**
@@ -25,10 +27,12 @@ class Choice {
 
     private final int retries;
     private final Time interval;
+    private final Set<Class<? extends Throwable>> includes;
 
-    Choice(int retries, Time interval) {
+    Choice(int retries, Time interval, Set<Class<? extends Throwable>> includes) {
         this.retries = validateRetries(retries);
         this.interval = validateInterval(interval);
+        this.includes = includes;
     }
 
     private static int validateRetries(int retries) {

@@ -16,30 +16,18 @@
 
 package shiver.me.timbers.retrying;
 
-import java.util.Set;
+import org.junit.rules.ExpectedException;
+import shiver.me.timbers.retrying.execution.RetryerInclude;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+public interface ITRetryerInclude {
 
-/**
- * @author Karl Bennett
- */
-class StaticDefaultChoices extends AbstractOverridingChoices implements DefaultChoices {
+    void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
 
-    static final Integer DEFAULT_RETRIES = 5;
-    static final Time DEFAULT_INTERVAL = new Time(100L, MILLISECONDS);
+    void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable;
 
-    @Override
-    public Integer getRetries() {
-        return DEFAULT_RETRIES;
-    }
+    void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable;
 
-    @Override
-    public Time getInterval() {
-        return DEFAULT_INTERVAL;
-    }
+    ExpectedException expectedException();
 
-    @Override
-    public Set<Class<? extends Throwable>> getIncludes() {
-        throw new UnsupportedOperationException();
-    }
+    RetryerInclude includes(int retries, Throwable... includes);
 }

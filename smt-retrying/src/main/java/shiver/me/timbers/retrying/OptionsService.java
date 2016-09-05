@@ -26,4 +26,6 @@ interface OptionsService {
     OptionsService withRetries(Integer retries);
 
     OptionsService withInterval(Long duration, TimeUnit unit);
+
+    OptionsService includes(Class<? extends Throwable>... includes);
 }

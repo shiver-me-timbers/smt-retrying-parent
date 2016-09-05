@@ -16,6 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.Set;
+
 /**
  * @author Karl Bennett
  */
@@ -23,7 +25,7 @@ abstract class AbstractOverridingChoices extends AbstractChoices implements Over
 
     @Override
     public Choices overrideWith(Choices choices) {
-        return new BasicChoices(overrideRetries(choices), overrideInterval(choices));
+        return new BasicChoices(overrideRetries(choices), overrideInterval(choices), overrideIncludes(choices));
     }
 
     private Integer overrideRetries(Choices choices) {
@@ -32,6 +34,14 @@ abstract class AbstractOverridingChoices extends AbstractChoices implements Over
 
     private Time overrideInterval(Choices choices) {
         return override(getInterval(), choices.getInterval());
+    }
+
+    private Set<Class<? extends Throwable>> overrideIncludes(Choices choices) {
+        final Set<Class<? extends Throwable>> override = choices.getIncludes();
+        if (override != null && !override.isEmpty()) {
+            return override;
+        }
+        return getIncludes();
     }
 
     private <T> T override(T current, T override) {

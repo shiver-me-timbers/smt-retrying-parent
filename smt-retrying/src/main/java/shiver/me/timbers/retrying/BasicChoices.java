@@ -16,6 +16,8 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.Set;
+
 /**
  * @author Karl Bennett
  */
@@ -23,10 +25,12 @@ class BasicChoices extends AbstractChoices implements Choices {
 
     private final Integer retries;
     private final Time interval;
+    private final Set<Class<? extends Throwable>> includes;
 
-    BasicChoices(Integer retries, Time interval) {
+    BasicChoices(Integer retries, Time interval, Set<Class<? extends Throwable>> includes) {
         this.retries = retries;
         this.interval = interval;
+        this.includes = includes;
     }
 
     @Override
@@ -36,5 +40,10 @@ class BasicChoices extends AbstractChoices implements Choices {
 
     public Time getInterval() {
         return interval;
+    }
+
+    @Override
+    public Set<Class<? extends Throwable>> getIncludes() {
+        return includes;
     }
 }

@@ -16,5 +16,5 @@
 
 package shiver.me.timbers.retrying;
 
-public interface ITRetryer extends ITRetryerDefaults, ITRetryerRetries, ITRetryerInterval {
+public interface ITRetryer extends ITRetryerDefaults, ITRetryerRetries, ITRetryerInterval, ITRetryerInclude {
 }
