@@ -19,8 +19,8 @@ package shiver.me.timbers.retrying;
 /**
  * @author Karl Bennett
  */
-class RetriedToManyTimesException extends RuntimeException {
-    RetriedToManyTimesException(Throwable cause) {
+class RetriedTooManyTimesException extends RuntimeException {
+    RetriedTooManyTimesException(Throwable cause) {
         super(cause);
     }
 }

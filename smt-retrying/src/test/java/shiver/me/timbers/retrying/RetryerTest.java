@@ -172,7 +172,7 @@ public class RetryerTest {
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(exception);
-        expectedException.expect(RetriedToManyTimesException.class);
+        expectedException.expect(RetriedTooManyTimesException.class);
         expectedException.expectCause(is(exception));
 
         // When

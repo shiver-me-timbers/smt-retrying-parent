@@ -65,7 +65,7 @@ public class Retryer implements RetryerService {
             throw (RuntimeException) throwable;
         }
 
-        throw new RetriedToManyTimesException(throwable);
+        throw new RetriedTooManyTimesException(throwable);
     }
 
     private class Thrower {
