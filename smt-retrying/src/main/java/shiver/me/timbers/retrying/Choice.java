@@ -60,4 +60,18 @@ class Choice {
     void sleepForInterval() throws InterruptedException {
         Thread.sleep(interval.toMillis());
     }
+
+    boolean isSuppressed(Throwable throwable) {
+        if (includes.isEmpty()) {
+            return true;
+        }
+
+        final Class<? extends Throwable> type = throwable.getClass();
+
+        if (includes.contains(type)) {
+            return true;
+        }
+
+        return false;
+    }
 }

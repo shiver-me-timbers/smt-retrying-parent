@@ -16,20 +16,31 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_INCLUDES;
 import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_INTERVAL;
 import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_RETRIES;
 
 public class StaticDefaultChoicesTest {
 
+    private StaticDefaultChoices choices;
+
+    @Before
+    public void setUp() {
+        choices = new StaticDefaultChoices();
+    }
+
     @Test
     public void Can_get_default_retries() {
 
         // When
-        final Integer actual = new StaticDefaultChoices().getRetries();
+        final Integer actual = choices.getRetries();
 
         // Then
         assertThat(actual, is(DEFAULT_RETRIES));
@@ -39,9 +50,19 @@ public class StaticDefaultChoicesTest {
     public void Can_get_default_interval() {
 
         // When
-        final Time actual = new StaticDefaultChoices().getInterval();
+        final Time actual = choices.getInterval();
 
         // Then
         assertThat(actual, is(DEFAULT_INTERVAL));
+    }
+
+    @Test
+    public void Can_get_default_includes() {
+
+        // When
+        final Set<Class<? extends Throwable>> actual = choices.getIncludes();
+
+        // Then
+        assertThat(actual, is(DEFAULT_INCLUDES));
     }
 }

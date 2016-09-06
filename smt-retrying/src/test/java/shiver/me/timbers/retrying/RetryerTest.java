@@ -28,6 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static shiver.me.timbers.data.random.RandomIntegers.someIntegerBetween;
+import static shiver.me.timbers.retrying.random.RandomExceptions.someThrowable;
 
 public class RetryerTest {
 
@@ -64,13 +65,15 @@ public class RetryerTest {
 
         final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
+        final Throwable throwable = someThrowable();
         final Object expected = new Object();
 
         // Given
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(2);
-        given(until.success()).willThrow(new Exception()).willReturn(expected);
+        given(until.success()).willThrow(throwable).willReturn(expected);
+        given(choice.isSuppressed(throwable)).willReturn(true);
 
         // When
         final Object actual = new Retryer(options).retry(until);
@@ -82,7 +85,7 @@ public class RetryerTest {
     }
 
     @Test
-    public void Can_retry_a_failed_execution_specific_number_of_times() throws Throwable {
+    public void Can_retry_a_failed_execution_a_specific_number_of_times() throws Throwable {
 
         final Options options = mock(Options.class);
         final Until until = mock(Until.class);
@@ -90,12 +93,14 @@ public class RetryerTest {
         final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
         final int retries = someIntegerBetween(1, 10);
+        final Throwable throwable = someThrowable();
 
         // Given
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
-        given(until.success()).willThrow(new Exception());
+        given(until.success()).willThrow(throwable);
+        given(choice.isSuppressed(throwable)).willReturn(true);
 
         // When
         try {
@@ -126,6 +131,7 @@ public class RetryerTest {
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(exception);
+        given(choice.isSuppressed(exception)).willReturn(true);
         expectedException.expect(is(exception));
 
         // When
@@ -149,6 +155,7 @@ public class RetryerTest {
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(error);
+        given(choice.isSuppressed(error)).willReturn(true);
         expectedException.expect(is(error));
 
         // When
@@ -172,8 +179,31 @@ public class RetryerTest {
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
         given(until.success()).willThrow(exception);
+        given(choice.isSuppressed(exception)).willReturn(true);
         expectedException.expect(RetriedTooManyTimesException.class);
         expectedException.expectCause(is(exception));
+
+        // When
+        new Retryer(options).retry(until);
+    }
+
+    @Test
+    public void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable {
+
+        final Options options = mock(Options.class);
+        final Until until = mock(Until.class);
+
+        final Chooser chooser = mock(Chooser.class);
+        final Choice choice = mock(Choice.class);
+        final Throwable throwable = someThrowable();
+
+        // Given
+        given(options.chooser()).willReturn(chooser);
+        given(chooser.choose()).willReturn(choice);
+        given(choice.getRetries()).willReturn(2);
+        given(until.success()).willThrow(throwable).willReturn(new Object());
+        given(choice.isSuppressed(throwable)).willReturn(false);
+        expectedException.expect(is(throwable));
 
         // When
         new Retryer(options).retry(until);

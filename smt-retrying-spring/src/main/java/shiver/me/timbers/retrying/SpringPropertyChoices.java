@@ -44,6 +44,11 @@ class SpringPropertyChoices extends AbstractPropertyChoices implements PropertyC
         return getProperty(INTERVAL_UNIT_PROPERTY);
     }
 
+    @Override
+    String getIncludesProperty() {
+        return getProperty(INCLUDES_PROPERTY);
+    }
+
     private String getProperty(String key) {
         return applicationContext.getEnvironment().getProperty(key);
     }

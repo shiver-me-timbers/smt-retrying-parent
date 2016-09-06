@@ -22,9 +22,12 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.util.StopWatch;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -34,6 +37,8 @@ import static shiver.me.timbers.data.random.RandomIntegers.someNegativeInteger;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLongBetween;
 import static shiver.me.timbers.data.random.RandomLongs.someNegativeLong;
+import static shiver.me.timbers.retrying.random.RandomExceptions.someOtherThrowable;
+import static shiver.me.timbers.retrying.random.RandomExceptions.someThrowable;
 
 public class ChoiceTest {
 
@@ -122,5 +127,52 @@ public class ChoiceTest {
 
         // When
         new Choice(retries, interval, includes);
+    }
+
+    @Test
+    public void Can_check_if_an_included_exception_is_suppressed() {
+
+        // Given
+        final Throwable exception = someOtherThrowable();
+
+        // When
+        final boolean actual = new Choice(
+            retries,
+            interval,
+            new HashSet<>(asList(someThrowable().getClass(), exception.getClass(), someThrowable().getClass()))
+        ).isSuppressed(exception);
+
+        // Then
+        assertThat(actual, is(true));
+    }
+
+    @Test
+    public void Can_check_if_an_exception_that_is_not_included_is_not_suppressed() {
+
+        // Given
+        final Throwable exception = someOtherThrowable();
+
+        // When
+        final boolean actual = new Choice(
+            retries,
+            interval,
+            new HashSet<>(asList(someThrowable().getClass(), someThrowable().getClass(), someThrowable().getClass()))
+        ).isSuppressed(exception);
+
+        // Then
+        assertThat(actual, is(false));
+    }
+
+    @Test
+    public void Can_check_that_all_exceptions_are_suppressed_if_no_includes_or_excludes_are_set() {
+
+        // Given
+        final Throwable exception = someThrowable();
+
+        // When
+        final boolean actual = new Choice(retries, interval, Collections.<Class<? extends Throwable>>emptySet()).isSuppressed(exception);
+
+        // Then
+        assertThat(actual, is(true));
     }
 }

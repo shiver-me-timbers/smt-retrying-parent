@@ -18,6 +18,7 @@ package shiver.me.timbers.retrying;
 
 import java.util.Set;
 
+import static java.util.Collections.emptySet;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
@@ -27,6 +28,7 @@ class StaticDefaultChoices extends AbstractOverridingChoices implements DefaultC
 
     static final Integer DEFAULT_RETRIES = 5;
     static final Time DEFAULT_INTERVAL = new Time(100L, MILLISECONDS);
+    static final Set<Class<? extends Throwable>> DEFAULT_INCLUDES = emptySet();
 
     @Override
     public Integer getRetries() {
@@ -40,6 +42,6 @@ class StaticDefaultChoices extends AbstractOverridingChoices implements DefaultC
 
     @Override
     public Set<Class<? extends Throwable>> getIncludes() {
-        throw new UnsupportedOperationException();
+        return DEFAULT_INCLUDES;
     }
 }

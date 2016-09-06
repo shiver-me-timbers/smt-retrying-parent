@@ -41,12 +41,13 @@ public class Retryer implements RetryerService {
         final Choice choice = choices.choose();
 
         final int retries = choice.getRetries();
-        final Thrower thrower = new Thrower();
+        final Thrower thrower = new Thrower(choice);
         for (int i = 0; i < retries; i++) {
             try {
                 return until.success();
             } catch (Throwable e) {
                 thrower.register(e);
+                thrower.throwIfNotSuppressed();
                 log.warn(
                     "Retry attempt ({}) for execution ({}) because of exception ({}, {}).",
                     i + 1, until, e.getClass(), e.getMessage()
@@ -55,29 +56,40 @@ public class Retryer implements RetryerService {
             choice.sleepForInterval();
         }
 
-        final Throwable throwable = thrower.registeredThrowable();
-
-        if (throwable instanceof Error) {
-            throw (Error) throwable;
-        }
-
-        if (throwable instanceof RuntimeException) {
-            throw (RuntimeException) throwable;
-        }
-
-        throw new RetriedTooManyTimesException(throwable);
+        // This is a syntactical trick to allow compilation. This method call will never actually return anything, it
+        // will only every throw an exception.
+        return thrower.throwRegisteredThrowable();
     }
 
     private class Thrower {
 
+        private final Choice choice;
         private Throwable throwable;
+
+        public Thrower(Choice choice) {
+            this.choice = choice;
+        }
 
         void register(Throwable throwable) {
             this.throwable = throwable;
         }
 
-        Throwable registeredThrowable() {
-            return throwable;
+        <T> T throwRegisteredThrowable() {
+            if (throwable instanceof Error) {
+                throw (Error) throwable;
+            }
+
+            if (throwable instanceof RuntimeException) {
+                throw (RuntimeException) throwable;
+            }
+
+            throw new RetriedTooManyTimesException(throwable);
+        }
+
+        public void throwIfNotSuppressed() {
+            if (!choice.isSuppressed(throwable)) {
+                throwRegisteredThrowable();
+            }
         }
     }
 }
