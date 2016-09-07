@@ -16,6 +16,7 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -25,7 +26,7 @@ abstract class AbstractOverridingChoices extends AbstractChoices implements Over
 
     @Override
     public Choices overrideWith(Choices choices) {
-        return new BasicChoices(overrideRetries(choices), overrideInterval(choices), overrideIncludes(choices));
+        return new BasicChoices(overrideRetries(choices), overrideInterval(choices), addIncludes(choices));
     }
 
     private Integer overrideRetries(Choices choices) {
@@ -36,12 +37,15 @@ abstract class AbstractOverridingChoices extends AbstractChoices implements Over
         return override(getInterval(), choices.getInterval());
     }
 
-    private Set<Class<? extends Throwable>> overrideIncludes(Choices choices) {
-        final Set<Class<? extends Throwable>> override = choices.getIncludes();
-        if (override != null && !override.isEmpty()) {
-            return override;
+    private Set<Class<? extends Throwable>> addIncludes(Choices choices) {
+        final Set<Class<? extends Throwable>> additions = choices.getIncludes();
+        if (additions == null || additions.isEmpty()) {
+            return getIncludes();
         }
-        return getIncludes();
+        // Need a new set for the current includes so that we don't mutate someone else's Set.
+        final Set<Class<? extends Throwable>> includes = new HashSet<>(getIncludes());
+        includes.addAll(additions);
+        return includes;
     }
 
     private <T> T override(T current, T override) {

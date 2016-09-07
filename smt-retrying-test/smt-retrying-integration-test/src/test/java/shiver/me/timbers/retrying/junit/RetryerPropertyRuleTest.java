@@ -22,6 +22,7 @@ import shiver.me.timbers.retrying.property.PropertyManager;
 
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -29,9 +30,13 @@ import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
+import static shiver.me.timbers.retrying.PropertyConstants.INCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.RETRIES_PROPERTY;
+import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_THROWABLES;
+import static shiver.me.timbers.retrying.util.Classes.toClassNames;
+import static shiver.me.timbers.retrying.util.Strings.concat;
 
 public class RetryerPropertyRuleTest {
 
@@ -72,5 +77,16 @@ public class RetryerPropertyRuleTest {
         assertThat(actual, is(rule));
         verify(propertyManager).setProperty(INTERVAL_DURATION_PROPERTY, duration.toString());
         verify(propertyManager).setProperty(INTERVAL_UNIT_PROPERTY, unit.name());
+    }
+
+    @Test
+    public void Can_build_property_rule_with_includes() {
+
+        // When
+        final RetryerPropertyRule actual = rule.withIncludes(SOME_THROWABLES);
+
+        // Then
+        assertThat(actual, is(rule));
+        verify(propertyManager).setProperty(INCLUDES_PROPERTY, concat(",", toClassNames(asList(SOME_THROWABLES))));
     }
 }

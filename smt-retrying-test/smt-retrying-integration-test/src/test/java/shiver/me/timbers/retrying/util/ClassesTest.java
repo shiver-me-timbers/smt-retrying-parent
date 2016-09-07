@@ -30,6 +30,7 @@ import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
 import static shiver.me.timbers.data.random.RandomShorts.someShort;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
+import static shiver.me.timbers.retrying.util.Classes.toClassNames;
 import static shiver.me.timbers.retrying.util.Classes.toClasses;
 
 public class ClassesTest {
@@ -49,6 +50,24 @@ public class ClassesTest {
         assertThat(actual, hasSize(objects.size()));
         for (Object object : objects) {
             assertThat(actual, hasItem(object.getClass()));
+        }
+    }
+
+    @Test
+    public void Can_convert_objects_to_class_names() {
+
+        // Given
+        final List objects = asList(
+            (Object) someShort(), someInteger(), someFloat(), someLong(), someDouble(), someString()
+        );
+
+        // When
+        final List<String> actual = toClassNames(objects);
+
+        // Then
+        assertThat(actual, hasSize(objects.size()));
+        for (Object object : objects) {
+            assertThat(actual, hasItem(object.getClass().getName()));
         }
     }
 }

@@ -20,13 +20,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.matchers.Matchers.hasField;
+import static shiver.me.timbers.retrying.random.RandomExceptions.someOtherThrowable;
+import static shiver.me.timbers.retrying.random.RandomExceptions.someThrowable;
 
 public class AbstractOverridingChoicesTest {
 
@@ -66,13 +72,10 @@ public class AbstractOverridingChoicesTest {
 
         final int retries = someInteger();
         final Time interval = mock(Time.class);
-        @SuppressWarnings("unchecked")
-        final Set<Class<? extends Throwable>> includes = mock(Set.class);
 
         // Given
         given(choices.getRetries()).willReturn(retries);
         given(choices.getInterval()).willReturn(interval);
-        given(choices.getIncludes()).willReturn(includes);
 
         // When
         final Choices actual = abstractChoices.overrideWith(choices);
@@ -80,7 +83,6 @@ public class AbstractOverridingChoicesTest {
         // Then
         assertThat(actual, hasField("retries", retries));
         assertThat(actual, hasField("interval", interval));
-        assertThat(actual, hasField("includes", includes));
     }
 
     @Test
@@ -91,7 +93,6 @@ public class AbstractOverridingChoicesTest {
         // Given
         given(choices.getRetries()).willReturn(null);
         given(choices.getInterval()).willReturn(null);
-        given(choices.getIncludes()).willReturn(null);
 
         // When
         final Choices actual = abstractChoices.overrideWith(choices);
@@ -99,11 +100,54 @@ public class AbstractOverridingChoicesTest {
         // Then
         assertThat(actual, hasField("retries", retries));
         assertThat(actual, hasField("interval", interval));
+    }
+
+    @Test
+    public void Can_add_choices() {
+
+        final Choices choices = mock(Choices.class);
+
+        final HashSet<Class<? extends Throwable>> currentIncludes = new HashSet<>(asList(
+            someOtherThrowable().getClass(), someOtherThrowable().getClass()
+        ));
+        final HashSet<Class<? extends Throwable>> originalCurrentIncludes = new HashSet<>(currentIncludes);
+        final Set<Class<? extends Throwable>> additionalIncludes = new HashSet<>(asList(
+            someThrowable().getClass(), someThrowable().getClass()
+        ));
+        final Set<Class<? extends Throwable>> expected = new HashSet<>(currentIncludes);
+        expected.addAll(additionalIncludes);
+
+        // Given
+        given(includes.iterator()).willReturn(currentIncludes.iterator());
+        given(choices.getIncludes()).willReturn(additionalIncludes);
+
+        // When
+        final Choices actual = abstractChoices.overrideWith(choices);
+
+        // Then
+        assertThat(actual, hasField("includes", expected));
+        // The addition of the includes should not mutate the includes within the current choices.
+        assertThat(currentIncludes, equalTo(originalCurrentIncludes));
+    }
+
+    @Test
+    public void Will_not_add_null_includes() {
+
+        final Choices choices = mock(Choices.class);
+
+        // Given
+        given(choices.getIncludes()).willReturn(null);
+
+        // When
+        final Choices actual = abstractChoices.overrideWith(choices);
+
+        // Then
+        verifyZeroInteractions(includes);
         assertThat(actual, hasField("includes", includes));
     }
 
     @Test
-    public void Will_not_override_with_empty_include() {
+    public void Will_not_add_empty_includes() {
 
         final Choices choices = mock(Choices.class);
 
@@ -114,6 +158,7 @@ public class AbstractOverridingChoicesTest {
         final Choices actual = abstractChoices.overrideWith(choices);
 
         // Then
+        verifyZeroInteractions(includes);
         assertThat(actual, hasField("includes", includes));
     }
 }

@@ -20,9 +20,13 @@ import shiver.me.timbers.retrying.property.PropertyManager;
 
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Arrays.asList;
+import static shiver.me.timbers.retrying.PropertyConstants.INCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.RETRIES_PROPERTY;
+import static shiver.me.timbers.retrying.util.Classes.toClassNames;
+import static shiver.me.timbers.retrying.util.Strings.concat;
 
 public class RetryerPropertyRule extends PropertyRule {
 
@@ -47,5 +51,14 @@ public class RetryerPropertyRule extends PropertyRule {
     public void setInterval(Long duration, TimeUnit unit) {
         setProperty(INTERVAL_DURATION_PROPERTY, duration.toString());
         setProperty(INTERVAL_UNIT_PROPERTY, unit.name());
+    }
+
+    public RetryerPropertyRule withIncludes(Throwable... includes) {
+        setIncludes(includes);
+        return this;
+    }
+
+    public void setIncludes(Throwable... includes) {
+        setProperty(INCLUDES_PROPERTY, concat(",", toClassNames(asList(includes))));
     }
 }

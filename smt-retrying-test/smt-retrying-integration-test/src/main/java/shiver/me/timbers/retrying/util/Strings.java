@@ -16,24 +16,23 @@
 
 package shiver.me.timbers.retrying.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Classes {
+public class Strings {
 
-    public static List<Class> toClasses(List objects) {
-        final List<Class> classes = new ArrayList<>(objects.size());
-        for (Object object : objects) {
-            classes.add(object.getClass());
-        }
-        return classes;
+    public static String concat(String delimiter, List<String> strings) {
+        return concat(new StringBuilder(), delimiter, strings);
     }
 
-    public static List<String> toClassNames(List objects) {
-        final List<String> classNames = new ArrayList<>(objects.size());
-        for (Object object : objects) {
-            classNames.add(object.getClass().getName());
+    private static String concat(StringBuilder stringBuilder, String delimiter, List<String> strings) {
+        if (strings.isEmpty()) {
+            return "";
         }
-        return classNames;
+        if (strings.size() == 1) {
+            return strings.remove(0);
+        }
+        return stringBuilder.append(strings.remove(0)).append(delimiter)
+            .append(concat(new StringBuilder(), delimiter, strings))
+            .toString();
     }
 }

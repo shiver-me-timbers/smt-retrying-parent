@@ -105,7 +105,7 @@ public class RetryerTest {
         // When
         try {
             new Retryer(options).retry(until);
-        } catch (RuntimeException e) {
+        } catch (Throwable e) {
             // Don't care what the exception is.
         }
 
