@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.execution;
 
-import org.junit.rules.ExpectedException;
-import shiver.me.timbers.retrying.execution.RetryerIncludes;
+import shiver.me.timbers.retrying.SpringOptions;
+import shiver.me.timbers.retrying.SpringRetryer;
 
-public interface ITRetryerInclude {
+public class SpringManualRetryerIncludes extends ManualRetryerIncludes<SpringRetryer, SpringOptions> {
 
-    void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
+    public SpringManualRetryerIncludes(int retries, Throwable... includes) {
+        super(retries, includes);
+    }
 
-    void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable;
+    @Override
+    public SpringRetryer retryer(SpringOptions options) {
+        return new SpringRetryer(options);
+    }
 
-    void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable;
-
-    ExpectedException expectedException();
-
-    RetryerIncludes includes(int retries, Throwable... includes);
+    @Override
+    public SpringOptions options() {
+        return new SpringOptions();
+    }
 }

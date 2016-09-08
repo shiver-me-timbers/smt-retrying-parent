@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_THROWABLES;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someOtherThrowable;
 
-public abstract class AbstractITRetryerInclude implements ITRetryerInclude {
+public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
 
     @Test
     @Override
@@ -61,7 +61,7 @@ public abstract class AbstractITRetryerInclude implements ITRetryerInclude {
         final Throwable expected = someOtherThrowable();
 
         // Given
-        given(callable.call()).willThrow(expected);
+        given(callable.call()).willThrow(expected).willReturn(new Object());
         expectedException().expect(is(expected));
 
         // When

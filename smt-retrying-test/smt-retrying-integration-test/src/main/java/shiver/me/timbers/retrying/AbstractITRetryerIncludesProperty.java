@@ -19,7 +19,7 @@ package shiver.me.timbers.retrying;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import shiver.me.timbers.retrying.execution.RetryerInclude;
+import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRuleAware;
 
 import java.util.concurrent.Callable;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_OTHER_THROWABLES;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
 
-public abstract class AbstractITRetryerIncludeProperty extends AbstractITRetryerInclude
+public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetryerIncludes
     implements ITRetryerDefaults, RetryerPropertyRuleAware {
 
     @Rule
@@ -45,8 +45,8 @@ public abstract class AbstractITRetryerIncludeProperty extends AbstractITRetryer
     }
 
     @Override
-    public RetryerInclude includes(final int retries, final Throwable... includes) {
-        return new RetryerInclude() {
+    public RetryerIncludes includes(final int retries, final Throwable... includes) {
+        return new RetryerIncludes() {
             @Override
             public <T> T includeMethod(Callable<T> callable) throws Exception {
                 properties().setRetries(retries);
@@ -56,7 +56,7 @@ public abstract class AbstractITRetryerIncludeProperty extends AbstractITRetryer
         };
     }
 
-    protected abstract RetryerInclude addInclude(final int retries, Throwable include);
+    protected abstract RetryerIncludes addInclude(final int retries, Throwable include);
 
     @Test
     public void Can_set_multiple_includes_with_a_system_property() throws Throwable {

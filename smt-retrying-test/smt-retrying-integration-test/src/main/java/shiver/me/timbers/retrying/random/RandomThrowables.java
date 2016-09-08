@@ -16,6 +16,7 @@
 
 package shiver.me.timbers.retrying.random;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import static shiver.me.timbers.data.random.RandomThings.someThing;
@@ -39,11 +40,28 @@ public class RandomThrowables {
         return someThings(SOME_THROWABLES).list();
     }
 
+    public static Throwable[] someThrowablesArray() {
+        return toArray(someThrowables(), Throwable.class);
+    }
+
     public static Throwable someOtherThrowable() {
         return someThing(SOME_OTHER_THROWABLES);
     }
 
     public static List<Throwable> someOtherThrowables() {
         return someThings(SOME_OTHER_THROWABLES).list();
+    }
+
+    public static Throwable[] someOtherThrowablesArray() {
+        return toArray(someOtherThrowables(), Throwable.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T[] toArray(List<T> throwables, Class<T> type) {
+        final T[] array = (T[]) Array.newInstance(type, throwables.size());
+        for (int i = 0; i < throwables.size(); i++) {
+            array[i] = throwables.get(i);
+        }
+        return array;
     }
 }

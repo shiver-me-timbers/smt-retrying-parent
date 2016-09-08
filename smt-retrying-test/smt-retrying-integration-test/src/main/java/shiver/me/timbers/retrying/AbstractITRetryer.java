@@ -19,7 +19,7 @@ package shiver.me.timbers.retrying;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import shiver.me.timbers.retrying.execution.RetryerInclude;
+import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
@@ -57,14 +57,14 @@ public abstract class AbstractITRetryer implements ITRetryer {
         }
     };
 
-    private final AbstractITRetryerInclude include = new AbstractITRetryerInclude() {
+    private final AbstractITRetryerIncludes include = new AbstractITRetryerIncludes() {
         @Override
         public ExpectedException expectedException() {
             return AbstractITRetryer.this.expectedException();
         }
 
         @Override
-        public RetryerInclude includes(int retries, Throwable... includes) {
+        public RetryerIncludes includes(int retries, Throwable... includes) {
             return AbstractITRetryer.this.includes(retries, includes);
         }
     };

@@ -41,6 +41,7 @@ public class OptionsServiceConfigurerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void Can_configure_an_options_service() {
 
         final OptionsService optionsService = mock(OptionsService.class);
@@ -50,12 +51,14 @@ public class OptionsServiceConfigurerTest {
         final Interval interval = mock(Interval.class);
         final Long intervalDuration = someLongBetween(1L, 1000L);
         final TimeUnit intervalUnit = someEnum(TimeUnit.class);
+        final Class[] includes = {RuntimeException.class, IllegalArgumentException.class, Error.class};
 
         // Given
         given(retry.value()).willReturn(retries);
         given(retry.interval()).willReturn(interval);
         given(interval.duration()).willReturn(intervalDuration);
         given(interval.unit()).willReturn(intervalUnit);
+        given(retry.includes()).willReturn(includes);
 
         // When
         configurer.configure(optionsService, retry);
@@ -63,9 +66,11 @@ public class OptionsServiceConfigurerTest {
         // Then
         verify(optionsService).withRetries(retries);
         verify(optionsService).withInterval(intervalDuration, intervalUnit);
+        verify(optionsService).includes(includes);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void Will_not_configure_default_options() {
 
         final OptionsService optionsService = mock(OptionsService.class);
@@ -78,6 +83,7 @@ public class OptionsServiceConfigurerTest {
         given(retry.interval()).willReturn(interval);
         given(interval.duration()).willReturn(someNegativeLong());
         given(interval.unit()).willReturn(someEnum(TimeUnit.class));
+        given(retry.includes()).willReturn(new Class[0]);
 
         // When
         configurer.configure(optionsService, retry);

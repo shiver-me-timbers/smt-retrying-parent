@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.execution;
 
-import org.junit.rules.ExpectedException;
-import shiver.me.timbers.retrying.execution.RetryerIncludes;
+import shiver.me.timbers.retrying.Retry;
 
-public interface ITRetryerInclude {
+import java.util.concurrent.Callable;
 
-    void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
+@Retry(value = 8)
+public class RetryerNoIncludesClass implements RetryerIncludes {
 
-    void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable;
-
-    void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable;
-
-    ExpectedException expectedException();
-
-    RetryerIncludes includes(int retries, Throwable... includes);
+    @Override
+    public <T> T includeMethod(Callable<T> callable) throws Exception {
+        return callable.call();
+    }
 }

@@ -17,17 +17,27 @@
 package shiver.me.timbers.retrying;
 
 import org.junit.Rule;
-import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
-import shiver.me.timbers.retrying.execution.ManualRetryerIncludes;
-import shiver.me.timbers.retrying.execution.RetryerDefaults;
-import shiver.me.timbers.retrying.execution.RetryerIncludes;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsMethodFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesMethodFactory;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRule;
 import shiver.me.timbers.retrying.property.SystemPropertyManager;
 
-public class ITManualRetryerIncludesProperty extends AbstractITRetryerIncludesProperty {
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = RetryerConfiguration.class)
+public class ITAutoProxyAspectRetryerIncludesPropertyMethod extends AbstractITAspectRetryerIncludesPropertyMethod {
 
     @Rule
     public RetryerPropertyRule properties = new RetryerPropertyRule(new SystemPropertyManager());
+
+    @Autowired
+    private AutoProxyRetryerDefaultsMethodFactory defaultsFactory;
+
+    @Autowired
+    private AutoProxyRetryerIncludesMethodFactory includesFactory;
 
     @Override
     public RetryerPropertyRule properties() {
@@ -35,12 +45,12 @@ public class ITManualRetryerIncludesProperty extends AbstractITRetryerIncludesPr
     }
 
     @Override
-    public RetryerDefaults defaults() {
-        return new ManualRetryerDefaults();
+    public AutoProxyRetryerDefaultsMethodFactory defaultsFactory() {
+        return defaultsFactory;
     }
 
     @Override
-    protected RetryerIncludes addInclude(int retries, Throwable include) {
-        return new ManualRetryerIncludes<>(retries, include);
+    public AutoProxyRetryerIncludesMethodFactory includesFactory() {
+        return includesFactory;
     }
 }

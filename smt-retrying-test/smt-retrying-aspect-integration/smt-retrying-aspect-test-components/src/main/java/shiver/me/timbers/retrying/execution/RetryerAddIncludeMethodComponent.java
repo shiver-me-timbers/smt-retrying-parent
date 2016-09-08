@@ -16,12 +16,8 @@
 
 package shiver.me.timbers.retrying.execution;
 
-import java.util.concurrent.Callable;
+import org.springframework.stereotype.Component;
 
-/**
- * @author Karl Bennett
- */
-public interface RetryerInclude {
-
-    <T> T includeMethod(Callable<T> callable) throws Exception;
+@Component
+public class RetryerAddIncludeMethodComponent extends RetryerAddIncludeMethod {
 }

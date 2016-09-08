@@ -27,13 +27,13 @@ import static shiver.me.timbers.retrying.util.Includes.addIncludes;
 /**
  * @author Karl Bennett
  */
-public class ManualRetryerInclude<R extends Retryer, O extends Options> extends RetryerCreater<R, O>
-    implements RetryerInclude {
+public class ManualRetryerIncludes<R extends Retryer, O extends Options> extends RetryerCreater<R, O>
+    implements RetryerIncludes {
 
     private final int retries;
     private final Throwable[] includes;
 
-    public ManualRetryerInclude(int retries, Throwable... includes) {
+    public ManualRetryerIncludes(int retries, Throwable... includes) {
         this.retries = retries;
         this.includes = includes;
     }

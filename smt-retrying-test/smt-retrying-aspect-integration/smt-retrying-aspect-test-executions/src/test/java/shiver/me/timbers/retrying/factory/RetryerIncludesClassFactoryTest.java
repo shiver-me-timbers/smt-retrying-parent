@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying;
+package shiver.me.timbers.retrying.factory;
 
-import org.junit.rules.ExpectedException;
+import org.junit.Test;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
+import shiver.me.timbers.retrying.execution.RetryerIncludesClass;
 
-public interface ITRetryerInclude {
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
+import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_THROWABLES;
 
-    void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
+public class RetryerIncludesClassFactoryTest {
 
-    void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable;
+    @Test
+    public void Can_create_a_retryer_retries_class_factory() {
 
-    void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable;
+        // When
+        final RetryerIncludes actual = new RetryerIncludesClassFactory().create(8, SOME_THROWABLES);
 
-    ExpectedException expectedException();
-
-    RetryerIncludes includes(int retries, Throwable... includes);
+        // Then
+        assertThat(actual, instanceOf(RetryerIncludesClass.class));
+    }
 }

@@ -16,39 +16,37 @@
 
 package shiver.me.timbers.retrying;
 
+import org.junit.Rule;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesClassFactory;
-import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalClassFactory;
-import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesClassFactory;
+import shiver.me.timbers.retrying.junit.RetryerPropertyRule;
+import shiver.me.timbers.retrying.property.SystemPropertyManager;
 
-public class ITAutoProxySpringAspectRetryerClass extends AbstractITSpringAspectRetryerClass {
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = RetryerConfiguration.class)
+public class ITAutoProxyAspectRetryerIncludesPropertyClass extends AbstractITAspectRetryerIncludesPropertyClass {
+
+    @Rule
+    public RetryerPropertyRule properties = new RetryerPropertyRule(new SystemPropertyManager());
 
     @Autowired
     private AutoProxyRetryerDefaultsClassFactory defaultsFactory;
 
     @Autowired
-    private AutoProxyRetryerRetriesClassFactory retriesFactory;
-
-    @Autowired
-    private AutoProxyRetryerIntervalClassFactory intervalFactory;
-
-    @Autowired
     private AutoProxyRetryerIncludesClassFactory includesFactory;
+
+    @Override
+    public RetryerPropertyRule properties() {
+        return properties;
+    }
 
     @Override
     public AutoProxyRetryerDefaultsClassFactory defaultsFactory() {
         return defaultsFactory;
-    }
-
-    @Override
-    public AutoProxyRetryerRetriesClassFactory retriesFactory() {
-        return retriesFactory;
-    }
-
-    @Override
-    public AutoProxyRetryerIntervalClassFactory intervalFactory() {
-        return intervalFactory;
     }
 
     @Override

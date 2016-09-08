@@ -16,18 +16,9 @@
 
 package shiver.me.timbers.retrying;
 
-import org.junit.rules.ExpectedException;
-import shiver.me.timbers.retrying.execution.RetryerIncludes;
+import shiver.me.timbers.retrying.factory.RetryerIncludesFactory;
 
-public interface ITRetryerInclude {
+public interface RetryerIncludesFactoryAware {
 
-    void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
-
-    void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable;
-
-    void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable;
-
-    ExpectedException expectedException();
-
-    RetryerIncludes includes(int retries, Throwable... includes);
+    RetryerIncludesFactory includesFactory();
 }

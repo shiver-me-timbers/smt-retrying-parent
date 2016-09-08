@@ -16,18 +16,18 @@
 
 package shiver.me.timbers.retrying;
 
-import org.junit.rules.ExpectedException;
-import shiver.me.timbers.retrying.execution.RetryerIncludes;
+import shiver.me.timbers.retrying.factory.RetryerDefaultsClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerIncludesClassFactory;
 
-public interface ITRetryerInclude {
+public abstract class AbstractITAspectRetryerIncludesPropertyClass extends AbstractITAspectRetryerIncludesProperty {
 
-    void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
+    @Override
+    public RetryerDefaultsClassFactory defaultsFactory() {
+        return new RetryerDefaultsClassFactory();
+    }
 
-    void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable;
-
-    void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable;
-
-    ExpectedException expectedException();
-
-    RetryerIncludes includes(int retries, Throwable... includes);
+    @Override
+    public RetryerIncludesClassFactory includesFactory() {
+        return new RetryerIncludesClassFactory();
+    }
 }
