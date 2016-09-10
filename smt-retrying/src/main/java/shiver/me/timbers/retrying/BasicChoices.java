@@ -26,11 +26,18 @@ class BasicChoices extends AbstractChoices implements Choices {
     private final Integer retries;
     private final Time interval;
     private final Set<Class<? extends Throwable>> includes;
+    private final Set<Class<? extends Throwable>> excludes;
 
-    BasicChoices(Integer retries, Time interval, Set<Class<? extends Throwable>> includes) {
+    BasicChoices(
+        Integer retries,
+        Time interval,
+        Set<Class<? extends Throwable>> includes,
+        Set<Class<? extends Throwable>> excludes
+    ) {
         this.retries = retries;
         this.interval = interval;
         this.includes = includes;
+        this.excludes = excludes;
     }
 
     @Override
@@ -45,5 +52,10 @@ class BasicChoices extends AbstractChoices implements Choices {
     @Override
     public Set<Class<? extends Throwable>> getIncludes() {
         return includes;
+    }
+
+    @Override
+    public Set<Class<? extends Throwable>> getExcludes() {
+        return excludes;
     }
 }

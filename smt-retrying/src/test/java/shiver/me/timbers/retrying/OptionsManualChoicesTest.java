@@ -37,11 +37,13 @@ public class OptionsManualChoicesTest {
         final int retries = someInteger();
         final Time interval = mock(Time.class);
         final Set<Class<? extends Throwable>> includes = mock(Set.class);
+        final Set<Class<? extends Throwable>> excludes = mock(Set.class);
 
         // Given
         given(options.getRetries()).willReturn(retries);
         given(options.getInterval()).willReturn(interval);
         given(options.getIncludes()).willReturn(includes);
+        given(options.getExcludes()).willReturn(excludes);
 
         // When
         final BasicChoices actual = new OptionsManualChoices().apply(options);
@@ -50,5 +52,6 @@ public class OptionsManualChoicesTest {
         assertThat(actual.getRetries(), is(retries));
         assertThat(actual.getInterval(), is(interval));
         assertThat(actual.getIncludes(), is(includes));
+        assertThat(actual.getExcludes(), is(excludes));
     }
 }

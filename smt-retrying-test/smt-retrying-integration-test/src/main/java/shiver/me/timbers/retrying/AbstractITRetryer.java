@@ -19,10 +19,12 @@ package shiver.me.timbers.retrying;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +68,24 @@ public abstract class AbstractITRetryer implements ITRetryer {
         @Override
         public RetryerIncludes includes(int retries, Throwable... includes) {
             return AbstractITRetryer.this.includes(retries, includes);
+        }
+    };
+
+    private final AbstractITRetryerExcludes excludes = new AbstractITRetryerExcludes() {
+
+        @Override
+        public ExpectedException expectedException() {
+            return AbstractITRetryer.this.expectedException();
+        }
+
+        @Override
+        public RetryerExcludes excludes(int retries, Throwable... excludes) {
+            return AbstractITRetryer.this.excludes(retries, excludes);
+        }
+
+        @Override
+        public RetryerExcludes excludesWithIncludes(int retries, List<Throwable> excludes, List<Throwable> includes) {
+            return AbstractITRetryer.this.excludesWithIncludes(retries, excludes, includes);
         }
     };
 
@@ -115,5 +135,29 @@ public abstract class AbstractITRetryer implements ITRetryer {
     @Override
     public void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable {
         include.Can_ignore_all_exceptions_if_no_includes_set();
+    }
+
+    @Test
+    @Override
+    public void Cannot_ignore_exceptions_that_are_contained_in_the_exclude_list() throws Throwable {
+        excludes.Cannot_ignore_exceptions_that_are_contained_in_the_exclude_list();
+    }
+
+    @Test
+    @Override
+    public void Can_ignore_exceptions_that_are_not_contained_in_the_exclude_list() throws Throwable {
+        excludes.Can_ignore_exceptions_that_are_not_contained_in_the_exclude_list();
+    }
+
+    @Test
+    @Override
+    public void Cannot_ignore_exceptions_contained_in_the_exclude_list_and_not_in_the_include_list() throws Throwable {
+        excludes.Cannot_ignore_exceptions_contained_in_the_exclude_list_and_not_in_the_include_list();
+    }
+
+    @Test
+    @Override
+    public void Excludes_take_precedence_over_includes() throws Throwable {
+        excludes.Excludes_take_precedence_over_includes();
     }
 }

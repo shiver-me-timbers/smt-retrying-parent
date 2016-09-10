@@ -27,5 +27,9 @@ interface OptionsService {
 
     OptionsService withInterval(Long duration, TimeUnit unit);
 
+    @SuppressWarnings("unchecked")
     OptionsService includes(Class<? extends Throwable>... includes);
+
+    @SuppressWarnings("unchecked")
+    OptionsService excludes(Class<? extends Throwable>... excludes);
 }

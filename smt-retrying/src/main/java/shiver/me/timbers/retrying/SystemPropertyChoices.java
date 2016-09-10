@@ -40,4 +40,9 @@ class SystemPropertyChoices extends AbstractPropertyChoices implements PropertyC
     String getIncludesProperty() {
         return System.getProperty(INCLUDES_PROPERTY);
     }
+
+    @Override
+    String getExcludesProperty() {
+        return System.getProperty(EXCLUDES_PROPERTY);
+    }
 }

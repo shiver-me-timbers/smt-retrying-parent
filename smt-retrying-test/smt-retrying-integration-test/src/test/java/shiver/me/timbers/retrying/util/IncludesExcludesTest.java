@@ -24,8 +24,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someOtherThrowable;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
+import static shiver.me.timbers.retrying.util.IncludesExcludes.addExcludes;
+import static shiver.me.timbers.retrying.util.IncludesExcludes.addIncludes;
 
-public class IncludesTest {
+public class IncludesExcludesTest {
 
     @Test
     @SuppressWarnings("unchecked")
@@ -37,10 +39,27 @@ public class IncludesTest {
         final Throwable throwable2 = someOtherThrowable();
 
         // When
-        Includes.addIncludes(options, throwable1, throwable2);
+        addIncludes(options, throwable1, throwable2);
 
         // Then
         verify(options).includes(throwable1.getClass(), throwable2.getClass());
+        verifyNoMoreInteractions(options);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void Can_add_excludes() {
+
+        // Given
+        final Options options = mock(Options.class);
+        final Throwable throwable1 = someThrowable();
+        final Throwable throwable2 = someOtherThrowable();
+
+        // When
+        addExcludes(options, throwable1, throwable2);
+
+        // Then
+        verify(options).excludes(throwable1.getClass(), throwable2.getClass());
         verifyNoMoreInteractions(options);
     }
 }

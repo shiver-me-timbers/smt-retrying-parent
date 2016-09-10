@@ -29,6 +29,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
+import static shiver.me.timbers.retrying.PropertyChoices.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_UNIT_PROPERTY;
@@ -106,6 +107,23 @@ public class SpringPropertyChoicesTest {
 
         // When
         final String actual = propertyChoices.getIncludesProperty();
+
+        // Then
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void Can_get_the_excludes_property() {
+
+        final Environment environment = mock(Environment.class);
+        final String expected = someString();
+
+        // Given
+        given(context.getEnvironment()).willReturn(environment);
+        given(environment.getProperty(EXCLUDES_PROPERTY)).willReturn(expected);
+
+        // When
+        final String actual = propertyChoices.getExcludesProperty();
 
         // Then
         assertThat(actual, is(expected));

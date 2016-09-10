@@ -26,7 +26,12 @@ abstract class AbstractOverridingChoices extends AbstractChoices implements Over
 
     @Override
     public Choices overrideWith(Choices choices) {
-        return new BasicChoices(overrideRetries(choices), overrideInterval(choices), addIncludes(choices));
+        return new BasicChoices(
+            overrideRetries(choices),
+            overrideInterval(choices),
+            addIncludes(choices),
+            addExcludes(choices)
+        );
     }
 
     private Integer overrideRetries(Choices choices) {
@@ -37,18 +42,52 @@ abstract class AbstractOverridingChoices extends AbstractChoices implements Over
         return override(getInterval(), choices.getInterval());
     }
 
-    private Set<Class<? extends Throwable>> addIncludes(Choices choices) {
-        final Set<Class<? extends Throwable>> additions = choices.getIncludes();
-        if (additions == null || additions.isEmpty()) {
-            return getIncludes();
-        }
-        // Need a new set for the current includes so that we don't mutate someone else's Set.
-        final Set<Class<? extends Throwable>> includes = new HashSet<>(getIncludes());
-        includes.addAll(additions);
-        return includes;
+    private Set<Class<? extends Throwable>> addIncludes(final Choices choices) {
+        return add(new Values<Class<? extends Throwable>>() {
+            @Override
+            public Set<Class<? extends Throwable>> getCurrent() {
+                return getIncludes();
+            }
+
+            @Override
+            public Set<Class<? extends Throwable>> getAdditional() {
+                return choices.getIncludes();
+            }
+        });
     }
 
-    private <T> T override(T current, T override) {
+    private Set<Class<? extends Throwable>> addExcludes(final Choices choices) {
+        return add(new Values<Class<? extends Throwable>>() {
+            @Override
+            public Set<Class<? extends Throwable>> getCurrent() {
+                return getExcludes();
+            }
+
+            @Override
+            public Set<Class<? extends Throwable>> getAdditional() {
+                return choices.getExcludes();
+            }
+        });
+    }
+
+    private static <T> T override(T current, T override) {
         return override == null ? current : override;
+    }
+
+    private static <T> Set<T> add(Values<T> values) {
+        final Set<T> additions = values.getAdditional();
+        if (additions == null || additions.isEmpty()) {
+            return values.getCurrent();
+        }
+        // Need a new set so that we don't mutate or expose someone else's Set.
+        final Set<T> current = new HashSet<>(values.getCurrent());
+        current.addAll(additions);
+        return current;
+    }
+
+    private interface Values<T> {
+        Set<T> getCurrent();
+
+        Set<T> getAdditional();
     }
 }

@@ -35,7 +35,6 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
     @Override
     public void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable {
 
-        final int retries = 8;
         final Callable callable = mock(Callable.class);
 
         final Object expected = new Object();
@@ -44,7 +43,7 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
         given(callable.call()).willThrow(SOME_THROWABLES).willReturn(expected);
 
         // When
-        final Object actual = includes(retries, SOME_THROWABLES).includeMethod(callable);
+        final Object actual = includes(8, SOME_THROWABLES).includeMethod(callable);
 
         // Then
         assertThat(actual, is(expected));
@@ -55,7 +54,6 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
     @Override
     public void Cannot_ignore_exceptions_that_are_not_contained_in_the_include_list() throws Throwable {
 
-        final int retries = 8;
         final Callable callable = mock(Callable.class);
 
         final Throwable expected = someOtherThrowable();
@@ -65,14 +63,13 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
         expectedException().expect(is(expected));
 
         // When
-        includes(retries, SOME_THROWABLES).includeMethod(callable);
+        includes(8, SOME_THROWABLES).includeMethod(callable);
     }
 
     @Test
     @Override
     public void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable {
 
-        final int retries = 8;
         final Callable callable = mock(Callable.class);
 
         final Object expected = new Object();
@@ -81,7 +78,7 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
         given(callable.call()).willThrow(SOME_THROWABLES).willReturn(expected);
 
         // When
-        final Object actual = includes(retries).includeMethod(callable);
+        final Object actual = includes(8).includeMethod(callable);
 
         // Then
         assertThat(actual, is(expected));

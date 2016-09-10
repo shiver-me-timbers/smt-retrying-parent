@@ -16,13 +16,9 @@
 
 package shiver.me.timbers.retrying;
 
-/**
- * @author Karl Bennett
- */
-interface PropertyChoices extends OverridingChoices {
-    String RETRIES_PROPERTY = "smt.retryer.retries";
-    String INTERVAL_DURATION_PROPERTY = "smt.retryer.interval.duration";
-    String INTERVAL_UNIT_PROPERTY = "smt.retryer.interval.unit";
-    String INCLUDES_PROPERTY = "smt.retryer.includes";
-    String EXCLUDES_PROPERTY = "smt.retryer.excludes";
+import org.junit.rules.ExpectedException;
+
+public interface ExpectedExceptionAware {
+
+    ExpectedException expectedException();
 }

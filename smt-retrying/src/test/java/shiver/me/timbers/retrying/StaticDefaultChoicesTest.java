@@ -23,6 +23,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_EXCLUDES;
 import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_INCLUDES;
 import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_INTERVAL;
 import static shiver.me.timbers.retrying.StaticDefaultChoices.DEFAULT_RETRIES;
@@ -64,5 +65,15 @@ public class StaticDefaultChoicesTest {
 
         // Then
         assertThat(actual, is(DEFAULT_INCLUDES));
+    }
+
+    @Test
+    public void Can_get_default_excludes() {
+
+        // When
+        final Set<Class<? extends Throwable>> actual = choices.getExcludes();
+
+        // Then
+        assertThat(actual, is(DEFAULT_EXCLUDES));
     }
 }

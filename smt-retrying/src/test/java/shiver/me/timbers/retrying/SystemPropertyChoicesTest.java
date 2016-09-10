@@ -23,6 +23,7 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
+import static shiver.me.timbers.retrying.PropertyChoices.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_UNIT_PROPERTY;
@@ -45,6 +46,7 @@ public class SystemPropertyChoicesTest {
         System.clearProperty(INTERVAL_DURATION_PROPERTY);
         System.clearProperty(INTERVAL_UNIT_PROPERTY);
         System.clearProperty(INCLUDES_PROPERTY);
+        System.clearProperty(EXCLUDES_PROPERTY);
     }
 
     @Test
@@ -102,6 +104,21 @@ public class SystemPropertyChoicesTest {
 
         // When
         final String actual = new SystemPropertyChoices().getIncludesProperty();
+
+        // Then
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void Can_get_the_excludes_property() {
+
+        final String expected = someString();
+
+        // Given
+        System.setProperty(EXCLUDES_PROPERTY, expected);
+
+        // When
+        final String actual = new SystemPropertyChoices().getExcludesProperty();
 
         // Then
         assertThat(actual, is(expected));

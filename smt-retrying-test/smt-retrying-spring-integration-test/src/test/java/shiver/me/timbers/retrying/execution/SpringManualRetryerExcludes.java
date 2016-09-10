@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package shiver.me.timbers.retrying.util;
+package shiver.me.timbers.retrying.execution;
 
+import shiver.me.timbers.retrying.SpringOptions;
+import shiver.me.timbers.retrying.SpringRetryer;
 
-import shiver.me.timbers.retrying.Options;
+public class SpringManualRetryerExcludes extends ManualRetryerExcludes<SpringRetryer, SpringOptions> {
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static shiver.me.timbers.retrying.util.Classes.toClasses;
-
-public class Includes {
-
-    public static Options addIncludes(Options options, Throwable... includes) {
-        return addIncludes(options, asList(includes));
+    public SpringManualRetryerExcludes(int retries, Throwable... includes) {
+        super(retries, includes);
     }
 
-    @SuppressWarnings("unchecked")
-    public static Options addIncludes(Options options, List<Throwable> includes) {
-        options.includes(toClasses(includes).toArray(new Class[includes.size()]));
-        return options;
+    @Override
+    public SpringRetryer retryer(SpringOptions options) {
+        return new SpringRetryer(options);
+    }
+
+    @Override
+    public SpringOptions options() {
+        return new SpringOptions();
     }
 }

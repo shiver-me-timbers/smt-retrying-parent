@@ -17,14 +17,18 @@
 package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
+import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerExcludes;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerIncludeWithExclude;
 import shiver.me.timbers.retrying.execution.SpringManualRetryerIncludes;
 import shiver.me.timbers.retrying.execution.SpringManualRetryerInterval;
 import shiver.me.timbers.retrying.execution.SpringManualRetryerRetries;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ITManualSpringRetryer extends AbstractITSpringRetryer {
@@ -47,5 +51,15 @@ public class ITManualSpringRetryer extends AbstractITSpringRetryer {
     @Override
     public RetryerIncludes includes(int retries, Throwable... includes) {
         return new SpringManualRetryerIncludes(retries, includes);
+    }
+
+    @Override
+    public RetryerExcludes excludes(int retries, Throwable... excludes) {
+        return new SpringManualRetryerExcludes(retries, excludes);
+    }
+
+    @Override
+    public RetryerExcludes excludesWithIncludes(int retries, List<Throwable> excludes, List<Throwable> includes) {
+        return new SpringManualRetryerIncludeWithExclude(retries, excludes, includes);
     }
 }

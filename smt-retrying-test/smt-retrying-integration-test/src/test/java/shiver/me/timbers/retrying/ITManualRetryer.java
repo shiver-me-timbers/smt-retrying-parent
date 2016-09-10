@@ -17,14 +17,18 @@
 package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.execution.ManualRetryerDefaults;
+import shiver.me.timbers.retrying.execution.ManualRetryerExcludes;
+import shiver.me.timbers.retrying.execution.ManualRetryerIncludeWithExclude;
 import shiver.me.timbers.retrying.execution.ManualRetryerIncludes;
 import shiver.me.timbers.retrying.execution.ManualRetryerInterval;
 import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
+import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ITManualRetryer extends AbstractITRetryer {
@@ -47,5 +51,15 @@ public class ITManualRetryer extends AbstractITRetryer {
     @Override
     public RetryerIncludes includes(int retries, Throwable... includes) {
         return new ManualRetryerIncludes<>(retries, includes);
+    }
+
+    @Override
+    public RetryerExcludes excludes(int retries, Throwable... excludes) {
+        return new ManualRetryerExcludes<>(retries, excludes);
+    }
+
+    @Override
+    public RetryerExcludes excludesWithIncludes(int retries, List<Throwable> excludes, List<Throwable> includes) {
+        return new ManualRetryerIncludeWithExclude<>(retries, excludes, includes);
     }
 }

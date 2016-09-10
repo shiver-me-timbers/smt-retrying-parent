@@ -93,6 +93,21 @@ public class OptionsTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void Can_set_the_exclude_exceptions_that_should_never_cause_a_retry() {
+
+        // Given
+        final Class<? extends Throwable> throwable1 = someThrowable().getClass();
+        final Class<? extends Throwable> throwable2 = someThrowable().getClass();
+
+        // When
+        final OptionsService actual = options.excludes(throwable1, throwable2);
+
+        // Then
+        assertThat(actual, hasField("excludes", new HashSet<>(asList(throwable1, throwable2))));
+    }
+
+    @Test
     public void Can_choose_the_final_options() {
 
         final Choices manualOptionsChoices = mock(Choices.class);

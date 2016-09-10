@@ -49,6 +49,11 @@ class SpringPropertyChoices extends AbstractPropertyChoices implements PropertyC
         return getProperty(INCLUDES_PROPERTY);
     }
 
+    @Override
+    String getExcludesProperty() {
+        return getProperty(EXCLUDES_PROPERTY);
+    }
+
     private String getProperty(String key) {
         return applicationContext.getEnvironment().getProperty(key);
     }

@@ -52,6 +52,11 @@ public class AbstractChoicesTest {
             public Set<Class<? extends Throwable>> getIncludes() {
                 return includes;
             }
+
+            @Override
+            public Set<Class<? extends Throwable>> getExcludes() {
+                throw new UnsupportedOperationException();
+            }
         }.choose();
 
         // Then

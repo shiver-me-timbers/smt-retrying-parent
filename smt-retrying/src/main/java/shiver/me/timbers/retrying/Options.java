@@ -44,6 +44,7 @@ public class Options implements OptionsService {
     private Integer retries;
     private Time interval;
     private Set<Class<? extends Throwable>> includes;
+    private Set<Class<? extends Throwable>> excludes;
 
     public Options() {
         this(new StaticDefaultChoices(), new SystemPropertyChoices(), new OptionsManualChoices());
@@ -71,9 +72,17 @@ public class Options implements OptionsService {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Options includes(Class<? extends Throwable>... includes) {
         this.includes = new HashSet<>(asList(includes));
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public OptionsService excludes(Class<? extends Throwable>... excludes) {
+        this.excludes = new HashSet<>(asList(excludes));
         return this;
     }
 
@@ -91,5 +100,9 @@ public class Options implements OptionsService {
 
     Set<Class<? extends Throwable>> getIncludes() {
         return includes;
+    }
+
+    public Set<Class<? extends Throwable>> getExcludes() {
+        return excludes;
     }
 }

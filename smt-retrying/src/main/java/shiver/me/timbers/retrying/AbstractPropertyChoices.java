@@ -43,13 +43,14 @@ abstract class AbstractPropertyChoices extends AbstractOverridingChoices impleme
         return new Time(duration, unit);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Set<Class<? extends Throwable>> getIncludes() {
-        final String includesProperty = getIncludesProperty();
-        return (Set) toClasses(
-            includesProperty == null || includesProperty.isEmpty() ? new String[0] : includesProperty.split(",")
-        );
+        return toThrowableClasses(getIncludesProperty());
+    }
+
+    @Override
+    public Set<Class<? extends Throwable>> getExcludes() {
+        return toThrowableClasses(getExcludesProperty());
     }
 
     abstract String getRetriesProperty();
@@ -59,6 +60,8 @@ abstract class AbstractPropertyChoices extends AbstractOverridingChoices impleme
     abstract String getIntervalUnitProperty();
 
     abstract String getIncludesProperty();
+
+    abstract String getExcludesProperty();
 
     private static Integer toIntegerOrNull(String string) {
         return string == null ? null : Integer.valueOf(string);
@@ -70,6 +73,11 @@ abstract class AbstractPropertyChoices extends AbstractOverridingChoices impleme
 
     private static TimeUnit toTimeUnitOrNull(String string) {
         return string == null ? null : TimeUnit.valueOf(string);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Class<? extends Throwable>> toThrowableClasses(String value) {
+        return (Set) toClasses(value == null || value.isEmpty() ? new String[0] : value.split(","));
     }
 
     private static Set<Class> toClasses(String[] split) {

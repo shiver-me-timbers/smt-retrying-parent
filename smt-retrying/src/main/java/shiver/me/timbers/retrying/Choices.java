@@ -28,4 +28,6 @@ interface Choices extends Chooser {
     Time getInterval();
 
     Set<Class<? extends Throwable>> getIncludes();
+
+    Set<Class<? extends Throwable>> getExcludes();
 }

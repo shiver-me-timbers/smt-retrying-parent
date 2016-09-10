@@ -39,6 +39,7 @@ public class AbstractOverridingChoicesTest {
     private int retries;
     private Time interval;
     private Set<Class<? extends Throwable>> includes;
+    private Set<Class<? extends Throwable>> excludes;
     private AbstractOverridingChoices abstractChoices;
 
     @Before
@@ -47,6 +48,7 @@ public class AbstractOverridingChoicesTest {
         retries = someInteger();
         interval = mock(Time.class);
         includes = mock(Set.class);
+        excludes = mock(Set.class);
         abstractChoices = new AbstractOverridingChoices() {
             @Override
             public Integer getRetries() {
@@ -61,6 +63,11 @@ public class AbstractOverridingChoicesTest {
             @Override
             public Set<Class<? extends Throwable>> getIncludes() {
                 return includes;
+            }
+
+            @Override
+            public Set<Class<? extends Throwable>> getExcludes() {
+                return excludes;
             }
         };
     }
@@ -110,24 +117,38 @@ public class AbstractOverridingChoicesTest {
         final HashSet<Class<? extends Throwable>> currentIncludes = new HashSet<>(asList(
             someOtherThrowable().getClass(), someOtherThrowable().getClass()
         ));
+        final HashSet<Class<? extends Throwable>> currentExcludes = new HashSet<>(asList(
+            someThrowable().getClass(), someThrowable().getClass()
+        ));
         final HashSet<Class<? extends Throwable>> originalCurrentIncludes = new HashSet<>(currentIncludes);
+        final HashSet<Class<? extends Throwable>> originalCurrentExcludes = new HashSet<>(currentExcludes);
         final Set<Class<? extends Throwable>> additionalIncludes = new HashSet<>(asList(
             someThrowable().getClass(), someThrowable().getClass()
         ));
-        final Set<Class<? extends Throwable>> expected = new HashSet<>(currentIncludes);
-        expected.addAll(additionalIncludes);
+        final Set<Class<? extends Throwable>> additionalExcludes = new HashSet<>(asList(
+            someOtherThrowable().getClass(), someOtherThrowable().getClass()
+        ));
+        final Set<Class<? extends Throwable>> expectedIncludes = new HashSet<>(currentIncludes);
+        expectedIncludes.addAll(additionalIncludes);
+        final Set<Class<? extends Throwable>> expectedExcludes = new HashSet<>(currentExcludes);
+        expectedExcludes.addAll(additionalExcludes);
 
         // Given
         given(includes.iterator()).willReturn(currentIncludes.iterator());
         given(choices.getIncludes()).willReturn(additionalIncludes);
+        given(excludes.iterator()).willReturn(currentExcludes.iterator());
+        given(choices.getExcludes()).willReturn(additionalExcludes);
 
         // When
         final Choices actual = abstractChoices.overrideWith(choices);
 
         // Then
-        assertThat(actual, hasField("includes", expected));
+        assertThat(actual, hasField("includes", expectedIncludes));
         // The addition of the includes should not mutate the includes within the current choices.
         assertThat(currentIncludes, equalTo(originalCurrentIncludes));
+        assertThat(actual, hasField("excludes", expectedExcludes));
+        // The addition of the excludes should not mutate the excludes within the current choices.
+        assertThat(currentExcludes, equalTo(originalCurrentExcludes));
     }
 
     @Test
@@ -160,5 +181,37 @@ public class AbstractOverridingChoicesTest {
         // Then
         verifyZeroInteractions(includes);
         assertThat(actual, hasField("includes", includes));
+    }
+
+    @Test
+    public void Will_not_add_null_excludes() {
+
+        final Choices choices = mock(Choices.class);
+
+        // Given
+        given(choices.getExcludes()).willReturn(null);
+
+        // When
+        final Choices actual = abstractChoices.overrideWith(choices);
+
+        // Then
+        verifyZeroInteractions(excludes);
+        assertThat(actual, hasField("excludes", excludes));
+    }
+
+    @Test
+    public void Will_not_add_empty_excludes() {
+
+        final Choices choices = mock(Choices.class);
+
+        // Given
+        given(choices.getExcludes()).willReturn(Collections.<Class<? extends Throwable>>emptySet());
+
+        // When
+        final Choices actual = abstractChoices.overrideWith(choices);
+
+        // Then
+        verifyZeroInteractions(excludes);
+        assertThat(actual, hasField("excludes", excludes));
     }
 }

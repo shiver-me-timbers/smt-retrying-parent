@@ -32,6 +32,7 @@ public class BasicChoicesTest {
     private Time interval;
     private BasicChoices choices;
     private Set<Class<? extends Throwable>> includes;
+    private Set<Class<? extends Throwable>> excludes;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -39,7 +40,8 @@ public class BasicChoicesTest {
         retries = someInteger();
         interval = mock(Time.class);
         includes = mock(Set.class);
-        choices = new BasicChoices(retries, interval, includes);
+        excludes = mock(Set.class);
+        choices = new BasicChoices(retries, interval, includes, excludes);
     }
 
     @Test
@@ -70,5 +72,15 @@ public class BasicChoicesTest {
 
         // Then
         assertThat(actual, is(includes));
+    }
+
+    @Test
+    public void Can_get_the_excludes() {
+
+        // When
+        final Set<Class<? extends Throwable>> actual = choices.getExcludes();
+
+        // Then
+        assertThat(actual, is(excludes));
     }
 }
