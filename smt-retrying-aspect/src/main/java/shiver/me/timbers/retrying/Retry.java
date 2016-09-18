@@ -51,4 +51,9 @@ public @interface Retry {
      * Set the exceptions or errors that should result in a retry.
      */
     Class<? extends Throwable>[] includes() default {};
+
+    /**
+     * Set the exceptions or errors that should never result in a retry.
+     */
+    Class<? extends Throwable>[] excludes() default {};
 }

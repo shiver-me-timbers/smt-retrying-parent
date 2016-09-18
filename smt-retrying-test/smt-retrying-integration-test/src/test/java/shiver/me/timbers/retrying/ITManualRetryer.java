@@ -54,12 +54,17 @@ public class ITManualRetryer extends AbstractITRetryer {
     }
 
     @Override
+    public RetryerIncludes includesWithExcludes(int retries, List<Throwable> includes, List<Throwable> excludes) {
+        return new ManualRetryerIncludeWithExclude<>(retries, includes, excludes);
+    }
+
+    @Override
     public RetryerExcludes excludes(int retries, Throwable... excludes) {
         return new ManualRetryerExcludes<>(retries, excludes);
     }
 
     @Override
     public RetryerExcludes excludesWithIncludes(int retries, List<Throwable> excludes, List<Throwable> includes) {
-        return new ManualRetryerIncludeWithExclude<>(retries, excludes, includes);
+        return new ManualRetryerIncludeWithExclude<>(retries, includes, excludes);
     }
 }

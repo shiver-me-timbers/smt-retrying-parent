@@ -24,7 +24,7 @@ import java.util.List;
 public class SpringManualRetryerIncludeWithExclude extends ManualRetryerIncludeWithExclude<SpringRetryer, SpringOptions> {
 
     public SpringManualRetryerIncludeWithExclude(int retries, List<Throwable> excludes, List<Throwable> includes) {
-        super(retries, excludes, includes);
+        super(retries, includes, excludes);
     }
 
     @Override

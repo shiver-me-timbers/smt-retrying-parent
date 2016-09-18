@@ -22,6 +22,7 @@ import static java.util.Arrays.asList;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_OTHER_THROWABLES;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_THROWABLES;
 import static shiver.me.timbers.retrying.util.Classes.toClasses;
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
 public class RetryerIncludesFactory {
 
@@ -33,9 +34,9 @@ public class RetryerIncludesFactory {
         RetryerIncludes retryerAddIncludes
     ) {
         this(new MapLookupFactory<RetryerIncludes>());
-        add(retryerIncludes, 8, SOME_THROWABLES);
-        add(retryerNoIncludes, 8);
-        add(retryerAddIncludes, 8, SOME_OTHER_THROWABLES[0]);
+        add(retryerIncludes, DEFAULT_RETRIES, SOME_THROWABLES);
+        add(retryerNoIncludes, DEFAULT_RETRIES);
+        add(retryerAddIncludes, DEFAULT_RETRIES, SOME_OTHER_THROWABLES[0]);
     }
 
     public RetryerIncludesFactory(LookupFactory<RetryerIncludes> lookupFactory) {

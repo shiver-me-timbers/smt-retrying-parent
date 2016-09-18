@@ -28,11 +28,18 @@ class Choice {
     private final int retries;
     private final Time interval;
     private final Set<Class<? extends Throwable>> includes;
+    private final Set<Class<? extends Throwable>> excludes;
 
-    Choice(int retries, Time interval, Set<Class<? extends Throwable>> includes) {
+    Choice(
+        int retries,
+        Time interval,
+        Set<Class<? extends Throwable>> includes,
+        Set<Class<? extends Throwable>> excludes
+    ) {
         this.retries = validateRetries(retries);
         this.interval = validateInterval(interval);
         this.includes = includes;
+        this.excludes = excludes;
     }
 
     private static int validateRetries(int retries) {
@@ -62,13 +69,17 @@ class Choice {
     }
 
     boolean isSuppressed(Throwable throwable) {
-        if (includes.isEmpty()) {
+        if (includes.isEmpty() && excludes.isEmpty()) {
             return true;
         }
 
         final Class<? extends Throwable> type = throwable.getClass();
 
-        if (includes.contains(type)) {
+        if (excludes.contains(type)) {
+            return false;
+        }
+
+        if (includes.contains(type) || includes.isEmpty()) {
             return true;
         }
 

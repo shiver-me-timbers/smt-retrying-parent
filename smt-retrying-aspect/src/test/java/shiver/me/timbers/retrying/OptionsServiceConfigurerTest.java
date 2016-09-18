@@ -52,6 +52,7 @@ public class OptionsServiceConfigurerTest {
         final Long intervalDuration = someLongBetween(1L, 1000L);
         final TimeUnit intervalUnit = someEnum(TimeUnit.class);
         final Class[] includes = {RuntimeException.class, IllegalArgumentException.class, Error.class};
+        final Class[] excludes = {IllegalStateException.class, ClassCastException.class, IllegalAccessError.class};
 
         // Given
         given(retry.value()).willReturn(retries);
@@ -59,6 +60,7 @@ public class OptionsServiceConfigurerTest {
         given(interval.duration()).willReturn(intervalDuration);
         given(interval.unit()).willReturn(intervalUnit);
         given(retry.includes()).willReturn(includes);
+        given(retry.excludes()).willReturn(excludes);
 
         // When
         configurer.configure(optionsService, retry);
@@ -67,6 +69,7 @@ public class OptionsServiceConfigurerTest {
         verify(optionsService).withRetries(retries);
         verify(optionsService).withInterval(intervalDuration, intervalUnit);
         verify(optionsService).includes(includes);
+        verify(optionsService).excludes(excludes);
     }
 
     @Test
@@ -84,6 +87,7 @@ public class OptionsServiceConfigurerTest {
         given(interval.duration()).willReturn(someNegativeLong());
         given(interval.unit()).willReturn(someEnum(TimeUnit.class));
         given(retry.includes()).willReturn(new Class[0]);
+        given(retry.excludes()).willReturn(new Class[0]);
 
         // When
         configurer.configure(optionsService, retry);

@@ -17,6 +17,11 @@
 package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.factory.RetryerDefaultsClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerExcludesClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerExcludesWithIncludesClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerIncludesClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerIncludesWithExcludesClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerIntervalClassFactory;
 import shiver.me.timbers.retrying.factory.RetryerRetriesClassFactory;
 
 public abstract class AbstractITAspectRetryerClass extends AbstractITAspectRetryer {
@@ -29,5 +34,30 @@ public abstract class AbstractITAspectRetryerClass extends AbstractITAspectRetry
     @Override
     public RetryerRetriesClassFactory retriesFactory() {
         return new RetryerRetriesClassFactory();
+    }
+
+    @Override
+    public RetryerIntervalClassFactory intervalFactory() {
+        return new RetryerIntervalClassFactory();
+    }
+
+    @Override
+    public RetryerIncludesClassFactory includesFactory() {
+        return new RetryerIncludesClassFactory();
+    }
+
+    @Override
+    public RetryerIncludesWithExcludesClassFactory includesWithExcludesFactory() {
+        return new RetryerIncludesWithExcludesClassFactory();
+    }
+
+    @Override
+    public RetryerExcludesClassFactory excludesFactory() {
+        return new RetryerExcludesClassFactory();
+    }
+
+    @Override
+    public RetryerExcludesWithIncludesClassFactory excludesWithIncludesFactory() {
+        return new RetryerExcludesWithIncludesClassFactory();
     }
 }

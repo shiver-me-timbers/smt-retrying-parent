@@ -18,13 +18,15 @@ package shiver.me.timbers.retrying.factory;
 
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
+
 public class RetryerRetriesFactory {
 
     private final LookupFactory<RetryerRetries> lookupFactory;
 
     public RetryerRetriesFactory(RetryerRetries retryerRetries) {
         this(new MapLookupFactory<RetryerRetries>());
-        add(retryerRetries, 8);
+        add(retryerRetries, DEFAULT_RETRIES);
     }
 
     public RetryerRetriesFactory(LookupFactory<RetryerRetries> lookupFactory) {

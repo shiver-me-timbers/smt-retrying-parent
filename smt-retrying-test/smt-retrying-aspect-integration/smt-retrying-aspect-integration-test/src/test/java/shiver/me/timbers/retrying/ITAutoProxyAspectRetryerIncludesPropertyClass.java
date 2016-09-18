@@ -23,6 +23,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesWithExcludesClassFactory;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRule;
 import shiver.me.timbers.retrying.property.SystemPropertyManager;
 
@@ -39,6 +40,9 @@ public class ITAutoProxyAspectRetryerIncludesPropertyClass extends AbstractITAsp
     @Autowired
     private AutoProxyRetryerIncludesClassFactory includesFactory;
 
+    @Autowired
+    private AutoProxyRetryerIncludesWithExcludesClassFactory includesWithExcludesFactory;
+
     @Override
     public RetryerPropertyRule properties() {
         return properties;
@@ -52,5 +56,10 @@ public class ITAutoProxyAspectRetryerIncludesPropertyClass extends AbstractITAsp
     @Override
     public AutoProxyRetryerIncludesClassFactory includesFactory() {
         return includesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerIncludesWithExcludesClassFactory includesWithExcludesFactory() {
+        return includesWithExcludesFactory;
     }
 }

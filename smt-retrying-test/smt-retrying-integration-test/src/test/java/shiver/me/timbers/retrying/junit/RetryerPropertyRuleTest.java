@@ -30,6 +30,7 @@ import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
+import static shiver.me.timbers.retrying.PropertyConstants.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
@@ -88,5 +89,16 @@ public class RetryerPropertyRuleTest {
         // Then
         assertThat(actual, is(rule));
         verify(propertyManager).setProperty(INCLUDES_PROPERTY, concat(",", toClassNames(asList(SOME_THROWABLES))));
+    }
+
+    @Test
+    public void Can_build_property_rule_with_excludes() {
+
+        // When
+        final RetryerPropertyRule actual = rule.withExcludes(SOME_THROWABLES);
+
+        // Then
+        assertThat(actual, is(rule));
+        verify(propertyManager).setProperty(EXCLUDES_PROPERTY, concat(",", toClassNames(asList(SOME_THROWABLES))));
     }
 }

@@ -20,5 +20,8 @@ public interface RetryerFactoriesAware extends
     RetryerDefaultsFactoryAware,
     RetryerRetriesFactoryAware,
     RetryerIntervalFactoryAware,
-    RetryerIncludesFactoryAware {
+    RetryerIncludesFactoryAware,
+    RetryerIncludesWithExcludesFactoryAware,
+    RetryerExcludesFactoryAware,
+    RetryerExcludesWithIncludesFactoryAware {
 }

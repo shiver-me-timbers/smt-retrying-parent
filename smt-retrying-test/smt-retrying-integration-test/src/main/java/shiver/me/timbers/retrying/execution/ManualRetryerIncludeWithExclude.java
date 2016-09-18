@@ -27,26 +27,36 @@ import static shiver.me.timbers.retrying.util.IncludesExcludes.addExcludes;
 import static shiver.me.timbers.retrying.util.IncludesExcludes.addIncludes;
 
 public class ManualRetryerIncludeWithExclude<R extends Retryer, O extends Options> extends RetryerCreater<R, O>
-    implements RetryerExcludes {
+    implements RetryerIncludes, RetryerExcludes {
 
     private final int retries;
-    private final List<Throwable> excludes;
     private final List<Throwable> includes;
+    private final List<Throwable> excludes;
 
-    public ManualRetryerIncludeWithExclude(int retries, List<Throwable> excludes, List<Throwable> includes) {
+    public ManualRetryerIncludeWithExclude(int retries, List<Throwable> includes, List<Throwable> excludes) {
         this.retries = retries;
-        this.excludes = excludes;
         this.includes = includes;
+        this.excludes = excludes;
+    }
+
+    @Override
+    public <T> T excludeMethod(final Callable<T> callable) throws InterruptedException {
+        return method(callable);
+    }
+
+    @Override
+    public <T> T includeMethod(Callable<T> callable) throws Exception {
+        return method(callable);
     }
 
     @SuppressWarnings("unchecked")
-    @Override
-    public <T> T excludeMethod(final Callable<T> callable) throws InterruptedException {
-        return retryer((O) addExcludes(addIncludes(options(), includes), excludes).withRetries(retries)).retry(new Until<T>() {
-            @Override
-            public T success() throws Throwable {
-                return callable.call();
-            }
-        });
+    private <T> T method(final Callable<T> callable) throws InterruptedException {
+        return retryer((O) addExcludes(addIncludes(options(), includes), excludes).withRetries(retries))
+            .retry(new Until<T>() {
+                @Override
+                public T success() throws Throwable {
+                    return callable.call();
+                }
+            });
     }
 }

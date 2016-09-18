@@ -26,6 +26,7 @@ class OptionsServiceConfigurer implements Configurer<OptionsService, Retry> {
         configureRetries(optionsService, retry.value());
         configureInterval(optionsService, retry.interval());
         configureIncludes(optionsService, retry.includes());
+        configureExcludes(optionsService, retry.excludes());
     }
 
     private static void configureRetries(OptionsService optionsService, int retries) {
@@ -47,5 +48,12 @@ class OptionsServiceConfigurer implements Configurer<OptionsService, Retry> {
             return;
         }
         optionsService.includes(includes);
+    }
+
+    private static void configureExcludes(OptionsService optionsService, Class<? extends Throwable>[] excludes) {
+        if (excludes.length == 0) {
+            return;
+        }
+        optionsService.excludes(excludes);
     }
 }

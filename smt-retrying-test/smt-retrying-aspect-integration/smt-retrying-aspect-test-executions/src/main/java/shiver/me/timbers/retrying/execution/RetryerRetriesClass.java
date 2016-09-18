@@ -20,7 +20,9 @@ import shiver.me.timbers.retrying.Retry;
 
 import java.util.concurrent.Callable;
 
-@Retry(8)
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
+
+@Retry(DEFAULT_RETRIES)
 public class RetryerRetriesClass implements RetryerRetries {
 
     @Override

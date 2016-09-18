@@ -26,6 +26,8 @@ public interface ITRetryerExclude extends ExpectedExceptionAware {
 
     void Can_ignore_exceptions_that_are_not_contained_in_the_exclude_list() throws Throwable;
 
+    void Can_ignore_all_exceptions_if_no_excludes_set() throws Throwable;
+
     void Cannot_ignore_exceptions_contained_in_the_exclude_list_and_not_in_the_include_list() throws Throwable;
 
     void Excludes_take_precedence_over_includes() throws Throwable;

@@ -22,4 +22,5 @@ public class PropertyConstants {
     public static final String INTERVAL_DURATION_PROPERTY = PropertyChoices.INTERVAL_DURATION_PROPERTY;
     public static final String INTERVAL_UNIT_PROPERTY = PropertyChoices.INTERVAL_UNIT_PROPERTY;
     public static final String INCLUDES_PROPERTY = PropertyChoices.INCLUDES_PROPERTY;
+    public static final String EXCLUDES_PROPERTY = PropertyChoices.EXCLUDES_PROPERTY;
 }

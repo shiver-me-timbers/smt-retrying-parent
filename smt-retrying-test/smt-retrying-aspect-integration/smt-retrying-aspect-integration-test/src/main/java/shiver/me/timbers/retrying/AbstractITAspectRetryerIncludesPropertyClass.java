@@ -18,6 +18,7 @@ package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.factory.RetryerDefaultsClassFactory;
 import shiver.me.timbers.retrying.factory.RetryerIncludesClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerIncludesWithExcludesClassFactory;
 
 public abstract class AbstractITAspectRetryerIncludesPropertyClass extends AbstractITAspectRetryerIncludesProperty {
 
@@ -29,5 +30,10 @@ public abstract class AbstractITAspectRetryerIncludesPropertyClass extends Abstr
     @Override
     public RetryerIncludesClassFactory includesFactory() {
         return new RetryerIncludesClassFactory();
+    }
+
+    @Override
+    public RetryerIncludesWithExcludesClassFactory includesWithExcludesFactory() {
+        return new RetryerIncludesWithExcludesClassFactory();
     }
 }

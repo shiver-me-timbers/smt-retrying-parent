@@ -21,7 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerExcludesClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerExcludesWithIncludesClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesWithExcludesClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesClassFactory;
 
@@ -41,6 +44,15 @@ public class ITAutoProxyAspectRetryerClass extends AbstractITAspectRetryerClass 
     @Autowired
     private AutoProxyRetryerIncludesClassFactory includesFactory;
 
+    @Autowired
+    private AutoProxyRetryerIncludesWithExcludesClassFactory includesWithExcludesFactory;
+
+    @Autowired
+    private AutoProxyRetryerExcludesClassFactory excludesFactory;
+
+    @Autowired
+    private AutoProxyRetryerExcludesWithIncludesClassFactory excludesWithIncludesFactory;
+
     @Override
     public AutoProxyRetryerDefaultsClassFactory defaultsFactory() {
         return defaultsFactory;
@@ -59,5 +71,20 @@ public class ITAutoProxyAspectRetryerClass extends AbstractITAspectRetryerClass 
     @Override
     public AutoProxyRetryerIncludesClassFactory includesFactory() {
         return includesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerIncludesWithExcludesClassFactory includesWithExcludesFactory() {
+        return includesWithExcludesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerExcludesClassFactory excludesFactory() {
+        return excludesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerExcludesWithIncludesClassFactory excludesWithIncludesFactory() {
+        return excludesWithIncludesFactory;
     }
 }

@@ -30,6 +30,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
 public abstract class AbstractITRetryerRetriesProperty extends AbstractITRetryerRetries
     implements ITRetryerDefaults, RetryerPropertyRuleAware {
@@ -48,7 +49,6 @@ public abstract class AbstractITRetryerRetriesProperty extends AbstractITRetryer
     @Test
     public void Can_override_the_retries_property() throws Throwable {
 
-        final int retries = 8;
         final Callable callable = mock(Callable.class);
 
         final Throwable throwable = someThrowable();
@@ -59,13 +59,13 @@ public abstract class AbstractITRetryerRetriesProperty extends AbstractITRetryer
 
         // When
         try {
-            overrideRetries(retries).retryMethod(callable);
+            overrideRetries(DEFAULT_RETRIES).retryMethod(callable);
         } catch (Throwable e) {
             assertThat(e, is(throwable));
         }
 
         // Then
-        verify(callable, times(retries)).call();
+        verify(callable, times(DEFAULT_RETRIES)).call();
     }
 
     protected abstract RetryerRetries overrideRetries(int retries);

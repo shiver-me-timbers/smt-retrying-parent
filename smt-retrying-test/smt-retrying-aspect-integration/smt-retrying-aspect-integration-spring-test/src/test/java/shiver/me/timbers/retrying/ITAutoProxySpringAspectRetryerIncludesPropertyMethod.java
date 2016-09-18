@@ -19,6 +19,7 @@ package shiver.me.timbers.retrying;
 import org.springframework.beans.factory.annotation.Autowired;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsMethodFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesMethodFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesWithExcludesMethodFactory;
 
 public class ITAutoProxySpringAspectRetryerIncludesPropertyMethod extends AbstractITSpringAspectRetryerIncludesPropertyMethod {
 
@@ -28,6 +29,9 @@ public class ITAutoProxySpringAspectRetryerIncludesPropertyMethod extends Abstra
     @Autowired
     private AutoProxyRetryerIncludesMethodFactory includesFactory;
 
+    @Autowired
+    private AutoProxyRetryerIncludesWithExcludesMethodFactory includesWithExcludesFactory;
+
     @Override
     public AutoProxyRetryerDefaultsMethodFactory defaultsFactory() {
         return defaultsFactory;
@@ -36,5 +40,10 @@ public class ITAutoProxySpringAspectRetryerIncludesPropertyMethod extends Abstra
     @Override
     public AutoProxyRetryerIncludesMethodFactory includesFactory() {
         return includesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerIncludesWithExcludesMethodFactory includesWithExcludesFactory() {
+        return includesWithExcludesFactory;
     }
 }

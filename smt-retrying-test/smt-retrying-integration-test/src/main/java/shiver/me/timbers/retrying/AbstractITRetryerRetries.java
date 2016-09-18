@@ -27,13 +27,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
 public abstract class AbstractITRetryerRetries implements ITRetryerRetries {
 
     @Test
     public void Can_set_the_number_of_retries() throws Throwable {
 
-        final int retries = 8;
         final Callable callable = mock(Callable.class);
 
         final Throwable throwable = someThrowable();
@@ -43,12 +43,12 @@ public abstract class AbstractITRetryerRetries implements ITRetryerRetries {
 
         // When
         try {
-            retries(retries).retryMethod(callable);
+            retries(DEFAULT_RETRIES).retryMethod(callable);
         } catch (Throwable e) {
             assertThat(e, is(throwable));
         }
 
         // Then
-        verify(callable, times(retries)).call();
+        verify(callable, times(DEFAULT_RETRIES)).call();
     }
 }

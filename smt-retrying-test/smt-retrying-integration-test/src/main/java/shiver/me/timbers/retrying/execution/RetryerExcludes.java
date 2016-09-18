@@ -20,5 +20,5 @@ import java.util.concurrent.Callable;
 
 public interface RetryerExcludes {
 
-    <T> T excludeMethod(Callable<T> callable) throws InterruptedException;
+    <T> T excludeMethod(Callable<T> callable) throws Exception;
 }

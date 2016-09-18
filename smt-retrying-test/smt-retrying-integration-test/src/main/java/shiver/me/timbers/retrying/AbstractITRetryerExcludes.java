@@ -31,7 +31,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_OTHER_THROWABLES;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_THROWABLES;
+import static shiver.me.timbers.retrying.random.RandomThrowables.someOtherThrowable;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
 public abstract class AbstractITRetryerExcludes implements ITRetryerExclude {
 
@@ -41,14 +43,19 @@ public abstract class AbstractITRetryerExcludes implements ITRetryerExclude {
 
         final Callable callable = mock(Callable.class);
 
-        final Throwable expected = SOME_OTHER_THROWABLES[0];
+        final Throwable expected = someOtherThrowable();
 
         // Given
         given(callable.call()).willThrow(expected);
-        expectedException().expect(is(expected));
 
         // When
-        excludes(8, SOME_THROWABLES[0], expected, SOME_THROWABLES[1]).excludeMethod(callable);
+        try {
+            excludes(DEFAULT_RETRIES, SOME_OTHER_THROWABLES).excludeMethod(callable);
+        } catch (Throwable t) {
+            assertThat(t, is(expected));
+        }
+
+        verify(callable).call();
     }
 
     @Test
@@ -63,7 +70,26 @@ public abstract class AbstractITRetryerExcludes implements ITRetryerExclude {
         given(callable.call()).willThrow(SOME_THROWABLES).willReturn(expected);
 
         // When
-        final Object actual = excludes(8, SOME_OTHER_THROWABLES).excludeMethod(callable);
+        final Object actual = excludes(DEFAULT_RETRIES, SOME_OTHER_THROWABLES).excludeMethod(callable);
+
+        // Then
+        assertThat(actual, is(expected));
+        verify(callable, times(4)).call();
+    }
+
+    @Test
+    @Override
+    public void Can_ignore_all_exceptions_if_no_excludes_set() throws Throwable {
+
+        final Callable callable = mock(Callable.class);
+
+        final Object expected = new Object();
+
+        // Given
+        given(callable.call()).willThrow(SOME_THROWABLES).willReturn(expected);
+
+        // When
+        final Object actual = excludes(DEFAULT_RETRIES).excludeMethod(callable);
 
         // Then
         assertThat(actual, is(expected));
@@ -76,14 +102,20 @@ public abstract class AbstractITRetryerExcludes implements ITRetryerExclude {
 
         final Callable callable = mock(Callable.class);
 
-        final Throwable exclude = someThrowable();
+        final Throwable expected = someThrowable();
 
         // Given
-        given(callable.call()).willThrow(exclude);
-        expectedException().expect(is(exclude));
+        given(callable.call()).willThrow(expected);
 
         // When
-        excludesWithIncludes(8, asList(SOME_THROWABLES), asList(SOME_OTHER_THROWABLES)).excludeMethod(callable);
+        try {
+            excludesWithIncludes(DEFAULT_RETRIES, asList(SOME_THROWABLES), asList(SOME_OTHER_THROWABLES))
+                .excludeMethod(callable);
+        } catch (Throwable t) {
+            assertThat(t, is(expected));
+        }
+
+        verify(callable).call();
     }
 
     @Test
@@ -97,9 +129,14 @@ public abstract class AbstractITRetryerExcludes implements ITRetryerExclude {
 
         // Given
         given(callable.call()).willThrow(expected);
-        expectedException().expect(is(expected));
 
         // When
-        excludesWithIncludes(8, expectation, expectation).excludeMethod(callable);
+        try {
+            excludesWithIncludes(DEFAULT_RETRIES, expectation, expectation).excludeMethod(callable);
+        } catch (Throwable t) {
+            assertThat(t, is(expected));
+        }
+
+        verify(callable).call();
     }
 }

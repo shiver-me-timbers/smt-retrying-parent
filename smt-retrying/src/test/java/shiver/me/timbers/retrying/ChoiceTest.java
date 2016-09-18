@@ -48,6 +48,7 @@ public class ChoiceTest {
     private Integer retries;
     private Time interval;
     private Set<Class<? extends Throwable>> includes;
+    private Set<Class<? extends Throwable>> excludes;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -55,13 +56,14 @@ public class ChoiceTest {
         retries = somePositiveInteger();
         interval = mock(Time.class);
         includes = mock(Set.class);
+        excludes = mock(Set.class);
     }
 
     @Test
     public void Can_get_the_number_of_retries() {
 
         // When
-        final int actual = new Choice(retries, interval, includes).getRetries();
+        final int actual = new Choice(retries, interval, includes, excludes).getRetries();
 
         // Then
         assertThat(actual, is(retries));
@@ -80,7 +82,7 @@ public class ChoiceTest {
         stopWatch.start();
 
         // When
-        new Choice(retries, interval, includes).sleepForInterval();
+        new Choice(retries, interval, includes, excludes).sleepForInterval();
 
         // Then
         stopWatch.stop();
@@ -95,7 +97,7 @@ public class ChoiceTest {
         expectedException.expectMessage("The retries value must be greater than 1. The value (0) is invalid.");
 
         // When
-        new Choice(0, interval, includes);
+        new Choice(0, interval, includes, excludes);
     }
 
     @Test
@@ -110,7 +112,7 @@ public class ChoiceTest {
         );
 
         // When
-        new Choice(retries, interval, includes);
+        new Choice(retries, interval, includes, excludes);
     }
 
     @Test
@@ -126,7 +128,7 @@ public class ChoiceTest {
         );
 
         // When
-        new Choice(retries, interval, includes);
+        new Choice(retries, interval, includes, excludes);
     }
 
     @Test
@@ -139,7 +141,8 @@ public class ChoiceTest {
         final boolean actual = new Choice(
             retries,
             interval,
-            new HashSet<>(asList(someThrowable().getClass(), exception.getClass(), someThrowable().getClass()))
+            new HashSet<>(asList(someThrowable().getClass(), exception.getClass(), someThrowable().getClass())),
+            Collections.<Class<? extends Throwable>>emptySet()
         ).isSuppressed(exception);
 
         // Then
@@ -156,7 +159,62 @@ public class ChoiceTest {
         final boolean actual = new Choice(
             retries,
             interval,
+            new HashSet<>(asList(someThrowable().getClass(), someThrowable().getClass(), someThrowable().getClass())),
+            Collections.<Class<? extends Throwable>>emptySet()
+        ).isSuppressed(exception);
+
+        // Then
+        assertThat(actual, is(false));
+    }
+
+    @Test
+    public void Can_check_if_an_excluded_exception_is_not_suppressed() {
+
+        // Given
+        final Throwable exception = someOtherThrowable();
+
+        // When
+        final boolean actual = new Choice(
+            retries,
+            interval,
+            Collections.<Class<? extends Throwable>>emptySet(),
+            new HashSet<>(asList(someThrowable().getClass(), exception.getClass(), someThrowable().getClass()))
+        ).isSuppressed(exception);
+
+        // Then
+        assertThat(actual, is(false));
+    }
+
+    @Test
+    public void Can_check_if_an_exception_that_is_not_excluded_is_suppressed() {
+
+        // Given
+        final Throwable exception = someOtherThrowable();
+
+        // When
+        final boolean actual = new Choice(
+            retries,
+            interval,
+            Collections.<Class<? extends Throwable>>emptySet(),
             new HashSet<>(asList(someThrowable().getClass(), someThrowable().getClass(), someThrowable().getClass()))
+        ).isSuppressed(exception);
+
+        // Then
+        assertThat(actual, is(true));
+    }
+
+    @Test
+    public void Can_check_if_an_exception_that_is_included_and_excluded_is_not_suppressed() {
+
+        // Given
+        final Throwable exception = someOtherThrowable();
+
+        // When
+        final boolean actual = new Choice(
+            retries,
+            interval,
+            new HashSet<>(asList(someOtherThrowable().getClass(), exception.getClass(), someOtherThrowable().getClass())),
+            new HashSet<>(asList(someThrowable().getClass(), exception.getClass(), someThrowable().getClass()))
         ).isSuppressed(exception);
 
         // Then
@@ -170,7 +228,12 @@ public class ChoiceTest {
         final Throwable exception = someThrowable();
 
         // When
-        final boolean actual = new Choice(retries, interval, Collections.<Class<? extends Throwable>>emptySet()).isSuppressed(exception);
+        final boolean actual = new Choice(
+            retries,
+            interval,
+            Collections.<Class<? extends Throwable>>emptySet(),
+            Collections.<Class<? extends Throwable>>emptySet()
+        ).isSuppressed(exception);
 
         // Then
         assertThat(actual, is(true));

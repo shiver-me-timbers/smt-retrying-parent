@@ -18,9 +18,11 @@ package shiver.me.timbers.retrying.junit;
 
 import shiver.me.timbers.retrying.property.PropertyManager;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
+import static shiver.me.timbers.retrying.PropertyConstants.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
@@ -59,6 +61,33 @@ public class RetryerPropertyRule extends PropertyRule {
     }
 
     public void setIncludes(Throwable... includes) {
-        setProperty(INCLUDES_PROPERTY, concat(",", toClassNames(asList(includes))));
+        withIncludes(asList(includes));
+    }
+
+    public RetryerPropertyRule withIncludes(List<Throwable> includes) {
+        setIncludes(includes);
+        return this;
+    }
+
+    public void setIncludes(List<Throwable> includes) {
+        setProperty(INCLUDES_PROPERTY, concat(",", toClassNames(includes)));
+    }
+
+    public RetryerPropertyRule withExcludes(Throwable... excludes) {
+        setExcludes(excludes);
+        return this;
+    }
+
+    public void setExcludes(Throwable... excludes) {
+        withExcludes(asList(excludes));
+    }
+
+    public RetryerPropertyRule withExcludes(List<Throwable> excludes) {
+        setExcludes(excludes);
+        return this;
+    }
+
+    public void setExcludes(List<Throwable> excludes) {
+        setProperty(EXCLUDES_PROPERTY, concat(",", toClassNames(excludes)));
     }
 }

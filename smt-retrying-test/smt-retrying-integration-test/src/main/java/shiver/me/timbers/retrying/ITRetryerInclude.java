@@ -18,6 +18,8 @@ package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 
+import java.util.List;
+
 public interface ITRetryerInclude extends ExpectedExceptionAware {
 
     void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
@@ -27,4 +29,6 @@ public interface ITRetryerInclude extends ExpectedExceptionAware {
     void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable;
 
     RetryerIncludes includes(int retries, Throwable... includes);
+
+    RetryerIncludes includesWithExcludes(int retries, List<Throwable> includes, List<Throwable> excludes);
 }

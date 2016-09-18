@@ -20,14 +20,17 @@ import org.junit.Test;
 
 import java.util.concurrent.Callable;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_OTHER_THROWABLES;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_THROWABLES;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someOtherThrowable;
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
 public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
 
@@ -43,7 +46,7 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
         given(callable.call()).willThrow(SOME_THROWABLES).willReturn(expected);
 
         // When
-        final Object actual = includes(8, SOME_THROWABLES).includeMethod(callable);
+        final Object actual = includes(DEFAULT_RETRIES, SOME_THROWABLES).includeMethod(callable);
 
         // Then
         assertThat(actual, is(expected));
@@ -63,7 +66,7 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
         expectedException().expect(is(expected));
 
         // When
-        includes(8, SOME_THROWABLES).includeMethod(callable);
+        includes(DEFAULT_RETRIES, SOME_THROWABLES).includeMethod(callable);
     }
 
     @Test
@@ -78,7 +81,27 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
         given(callable.call()).willThrow(SOME_THROWABLES).willReturn(expected);
 
         // When
-        final Object actual = includes(8).includeMethod(callable);
+        final Object actual = includes(DEFAULT_RETRIES).includeMethod(callable);
+
+        // Then
+        assertThat(actual, is(expected));
+        verify(callable, times(4)).call();
+    }
+
+    @Test
+    public void Can_ignore_exceptions_contained_in_the_include_list_and_not_in_the_exclude_list() throws Throwable {
+
+        final Callable callable = mock(Callable.class);
+
+        final Object expected = new Object();
+
+        // Given
+        given(callable.call()).willThrow(SOME_THROWABLES).willReturn(expected);
+
+        // When
+        final Object actual = includesWithExcludes(
+            DEFAULT_RETRIES, asList(SOME_THROWABLES), asList(SOME_OTHER_THROWABLES)
+        ).includeMethod(callable);
 
         // Then
         assertThat(actual, is(expected));

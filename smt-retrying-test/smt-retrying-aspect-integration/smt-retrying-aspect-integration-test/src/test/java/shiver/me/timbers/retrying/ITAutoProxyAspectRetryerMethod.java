@@ -21,7 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerDefaultsMethodFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerExcludesMethodFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerExcludesWithIncludesMethodFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesMethodFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesWithExcludesMethodFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalMethodFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesMethodFactory;
 
@@ -41,6 +44,15 @@ public class ITAutoProxyAspectRetryerMethod extends AbstractITAspectRetryerMetho
     @Autowired
     private AutoProxyRetryerIncludesMethodFactory includesFactory;
 
+    @Autowired
+    private AutoProxyRetryerIncludesWithExcludesMethodFactory includesWithExcludesFactory;
+
+    @Autowired
+    private AutoProxyRetryerExcludesMethodFactory excludesFactory;
+
+    @Autowired
+    private AutoProxyRetryerExcludesWithIncludesMethodFactory excludesWithIncludesFactory;
+
     @Override
     public AutoProxyRetryerDefaultsMethodFactory defaultsFactory() {
         return defaultsFactory;
@@ -59,5 +71,20 @@ public class ITAutoProxyAspectRetryerMethod extends AbstractITAspectRetryerMetho
     @Override
     public AutoProxyRetryerIncludesMethodFactory includesFactory() {
         return includesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerIncludesWithExcludesMethodFactory includesWithExcludesFactory() {
+        return includesWithExcludesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerExcludesMethodFactory excludesFactory() {
+        return excludesFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerExcludesWithIncludesMethodFactory excludesWithIncludesFactory() {
+        return excludesWithIncludesFactory;
     }
 }

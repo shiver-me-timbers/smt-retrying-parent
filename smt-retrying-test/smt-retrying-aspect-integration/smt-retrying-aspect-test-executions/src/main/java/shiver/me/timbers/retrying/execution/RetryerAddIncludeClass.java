@@ -20,7 +20,9 @@ import shiver.me.timbers.retrying.Retry;
 
 import java.util.concurrent.Callable;
 
-@Retry(value = 8, includes = {IllegalStateException.class})
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
+
+@Retry(value = DEFAULT_RETRIES, includes = {IllegalStateException.class})
 public class RetryerAddIncludeClass implements RetryerIncludes {
 
     @Override

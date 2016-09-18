@@ -28,13 +28,14 @@ import static shiver.me.timbers.matchers.Matchers.hasField;
 public class AbstractChoicesTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void Can_choose_the_current_choices() {
 
         // Given
         final Integer retries = somePositiveInteger();
         final Time interval = mock(Time.class);
-        @SuppressWarnings("unchecked")
         final Set<Class<? extends Throwable>> includes = mock(Set.class);
+        final Set<Class<? extends Throwable>> excludes = mock(Set.class);
 
         // When
         final Choice actual = new AbstractChoices() {
@@ -55,7 +56,7 @@ public class AbstractChoicesTest {
 
             @Override
             public Set<Class<? extends Throwable>> getExcludes() {
-                throw new UnsupportedOperationException();
+                return excludes;
             }
         }.choose();
 
@@ -63,5 +64,6 @@ public class AbstractChoicesTest {
         assertThat(actual, hasField("retries", retries));
         assertThat(actual, hasField("interval", interval));
         assertThat(actual, hasField("includes", includes));
+        assertThat(actual, hasField("excludes", excludes));
     }
 }

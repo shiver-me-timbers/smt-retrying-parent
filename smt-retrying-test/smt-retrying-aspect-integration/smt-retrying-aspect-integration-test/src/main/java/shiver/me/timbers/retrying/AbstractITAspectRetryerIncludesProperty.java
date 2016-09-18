@@ -20,7 +20,7 @@ import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 
 public abstract class AbstractITAspectRetryerIncludesProperty extends AbstractITRetryerIncludesProperty
-    implements RetryerIncludesFactoryAware, RetryerDefaultsFactoryAware {
+    implements RetryerIncludesFactoryAware, RetryerIncludesWithExcludesFactoryAware, RetryerDefaultsFactoryAware {
 
     @Override
     public RetryerDefaults defaults() {

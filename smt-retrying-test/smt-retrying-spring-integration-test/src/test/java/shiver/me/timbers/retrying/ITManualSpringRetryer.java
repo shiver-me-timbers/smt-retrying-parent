@@ -54,6 +54,11 @@ public class ITManualSpringRetryer extends AbstractITSpringRetryer {
     }
 
     @Override
+    public RetryerIncludes includesWithExcludes(int retries, List<Throwable> includes, List<Throwable> excludes) {
+        return new SpringManualRetryerIncludeWithExclude(retries, excludes, includes);
+    }
+
+    @Override
     public RetryerExcludes excludes(int retries, Throwable... excludes) {
         return new SpringManualRetryerExcludes(retries, excludes);
     }

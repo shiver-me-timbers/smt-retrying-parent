@@ -17,10 +17,12 @@
 package shiver.me.timbers.retrying;
 
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
+import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractITAspectRetryer extends AbstractITRetryer implements RetryerFactoriesAware {
@@ -43,5 +45,20 @@ public abstract class AbstractITAspectRetryer extends AbstractITRetryer implemen
     @Override
     public RetryerIncludes includes(int retries, Throwable... includes) {
         return includesFactory().create(retries, includes);
+    }
+
+    @Override
+    public RetryerIncludes includesWithExcludes(int retries, List<Throwable> includes, List<Throwable> excludes) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public RetryerExcludes excludes(int retries, Throwable... excludes) {
+        return excludesFactory().create(retries, excludes);
+    }
+
+    @Override
+    public RetryerExcludes excludesWithIncludes(int retries, List<Throwable> excludes, List<Throwable> includes) {
+        return excludesWithIncludesFactory().create(retries, excludes, includes);
     }
 }

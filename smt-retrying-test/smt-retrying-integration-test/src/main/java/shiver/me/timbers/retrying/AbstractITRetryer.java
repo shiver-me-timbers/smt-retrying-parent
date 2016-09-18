@@ -69,6 +69,11 @@ public abstract class AbstractITRetryer implements ITRetryer {
         public RetryerIncludes includes(int retries, Throwable... includes) {
             return AbstractITRetryer.this.includes(retries, includes);
         }
+
+        @Override
+        public RetryerIncludes includesWithExcludes(int retries, List<Throwable> includes, List<Throwable> excludes) {
+            return AbstractITRetryer.this.includesWithExcludes(retries, includes, excludes);
+        }
     };
 
     private final AbstractITRetryerExcludes excludes = new AbstractITRetryerExcludes() {
@@ -147,6 +152,12 @@ public abstract class AbstractITRetryer implements ITRetryer {
     @Override
     public void Can_ignore_exceptions_that_are_not_contained_in_the_exclude_list() throws Throwable {
         excludes.Can_ignore_exceptions_that_are_not_contained_in_the_exclude_list();
+    }
+
+    @Test
+    @Override
+    public void Can_ignore_all_exceptions_if_no_excludes_set() throws Throwable {
+        excludes.Can_ignore_all_exceptions_if_no_excludes_set();
     }
 
     @Test

@@ -22,6 +22,7 @@ import org.junit.rules.ExpectedException;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRuleAware;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import static org.hamcrest.Matchers.is;
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_OTHER_THROWABLES;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
+import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
 public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetryerIncludes
     implements ITRetryerDefaults, RetryerPropertyRuleAware {
@@ -56,6 +58,23 @@ public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetrye
         };
     }
 
+    @Override
+    public RetryerIncludes includesWithExcludes(
+        final int retries,
+        final List<Throwable> includes,
+        final List<Throwable> excludes
+    ) {
+        return new RetryerIncludes() {
+            @Override
+            public <T> T includeMethod(Callable<T> callable) throws Exception {
+                properties().setRetries(retries);
+                properties().setIncludes(includes);
+                properties().setExcludes(excludes);
+                return defaults().defaultsMethod(callable);
+            }
+        };
+    }
+
     protected abstract RetryerIncludes addInclude(final int retries, Throwable include);
 
     @Test
@@ -63,14 +82,13 @@ public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetrye
 
         final Callable callable = mock(Callable.class);
 
-        final int retries = 8;
         final Throwable exception1 = someThrowable();
         final Throwable exception2 = someThrowable();
 
         final Object expected = new Object();
 
         // Given
-        properties().setRetries(retries);
+        properties().setRetries(DEFAULT_RETRIES);
         properties().setIncludes(exception1, exception2);
         given(callable.call()).willThrow(exception1).willThrow(exception2).willReturn(expected);
 
@@ -87,7 +105,6 @@ public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetrye
 
         final Callable callable = mock(Callable.class);
 
-        final int retries = 8;
         final Throwable exception1 = someThrowable();
         final Throwable exception2 = SOME_OTHER_THROWABLES[0];
 
@@ -98,7 +115,7 @@ public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetrye
         given(callable.call()).willThrow(exception1).willThrow(exception2).willReturn(expected);
 
         // When
-        final Object actual = addInclude(retries, exception2).includeMethod(callable);
+        final Object actual = addInclude(DEFAULT_RETRIES, exception2).includeMethod(callable);
 
         // Then
         assertThat(actual, is(expected));
