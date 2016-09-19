@@ -8,7 +8,7 @@ import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
 public class RetryerAddExcludesMethod implements RetryerExcludes {
 
-    @Retry(value = DEFAULT_RETRIES, excludes = {IllegalMonitorStateException.class})
+    @Retry(value = DEFAULT_RETRIES, excludes = {IllegalStateException.class})
     @Override
     public <T> T excludeMethod(Callable<T> callable) throws Exception {
         return callable.call();

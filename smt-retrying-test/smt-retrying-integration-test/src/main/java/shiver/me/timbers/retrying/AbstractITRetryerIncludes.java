@@ -63,10 +63,16 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
 
         // Given
         given(callable.call()).willThrow(expected).willReturn(new Object());
-        expectedException().expect(is(expected));
 
         // When
-        includes(DEFAULT_RETRIES, SOME_THROWABLES).includeMethod(callable);
+        try {
+            includes(DEFAULT_RETRIES, SOME_THROWABLES).includeMethod(callable);
+        } catch (Throwable t) {
+            assertThat(t, is(expected));
+        }
+
+        // Then
+        verify(callable).call();
     }
 
     @Test

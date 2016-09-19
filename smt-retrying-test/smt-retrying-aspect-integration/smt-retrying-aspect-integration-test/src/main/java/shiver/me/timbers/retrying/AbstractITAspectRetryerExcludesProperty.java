@@ -16,9 +16,19 @@
 
 package shiver.me.timbers.retrying;
 
-import org.junit.rules.ExpectedException;
+import shiver.me.timbers.retrying.execution.RetryerDefaults;
+import shiver.me.timbers.retrying.execution.RetryerExcludes;
 
-public interface ExpectedExceptionAware {
+public abstract class AbstractITAspectRetryerExcludesProperty extends AbstractITRetryerExcludesProperty
+    implements RetryerExcludesFactoryAware, RetryerExcludesWithIncludesFactoryAware, RetryerDefaultsFactoryAware {
 
-    ExpectedException expectedException();
+    @Override
+    public RetryerDefaults defaults() {
+        return defaultsFactory().create();
+    }
+
+    @Override
+    protected RetryerExcludes addExclude(int retries, Throwable exclude) {
+        return excludesFactory().create(retries, exclude);
+    }
 }

@@ -18,90 +18,91 @@ package shiver.me.timbers.retrying;
 
 import org.junit.Test;
 import shiver.me.timbers.retrying.execution.PropertyIncludesWithExcludesRetryerExcludes;
-import shiver.me.timbers.retrying.execution.RetryerIncludes;
+import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.junit.RetryerPropertyRuleAware;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isA;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_OTHER_THROWABLES;
+import static shiver.me.timbers.retrying.random.RandomThrowables.someOtherThrowable;
 import static shiver.me.timbers.retrying.random.RandomThrowables.someThrowable;
 import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
-public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetryerIncludes
+public abstract class AbstractITRetryerExcludesProperty extends AbstractITRetryerExcludes
     implements ITRetryerDefaults, RetryerPropertyRuleAware {
 
     @Override
-    public RetryerIncludes includes(final int retries, final Throwable... includes) {
-        return new RetryerIncludes() {
+    public RetryerExcludes excludes(final int retries, final Throwable... excludes) {
+        return new RetryerExcludes() {
             @Override
-            public <T> T includeMethod(Callable<T> callable) throws Exception {
+            public <T> T excludeMethod(Callable<T> callable) throws Exception {
                 properties().setRetries(retries);
-                properties().setIncludes(includes);
+                properties().setExcludes(excludes);
                 return defaults().defaultsMethod(callable);
             }
         };
     }
 
     @Override
-    public RetryerIncludes includesWithExcludes(
+    public RetryerExcludes excludesWithIncludes(
         final int retries,
-        final List<Throwable> includes,
-        final List<Throwable> excludes
+        final List<Throwable> excludes,
+        final List<Throwable> includes
     ) {
         return new PropertyIncludesWithExcludesRetryerExcludes(properties(), retries, includes, excludes, this);
     }
 
-    protected abstract RetryerIncludes addInclude(final int retries, Throwable include);
+    protected abstract RetryerExcludes addExclude(int retries, Throwable exclude);
 
     @Test
-    public void Can_set_multiple_includes_with_a_system_property() throws Throwable {
+    public void Can_set_multiple_excludes_with_a_system_property() throws Throwable {
 
         final Callable callable = mock(Callable.class);
 
-        final Throwable exception1 = someThrowable();
-        final Throwable exception2 = someThrowable();
-
-        final Object expected = new Object();
+        final Throwable expected = someOtherThrowable();
 
         // Given
         properties().setRetries(DEFAULT_RETRIES);
-        properties().setIncludes(exception1, exception2);
-        given(callable.call()).willThrow(exception1).willThrow(exception2).willReturn(expected);
+        properties().setExcludes(someThrowable(), expected);
+        given(callable.call()).willThrow(expected);
 
         // When
-        final Object actual = defaults().defaultsMethod(callable);
+        try {
+            defaults().defaultsMethod(callable);
+        } catch (Throwable t) {
+            assertThat(t, isA((Class) expected.getClass()));
+        }
 
         // Then
-        assertThat(actual, is(expected));
-        verify(callable, times(3)).call();
+        verify(callable).call();
     }
 
     @Test
-    public void Can_add_an_extra_include_to_those_set_with_the_system_property() throws Throwable {
+    public void Can_add_an_extra_exclude_to_those_set_with_the_system_property() throws Throwable {
 
         final Callable callable = mock(Callable.class);
 
-        final Throwable exception1 = someThrowable();
-        final Throwable exception2 = SOME_OTHER_THROWABLES[0];
-
-        final Object expected = new Object();
+        final Throwable expected = SOME_OTHER_THROWABLES[0];
 
         // Given
-        properties().setIncludes(exception1);
-        given(callable.call()).willThrow(exception1).willThrow(exception2).willReturn(expected);
+        properties().setExcludes(someThrowable());
+        given(callable.call()).willThrow(expected);
 
         // When
-        final Object actual = addInclude(DEFAULT_RETRIES, exception2).includeMethod(callable);
+        try {
+            addExclude(DEFAULT_RETRIES, expected).excludeMethod(callable);
+        } catch (Throwable t) {
+            assertThat(t, is(expected));
+        }
 
         // Then
-        assertThat(actual, is(expected));
-        verify(callable, times(3)).call();
+        verify(callable).call();
     }
 }

@@ -16,9 +16,7 @@
 
 package shiver.me.timbers.retrying;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
@@ -37,14 +35,6 @@ import static org.mockito.Mockito.verify;
 
 public abstract class AbstractITRetryer implements ITRetryer {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    @Override
-    public ExpectedException expectedException() {
-        return expectedException;
-    }
-
     private final AbstractITRetryerRetries retries = new AbstractITRetryerRetries() {
         @Override
         public RetryerRetries retries(int retries) {
@@ -61,11 +51,6 @@ public abstract class AbstractITRetryer implements ITRetryer {
 
     private final AbstractITRetryerIncludes include = new AbstractITRetryerIncludes() {
         @Override
-        public ExpectedException expectedException() {
-            return AbstractITRetryer.this.expectedException();
-        }
-
-        @Override
         public RetryerIncludes includes(int retries, Throwable... includes) {
             return AbstractITRetryer.this.includes(retries, includes);
         }
@@ -77,12 +62,6 @@ public abstract class AbstractITRetryer implements ITRetryer {
     };
 
     private final AbstractITRetryerExcludes excludes = new AbstractITRetryerExcludes() {
-
-        @Override
-        public ExpectedException expectedException() {
-            return AbstractITRetryer.this.expectedException();
-        }
-
         @Override
         public RetryerExcludes excludes(int retries, Throwable... excludes) {
             return AbstractITRetryer.this.excludes(retries, excludes);

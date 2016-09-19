@@ -16,23 +16,20 @@
 
 package shiver.me.timbers.retrying;
 
+import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerExcludes;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerDefaults;
+import shiver.me.timbers.retrying.execution.SpringManualRetryerExcludes;
 
-import java.util.List;
+public class ITManualSpringRetryerExcludesProperty extends AbstractITSpringRetryerExcludesProperty {
 
-public interface ITRetryerExclude {
+    @Override
+    public RetryerDefaults defaults() {
+        return new SpringManualRetryerDefaults();
+    }
 
-    void Cannot_ignore_exceptions_that_are_contained_in_the_exclude_list() throws Throwable;
-
-    void Can_ignore_exceptions_that_are_not_contained_in_the_exclude_list() throws Throwable;
-
-    void Can_ignore_all_exceptions_if_no_excludes_set() throws Throwable;
-
-    void Cannot_ignore_exceptions_contained_in_the_exclude_list_and_not_in_the_include_list() throws Throwable;
-
-    void Excludes_take_precedence_over_includes() throws Throwable;
-
-    RetryerExcludes excludes(int retries, Throwable... excludes);
-
-    RetryerExcludes excludesWithIncludes(int retries, List<Throwable> excludes, List<Throwable> includes);
+    @Override
+    protected RetryerExcludes addExclude(int retries, Throwable exclude) {
+        return new SpringManualRetryerExcludes(retries, exclude);
+    }
 }

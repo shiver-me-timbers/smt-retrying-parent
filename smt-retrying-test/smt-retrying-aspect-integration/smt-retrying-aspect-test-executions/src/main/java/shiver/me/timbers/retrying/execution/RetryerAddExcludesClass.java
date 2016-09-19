@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 
 import static shiver.me.timbers.retrying.util.Constants.DEFAULT_RETRIES;
 
-@Retry(value = DEFAULT_RETRIES, excludes = {IllegalMonitorStateException.class})
+@Retry(value = DEFAULT_RETRIES, excludes = {IllegalStateException.class})
 public class RetryerAddExcludesClass implements RetryerExcludes {
 
     @Override

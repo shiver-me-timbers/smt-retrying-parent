@@ -20,7 +20,7 @@ import shiver.me.timbers.retrying.execution.RetryerIncludes;
 
 import java.util.List;
 
-public interface ITRetryerInclude extends ExpectedExceptionAware {
+public interface ITRetryerInclude {
 
     void Can_ignore_exceptions_contained_in_the_include_list() throws Throwable;
 
