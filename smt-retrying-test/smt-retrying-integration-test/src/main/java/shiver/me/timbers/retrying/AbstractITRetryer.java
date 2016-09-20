@@ -20,6 +20,7 @@ import org.junit.Test;
 import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
+import shiver.me.timbers.retrying.execution.RetryerIntervalIncrements;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 import java.util.List;
@@ -46,6 +47,13 @@ public abstract class AbstractITRetryer implements ITRetryer {
         @Override
         public RetryerInterval interval(Long duration, TimeUnit unit) {
             return AbstractITRetryer.this.interval(duration, unit);
+        }
+    };
+
+    private final AbstractITRetryerIntervalIncrements intervalIncrements = new AbstractITRetryerIntervalIncrements() {
+        @Override
+        public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, long... increments) {
+            return AbstractITRetryer.this.intervalIncrements(retries, unit, increments);
         }
     };
 
@@ -101,6 +109,12 @@ public abstract class AbstractITRetryer implements ITRetryer {
     @Override
     public void Can_set_the_interval() throws Throwable {
         interval.Can_set_the_interval();
+    }
+
+    @Test
+    @Override
+    public void Can_set_the_interval_increments() throws Throwable {
+        intervalIncrements.Can_set_the_interval_increments();
     }
 
     @Test

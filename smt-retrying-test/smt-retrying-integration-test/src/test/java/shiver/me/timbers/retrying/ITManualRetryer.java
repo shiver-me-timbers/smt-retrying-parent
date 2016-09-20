@@ -21,11 +21,13 @@ import shiver.me.timbers.retrying.execution.ManualRetryerExcludes;
 import shiver.me.timbers.retrying.execution.ManualRetryerIncludeWithExclude;
 import shiver.me.timbers.retrying.execution.ManualRetryerIncludes;
 import shiver.me.timbers.retrying.execution.ManualRetryerInterval;
+import shiver.me.timbers.retrying.execution.ManualRetryerIntervalncrements;
 import shiver.me.timbers.retrying.execution.ManualRetryerRetries;
 import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
+import shiver.me.timbers.retrying.execution.RetryerIntervalIncrements;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 import java.util.List;
@@ -46,6 +48,11 @@ public class ITManualRetryer extends AbstractITRetryer {
     @Override
     public RetryerInterval interval(Long duration, TimeUnit unit) {
         return new ManualRetryerInterval(duration, unit);
+    }
+
+    @Override
+    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, long... increments) {
+        return new ManualRetryerIntervalncrements(retries, unit, increments);
     }
 
     @Override

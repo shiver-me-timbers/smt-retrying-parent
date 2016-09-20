@@ -40,7 +40,7 @@ abstract class AbstractPropertyChoices extends AbstractOverridingChoices impleme
             return null;
         }
 
-        return new Time(duration, unit);
+        return new Time(unit, duration);
     }
 
     @Override

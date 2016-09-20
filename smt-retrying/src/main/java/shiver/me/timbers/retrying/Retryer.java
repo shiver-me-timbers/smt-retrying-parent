@@ -42,6 +42,8 @@ public class Retryer implements RetryerService {
 
         final int retries = choice.getRetries();
         final Thrower thrower = new Thrower(choice);
+        final Intervals intervals = choice.getIntervals();
+
         for (int i = 0; i < retries; i++) {
             try {
                 return until.success();
@@ -53,7 +55,7 @@ public class Retryer implements RetryerService {
                     i + 1, until, e.getClass(), e.getMessage()
                 );
             }
-            choice.sleepForInterval();
+            intervals.sleep();
         }
 
         // This is a syntactical trick to allow compilation. This method call will never actually return anything, it
@@ -66,7 +68,7 @@ public class Retryer implements RetryerService {
         private final Choice choice;
         private Throwable throwable;
 
-        public Thrower(Choice choice) {
+        Thrower(Choice choice) {
             this.choice = choice;
         }
 
@@ -86,7 +88,7 @@ public class Retryer implements RetryerService {
             throw new RetriedTooManyTimesException(throwable);
         }
 
-        public void throwIfNotSuppressed() {
+        void throwIfNotSuppressed() {
             if (!choice.isSuppressed(throwable)) {
                 throwRegisteredThrowable();
             }

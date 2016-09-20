@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
@@ -153,7 +154,7 @@ public class AbstractPropertyChoicesTest {
         }.getInterval();
 
         // Then
-        assertThat(actual, hasField("duration", duration));
+        assertThat(actual, hasField("durations", singletonList(duration)));
         assertThat(actual, hasField("unit", unit));
     }
 

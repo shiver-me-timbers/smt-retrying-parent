@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.springframework.util.StopWatch;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,15 +27,12 @@ import java.util.Set;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomIntegers.someNegativeInteger;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
-import static shiver.me.timbers.data.random.RandomLongs.someLongBetween;
-import static shiver.me.timbers.data.random.RandomLongs.someNegativeLong;
 import static shiver.me.timbers.retrying.random.RandomExceptions.someOtherThrowable;
 import static shiver.me.timbers.retrying.random.RandomExceptions.someThrowable;
 
@@ -70,23 +66,18 @@ public class ChoiceTest {
     }
 
     @Test
-    public void Can_sleep_for_the_interval() throws InterruptedException {
+    public void Can_get_the_intervals() {
 
-        final Time interval = mock(Time.class);
-        final StopWatch stopWatch = new StopWatch();
-
-        final Long duration = someLongBetween(200L, 300L);
+        final Intervals expected = mock(Intervals.class);
 
         // Given
-        given(interval.toMillis()).willReturn(duration);
-        stopWatch.start();
+        given(interval.startIntervals()).willReturn(expected);
 
         // When
-        new Choice(retries, interval, includes, excludes).sleepForInterval();
+        final Intervals actual = new Choice(retries, interval, includes, excludes).getIntervals();
 
         // Then
-        stopWatch.stop();
-        assertThat(stopWatch.getLastTaskTimeMillis(), greaterThanOrEqualTo(duration));
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -109,22 +100,6 @@ public class ChoiceTest {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage(
             format("The retries value must be greater than 1. The value (%s) is invalid.", retries)
-        );
-
-        // When
-        new Choice(retries, interval, includes, excludes);
-    }
-
-    @Test
-    public void Cannot_set_a_negative_interval_duration() {
-
-        final Time interval = mock(Time.class);
-
-        // Given
-        given(interval.toMillis()).willReturn(someNegativeLong());
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage(
-            format("The interval value must be greater than 0. The value (%s) is invalid.", interval)
         );
 
         // When

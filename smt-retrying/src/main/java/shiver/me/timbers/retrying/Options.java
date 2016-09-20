@@ -68,7 +68,7 @@ public class Options implements OptionsService {
 
     @Override
     public Options withInterval(Long duration, TimeUnit unit) {
-        this.interval = new Time(duration, unit);
+        this.interval = new Time(unit, duration);
         return this;
     }
 
@@ -81,8 +81,14 @@ public class Options implements OptionsService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public OptionsService excludes(Class<? extends Throwable>... excludes) {
+    public Options excludes(Class<? extends Throwable>... excludes) {
         this.excludes = new HashSet<>(asList(excludes));
+        return this;
+    }
+
+    @Override
+    public Options withIntervals(TimeUnit unit, long... increments) {
+        this.interval = new Time(unit, increments);
         return this;
     }
 

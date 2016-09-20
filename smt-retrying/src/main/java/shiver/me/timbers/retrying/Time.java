@@ -16,29 +16,45 @@
 
 package shiver.me.timbers.retrying;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.Collections.unmodifiableList;
 
 /**
  * @author Karl Bennett
  */
 class Time {
 
-    private final Long duration;
+    private final List<Long> durations;
     private final TimeUnit unit;
 
-    Time(Long duration, TimeUnit unit) {
-        this.duration = duration;
-        this.unit = unit;
+    Time(TimeUnit unit, long... durations) {
+        this(toList(durations), unit);
     }
 
-    long toMillis() {
-        return unit.toMillis(duration);
+    Time(List<Long> durations, TimeUnit unit) {
+        this.unit = unit;
+        this.durations = durations;
+    }
+
+    private static List<Long> toList(long... durations) {
+        final List<Long> list = new ArrayList<>(durations.length);
+        for (long duration : durations) {
+            list.add(duration);
+        }
+        return unmodifiableList(list);
+    }
+
+    Intervals startIntervals() {
+        return new Intervals(durations, unit);
     }
 
     @Override
     public String toString() {
         return "Time{" +
-            "duration=" + duration +
+            "durations=" + durations +
             ", unit=" + unit +
             '}';
     }

@@ -37,7 +37,7 @@ class Choice {
         Set<Class<? extends Throwable>> excludes
     ) {
         this.retries = validateRetries(retries);
-        this.interval = validateInterval(interval);
+        this.interval = interval;
         this.includes = includes;
         this.excludes = excludes;
     }
@@ -51,21 +51,12 @@ class Choice {
         );
     }
 
-    private static Time validateInterval(Time interval) {
-        if (interval.toMillis() >= 0) {
-            return interval;
-        }
-        throw new IllegalArgumentException(
-            format("The interval value must be greater than 0. The value (%s) is invalid.", interval)
-        );
-    }
-
     int getRetries() {
         return retries;
     }
 
-    void sleepForInterval() throws InterruptedException {
-        Thread.sleep(interval.toMillis());
+    Intervals getIntervals() {
+        return interval.startIntervals();
     }
 
     boolean isSuppressed(Throwable throwable) {

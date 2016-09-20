@@ -19,35 +19,54 @@ package shiver.me.timbers.retrying;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
+import static shiver.me.timbers.matchers.Matchers.hasField;
 
 public class TimeTest {
 
-    private Long duration;
     private TimeUnit unit;
+    private Long duration1;
+    private Long duration2;
+    private Long duration3;
     private Time time;
 
     @Before
     public void setUp() {
-        duration = someLong();
         unit = someEnum(TimeUnit.class);
-        time = new Time(duration, unit);
+        duration1 = someLong();
+        duration2 = someLong();
+        duration3 = someLong();
+        time = new Time(unit, duration1, duration2, duration3);
     }
 
     @Test
-    public void Can_convert_time_to_milliseconds() {
+    @SuppressWarnings("unchecked")
+    public void Can_start_intervals() {
+
+        final List<Long> durations = mock(List.class);
+
+        final Iterator<Long> iterator = mock(Iterator.class);
+
+        // Given
+        given(durations.iterator()).willReturn(iterator);
 
         // When
-        final long actual = time.toMillis();
+        final Intervals actual = new Time(durations, unit).startIntervals();
 
         // Then
-        assertThat(actual, equalTo(unit.toMillis(duration)));
+        assertThat(actual, hasField("unit", unit));
+        assertThat(actual, hasField("durations", iterator));
     }
 
     @Test
@@ -57,6 +76,9 @@ public class TimeTest {
         final String actual = time.toString();
 
         // Then
-        assertThat(actual, equalTo(format("Time{duration=%s, unit=%s}", duration, unit.name())));
+        assertThat(
+            actual,
+            equalTo(format("Time{durations=%s, unit=%s}", asList(duration1, duration2, duration3), unit.name()))
+        );
     }
 }

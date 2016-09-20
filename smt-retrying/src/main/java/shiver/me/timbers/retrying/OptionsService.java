@@ -32,4 +32,6 @@ interface OptionsService {
 
     @SuppressWarnings("unchecked")
     OptionsService excludes(Class<? extends Throwable>... excludes);
+
+    OptionsService withIntervals(TimeUnit unit, long... increments);
 }

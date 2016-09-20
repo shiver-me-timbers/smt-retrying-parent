@@ -27,7 +27,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 class StaticDefaultChoices extends AbstractOverridingChoices implements DefaultChoices {
 
     static final Integer DEFAULT_RETRIES = 5;
-    static final Time DEFAULT_INTERVAL = new Time(100L, MILLISECONDS);
+    static final Time DEFAULT_INTERVAL = new Time(MILLISECONDS, 100L);
     static final Set<Class<? extends Throwable>> DEFAULT_INCLUDES = emptySet();
     static final Set<Class<? extends Throwable>> DEFAULT_EXCLUDES = emptySet();
 

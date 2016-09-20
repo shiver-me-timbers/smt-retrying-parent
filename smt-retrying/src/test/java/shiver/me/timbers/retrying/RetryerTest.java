@@ -65,6 +65,7 @@ public class RetryerTest {
 
         final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
+        final Intervals intervals = mock(Intervals.class);
         final Throwable throwable = someThrowable();
         final Object expected = new Object();
 
@@ -72,6 +73,7 @@ public class RetryerTest {
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(2);
+        given(choice.getIntervals()).willReturn(intervals);
         given(until.success()).willThrow(throwable).willReturn(expected);
         given(choice.isSuppressed(throwable)).willReturn(true);
 
@@ -81,7 +83,7 @@ public class RetryerTest {
         // Then
         assertThat(actual, is(expected));
         verify(until, times(2)).success();
-        verify(choice).sleepForInterval();
+        verify(intervals).sleep();
     }
 
     @Test
@@ -93,12 +95,14 @@ public class RetryerTest {
         final Chooser chooser = mock(Chooser.class);
         final Choice choice = mock(Choice.class);
         final int retries = someIntegerBetween(1, 10);
+        final Intervals intervals = mock(Intervals.class);
         final Throwable throwable = someThrowable();
 
         // Given
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
+        given(choice.getIntervals()).willReturn(intervals);
         given(until.success()).willThrow(throwable);
         given(choice.isSuppressed(throwable)).willReturn(true);
 
@@ -111,7 +115,7 @@ public class RetryerTest {
 
         // Then
         verify(until, times(retries)).success();
-        verify(choice, times(retries)).sleepForInterval();
+        verify(intervals, times(retries)).sleep();
     }
 
     @Test
@@ -130,6 +134,7 @@ public class RetryerTest {
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
+        given(choice.getIntervals()).willReturn(mock(Intervals.class));
         given(until.success()).willThrow(exception);
         given(choice.isSuppressed(exception)).willReturn(true);
         expectedException.expect(is(exception));
@@ -154,6 +159,7 @@ public class RetryerTest {
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
+        given(choice.getIntervals()).willReturn(mock(Intervals.class));
         given(until.success()).willThrow(error);
         given(choice.isSuppressed(error)).willReturn(true);
         expectedException.expect(is(error));
@@ -178,6 +184,7 @@ public class RetryerTest {
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(retries);
+        given(choice.getIntervals()).willReturn(mock(Intervals.class));
         given(until.success()).willThrow(exception);
         given(choice.isSuppressed(exception)).willReturn(true);
         expectedException.expect(RetriedTooManyTimesException.class);
@@ -201,6 +208,7 @@ public class RetryerTest {
         given(options.chooser()).willReturn(chooser);
         given(chooser.choose()).willReturn(choice);
         given(choice.getRetries()).willReturn(2);
+        given(choice.getIntervals()).willReturn(mock(Intervals.class));
         given(until.success()).willThrow(throwable).willReturn(new Object());
         given(choice.isSuppressed(throwable)).willReturn(false);
         expectedException.expect(is(throwable));
