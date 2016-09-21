@@ -23,6 +23,7 @@ import shiver.me.timbers.retrying.factory.AutoProxyRetryerExcludesWithIncludesCl
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesWithExcludesClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalIncrementsClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesClassFactory;
 
 public class ITAutoProxySpringAspectRetryerClass extends AbstractITSpringAspectRetryerClass {
@@ -35,6 +36,9 @@ public class ITAutoProxySpringAspectRetryerClass extends AbstractITSpringAspectR
 
     @Autowired
     private AutoProxyRetryerIntervalClassFactory intervalFactory;
+
+    @Autowired
+    private AutoProxyRetryerIntervalIncrementsClassFactory intervalIncrementsFactory;
 
     @Autowired
     private AutoProxyRetryerIncludesClassFactory includesFactory;
@@ -61,6 +65,11 @@ public class ITAutoProxySpringAspectRetryerClass extends AbstractITSpringAspectR
     @Override
     public AutoProxyRetryerIntervalClassFactory intervalFactory() {
         return intervalFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerIntervalIncrementsClassFactory intervalIncrementsFactory() {
+        return intervalIncrementsFactory;
     }
 
     @Override

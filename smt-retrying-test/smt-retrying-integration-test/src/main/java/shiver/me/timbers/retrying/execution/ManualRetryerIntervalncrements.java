@@ -12,9 +12,9 @@ public class ManualRetryerIntervalncrements<R extends Retryer, O extends Options
 
     private final int retries;
     private final TimeUnit unit;
-    private final long[] increments;
+    private final Long[] increments;
 
-    public ManualRetryerIntervalncrements(int retries, TimeUnit unit, long... increments) {
+    public ManualRetryerIntervalncrements(int retries, TimeUnit unit, Long... increments) {
         this.retries = retries;
         this.unit = unit;
         this.increments = increments;

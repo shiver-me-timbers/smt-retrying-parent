@@ -39,7 +39,7 @@ public class RetryerIntervalFactory {
         return lookupFactory.find(duration, unit);
     }
 
-    public void add(RetryerInterval retryerRetries, Long duration, TimeUnit unit) {
-        lookupFactory.add(retryerRetries, duration, unit);
+    public void add(RetryerInterval retryerInterval, Long duration, TimeUnit unit) {
+        lookupFactory.add(retryerInterval, duration, unit);
     }
 }

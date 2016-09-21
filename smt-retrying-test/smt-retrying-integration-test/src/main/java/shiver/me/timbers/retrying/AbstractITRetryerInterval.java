@@ -27,6 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static shiver.me.timbers.retrying.util.Constants.DURATION2;
 
 public abstract class AbstractITRetryerInterval implements ITRetryerInterval {
 
@@ -41,7 +42,7 @@ public abstract class AbstractITRetryerInterval implements ITRetryerInterval {
         stopWatch.start();
 
         // When
-        interval(200L, MILLISECONDS).intervalMethod(callable);
+        interval(DURATION2, MILLISECONDS).intervalMethod(callable);
 
         // Then
         stopWatch.stop();

@@ -52,7 +52,7 @@ public abstract class AbstractITRetryer implements ITRetryer {
 
     private final AbstractITRetryerIntervalIncrements intervalIncrements = new AbstractITRetryerIntervalIncrements() {
         @Override
-        public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, long... increments) {
+        public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... increments) {
             return AbstractITRetryer.this.intervalIncrements(retries, unit, increments);
         }
     };
@@ -133,6 +133,12 @@ public abstract class AbstractITRetryer implements ITRetryer {
     @Override
     public void Can_ignore_all_exceptions_if_no_includes_set() throws Throwable {
         include.Can_ignore_all_exceptions_if_no_includes_set();
+    }
+
+    @Test
+    @Override
+    public void Can_ignore_exceptions_contained_in_the_include_list_and_not_in_the_exclude_list() throws Throwable {
+        include.Can_ignore_exceptions_contained_in_the_include_list_and_not_in_the_exclude_list();
     }
 
     @Test

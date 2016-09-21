@@ -8,5 +8,5 @@ public interface ITRetryerIntervalIncrements {
 
     void Can_set_the_interval_increments() throws Throwable;
 
-    RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, long... increments);
+    RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... increments);
 }

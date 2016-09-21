@@ -16,11 +16,10 @@
 
 package shiver.me.timbers.retrying;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.Collections.unmodifiableList;
+import static java.util.Arrays.asList;
 
 /**
  * @author Karl Bennett
@@ -30,21 +29,13 @@ class Time {
     private final List<Long> durations;
     private final TimeUnit unit;
 
-    Time(TimeUnit unit, long... durations) {
-        this(toList(durations), unit);
+    Time(TimeUnit unit, Long... durations) {
+        this(asList(durations), unit);
     }
 
     Time(List<Long> durations, TimeUnit unit) {
         this.unit = unit;
         this.durations = durations;
-    }
-
-    private static List<Long> toList(long... durations) {
-        final List<Long> list = new ArrayList<>(durations.length);
-        for (long duration : durations) {
-            list.add(duration);
-        }
-        return unmodifiableList(list);
     }
 
     Intervals startIntervals() {

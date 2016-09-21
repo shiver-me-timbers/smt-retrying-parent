@@ -22,6 +22,7 @@ import shiver.me.timbers.retrying.factory.RetryerExcludesWithIncludesClassFactor
 import shiver.me.timbers.retrying.factory.RetryerIncludesClassFactory;
 import shiver.me.timbers.retrying.factory.RetryerIncludesWithExcludesClassFactory;
 import shiver.me.timbers.retrying.factory.RetryerIntervalClassFactory;
+import shiver.me.timbers.retrying.factory.RetryerIntervalIncrementsClassFactory;
 import shiver.me.timbers.retrying.factory.RetryerRetriesClassFactory;
 
 public abstract class AbstractITAspectRetryerClass extends AbstractITAspectRetryer {
@@ -39,6 +40,11 @@ public abstract class AbstractITAspectRetryerClass extends AbstractITAspectRetry
     @Override
     public RetryerIntervalClassFactory intervalFactory() {
         return new RetryerIntervalClassFactory();
+    }
+
+    @Override
+    public RetryerIntervalIncrementsClassFactory intervalIncrementsFactory() {
+        return new RetryerIntervalIncrementsClassFactory();
     }
 
     @Override

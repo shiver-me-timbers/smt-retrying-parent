@@ -27,11 +27,11 @@ interface OptionsService {
 
     OptionsService withInterval(Long duration, TimeUnit unit);
 
+    OptionsService withIntervals(TimeUnit unit, Long... increments);
+
     @SuppressWarnings("unchecked")
     OptionsService includes(Class<? extends Throwable>... includes);
 
     @SuppressWarnings("unchecked")
     OptionsService excludes(Class<? extends Throwable>... excludes);
-
-    OptionsService withIntervals(TimeUnit unit, long... increments);
 }

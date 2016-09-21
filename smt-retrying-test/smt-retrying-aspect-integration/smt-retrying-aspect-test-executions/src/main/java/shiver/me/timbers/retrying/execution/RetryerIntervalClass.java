@@ -22,8 +22,9 @@ import shiver.me.timbers.retrying.Retry;
 import java.util.concurrent.Callable;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static shiver.me.timbers.retrying.util.Constants.DURATION2;
 
-@Retry(interval = @Interval(duration = 200, unit = MILLISECONDS))
+@Retry(interval = @Interval(duration = DURATION2, unit = MILLISECONDS))
 public class RetryerIntervalClass implements RetryerInterval {
 
     @Override

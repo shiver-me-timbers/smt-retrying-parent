@@ -25,6 +25,9 @@ import java.util.concurrent.Callable;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
+import static shiver.me.timbers.retrying.util.Constants.DURATION1;
+import static shiver.me.timbers.retrying.util.Constants.DURATION2;
+import static shiver.me.timbers.retrying.util.Constants.DURATION3;
 import static shiver.me.timbers.retrying.util.Constants.INCREMENT_RETRIES;
 
 public abstract class AbstractITRetryerIntervalIncrements implements ITRetryerIntervalIncrements {
@@ -50,7 +53,8 @@ public abstract class AbstractITRetryerIntervalIncrements implements ITRetryerIn
 
         // When
         try {
-            intervalIncrements(INCREMENT_RETRIES, MILLISECONDS, 100L, 200L, 300L).intervalIncrementsMethod(callable);
+            intervalIncrements(INCREMENT_RETRIES, MILLISECONDS, DURATION1, DURATION2, DURATION3)
+                .intervalIncrementsMethod(callable);
         } catch (RuntimeException e) {
             if (e != exception) {
                 throw e;

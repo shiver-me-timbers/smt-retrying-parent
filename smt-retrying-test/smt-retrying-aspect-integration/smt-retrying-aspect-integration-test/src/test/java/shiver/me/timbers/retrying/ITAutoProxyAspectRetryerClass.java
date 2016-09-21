@@ -26,6 +26,7 @@ import shiver.me.timbers.retrying.factory.AutoProxyRetryerExcludesWithIncludesCl
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIncludesWithExcludesClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalClassFactory;
+import shiver.me.timbers.retrying.factory.AutoProxyRetryerIntervalIncrementsClassFactory;
 import shiver.me.timbers.retrying.factory.AutoProxyRetryerRetriesClassFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,6 +41,9 @@ public class ITAutoProxyAspectRetryerClass extends AbstractITAspectRetryerClass 
 
     @Autowired
     private AutoProxyRetryerIntervalClassFactory intervalFactory;
+
+    @Autowired
+    private AutoProxyRetryerIntervalIncrementsClassFactory intervalIncrementsFactory;
 
     @Autowired
     private AutoProxyRetryerIncludesClassFactory includesFactory;
@@ -66,6 +70,11 @@ public class ITAutoProxyAspectRetryerClass extends AbstractITAspectRetryerClass 
     @Override
     public AutoProxyRetryerIntervalClassFactory intervalFactory() {
         return intervalFactory;
+    }
+
+    @Override
+    public AutoProxyRetryerIntervalIncrementsClassFactory intervalIncrementsFactory() {
+        return intervalIncrementsFactory;
     }
 
     @Override

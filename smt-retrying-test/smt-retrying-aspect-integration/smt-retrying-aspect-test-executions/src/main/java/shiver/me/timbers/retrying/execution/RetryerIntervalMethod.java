@@ -22,10 +22,11 @@ import shiver.me.timbers.retrying.Retry;
 import java.util.concurrent.Callable;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static shiver.me.timbers.retrying.util.Constants.DURATION2;
 
 public class RetryerIntervalMethod implements RetryerInterval {
 
-    @Retry(interval = @Interval(duration = 200, unit = MILLISECONDS))
+    @Retry(interval = @Interval(duration = DURATION2, unit = MILLISECONDS))
     @Override
     public <T> T intervalMethod(Callable<T> callable) throws Exception {
         return callable.call();

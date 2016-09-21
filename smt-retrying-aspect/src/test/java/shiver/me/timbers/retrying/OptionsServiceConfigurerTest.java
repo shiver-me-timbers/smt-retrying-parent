@@ -28,8 +28,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomIntegers.someNegativeInteger;
 import static shiver.me.timbers.data.random.RandomIntegers.somePositiveInteger;
-import static shiver.me.timbers.data.random.RandomLongs.someLongBetween;
-import static shiver.me.timbers.data.random.RandomLongs.someNegativeLong;
+import static shiver.me.timbers.data.random.RandomLongs.someLongs;
 
 public class OptionsServiceConfigurerTest {
 
@@ -49,7 +48,7 @@ public class OptionsServiceConfigurerTest {
 
         final Integer retries = somePositiveInteger();
         final Interval interval = mock(Interval.class);
-        final Long intervalDuration = someLongBetween(1L, 1000L);
+        final Long[] intervalDurations = someLongs().array();
         final TimeUnit intervalUnit = someEnum(TimeUnit.class);
         final Class[] includes = {RuntimeException.class, IllegalArgumentException.class, Error.class};
         final Class[] excludes = {IllegalStateException.class, ClassCastException.class, IllegalAccessError.class};
@@ -57,7 +56,7 @@ public class OptionsServiceConfigurerTest {
         // Given
         given(retry.value()).willReturn(retries);
         given(retry.interval()).willReturn(interval);
-        given(interval.duration()).willReturn(intervalDuration);
+        given(interval.duration()).willReturn(toPrimitives(intervalDurations));
         given(interval.unit()).willReturn(intervalUnit);
         given(retry.includes()).willReturn(includes);
         given(retry.excludes()).willReturn(excludes);
@@ -67,7 +66,7 @@ public class OptionsServiceConfigurerTest {
 
         // Then
         verify(optionsService).withRetries(retries);
-        verify(optionsService).withInterval(intervalDuration, intervalUnit);
+        verify(optionsService).withIntervals(intervalUnit, intervalDurations);
         verify(optionsService).includes(includes);
         verify(optionsService).excludes(excludes);
     }
@@ -84,7 +83,7 @@ public class OptionsServiceConfigurerTest {
         // Given
         given(retry.value()).willReturn(someNegativeInteger());
         given(retry.interval()).willReturn(interval);
-        given(interval.duration()).willReturn(someNegativeLong());
+        given(interval.duration()).willReturn(new long[0]);
         given(interval.unit()).willReturn(someEnum(TimeUnit.class));
         given(retry.includes()).willReturn(new Class[0]);
         given(retry.excludes()).willReturn(new Class[0]);
@@ -94,5 +93,13 @@ public class OptionsServiceConfigurerTest {
 
         // Then
         verifyZeroInteractions(optionsService);
+    }
+
+    private static long[] toPrimitives(Long[] longs) {
+        final long[] primitives = new long[longs.length];
+        for (int i = 0; i < longs.length; i++) {
+            primitives[i] = longs[i];
+        }
+        return primitives;
     }
 }

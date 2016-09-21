@@ -26,9 +26,12 @@ import java.util.concurrent.TimeUnit;
 public @interface Interval {
 
     /**
-     * The number of of {@link TimeUnit}s to wait.
+     * The number of of {@link TimeUnit}s to wait. This can either be one or many values. When more than one value is
+     * supplied the durations will be applied in order between each subsequent retry. If the number of retries exceeds
+     * the number of supplied durations then the last duration in the list will be reused for any remaining retry
+     * intervals.
      */
-    long duration();
+    long[] duration();
 
     /**
      * The unit of time related to the duration.

@@ -51,7 +51,7 @@ public class ITManualRetryer extends AbstractITRetryer {
     }
 
     @Override
-    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, long... increments) {
+    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... increments) {
         return new ManualRetryerIntervalncrements(retries, unit, increments);
     }
 

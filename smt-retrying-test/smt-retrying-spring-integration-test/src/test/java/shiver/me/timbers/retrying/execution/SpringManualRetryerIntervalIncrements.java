@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SpringManualRetryerIntervalIncrements extends ManualRetryerIntervalncrements<SpringRetryer, SpringOptions> {
 
-    public SpringManualRetryerIntervalIncrements(int retries, TimeUnit unit, long... increments) {
+    public SpringManualRetryerIntervalIncrements(int retries, TimeUnit unit, Long... increments) {
         super(retries, unit, increments);
     }
 

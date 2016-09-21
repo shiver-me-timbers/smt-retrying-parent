@@ -45,7 +45,7 @@ public @interface Retry {
     /**
      * Set how long the retryer should wait between retries of the failing method.
      */
-    Interval interval() default @Interval(duration = -1, unit = MILLISECONDS);
+    Interval interval() default @Interval(duration = {}, unit = MILLISECONDS);
 
     /**
      * Set the exceptions or errors that should result in a retry.

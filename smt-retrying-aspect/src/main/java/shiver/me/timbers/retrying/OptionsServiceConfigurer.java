@@ -37,10 +37,11 @@ class OptionsServiceConfigurer implements Configurer<OptionsService, Retry> {
     }
 
     private static void configureInterval(OptionsService optionsService, Interval interval) {
-        if (interval.duration() < 0) {
+        final long[] durations = interval.duration();
+        if (durations.length == 0) {
             return;
         }
-        optionsService.withInterval(interval.duration(), interval.unit());
+        optionsService.withIntervals(interval.unit(), autoBox(durations));
     }
 
     private static void configureIncludes(OptionsService optionsService, Class<? extends Throwable>[] includes) {
@@ -55,5 +56,13 @@ class OptionsServiceConfigurer implements Configurer<OptionsService, Retry> {
             return;
         }
         optionsService.excludes(excludes);
+    }
+
+    private static Long[] autoBox(long[] longs) {
+        final Long[] objects = new Long[longs.length];
+        for (int i = 0; i < longs.length; i++) {
+            objects[i] = longs[i];
+        }
+        return objects;
     }
 }

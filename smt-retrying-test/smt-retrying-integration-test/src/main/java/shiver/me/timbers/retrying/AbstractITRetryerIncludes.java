@@ -95,6 +95,7 @@ public abstract class AbstractITRetryerIncludes implements ITRetryerInclude {
     }
 
     @Test
+    @Override
     public void Can_ignore_exceptions_contained_in_the_include_list_and_not_in_the_exclude_list() throws Throwable {
 
         final Callable callable = mock(Callable.class);

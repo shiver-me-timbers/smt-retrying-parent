@@ -20,6 +20,7 @@ import shiver.me.timbers.retrying.execution.RetryerDefaults;
 import shiver.me.timbers.retrying.execution.RetryerExcludes;
 import shiver.me.timbers.retrying.execution.RetryerIncludes;
 import shiver.me.timbers.retrying.execution.RetryerInterval;
+import shiver.me.timbers.retrying.execution.RetryerIntervalIncrements;
 import shiver.me.timbers.retrying.execution.RetryerRetries;
 
 import java.util.List;
@@ -43,13 +44,18 @@ public abstract class AbstractITAspectRetryer extends AbstractITRetryer implemen
     }
 
     @Override
+    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... increments) {
+        return intervalIncrementsFactory().create(retries, unit, increments);
+    }
+
+    @Override
     public RetryerIncludes includes(int retries, Throwable... includes) {
         return includesFactory().create(retries, includes);
     }
 
     @Override
     public RetryerIncludes includesWithExcludes(int retries, List<Throwable> includes, List<Throwable> excludes) {
-        throw new UnsupportedOperationException();
+        return includesWithExcludesFactory().create(retries, includes, excludes);
     }
 
     @Override
