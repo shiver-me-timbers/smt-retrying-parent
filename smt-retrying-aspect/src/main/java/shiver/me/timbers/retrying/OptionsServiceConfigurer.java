@@ -37,7 +37,7 @@ class OptionsServiceConfigurer implements Configurer<OptionsService, Retry> {
     }
 
     private static void configureInterval(OptionsService optionsService, Interval interval) {
-        final long[] durations = interval.duration();
+        final long[] durations = interval.durations();
         if (durations.length == 0) {
             return;
         }

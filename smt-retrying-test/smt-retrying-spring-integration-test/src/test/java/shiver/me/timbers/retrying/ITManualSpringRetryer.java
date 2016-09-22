@@ -51,8 +51,8 @@ public class ITManualSpringRetryer extends AbstractITSpringRetryer {
     }
 
     @Override
-    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... increments) {
-        return new SpringManualRetryerIntervalIncrements(retries, unit, increments);
+    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... durations) {
+        return new SpringManualRetryerIntervalIncrements(retries, unit, durations);
     }
 
     @Override

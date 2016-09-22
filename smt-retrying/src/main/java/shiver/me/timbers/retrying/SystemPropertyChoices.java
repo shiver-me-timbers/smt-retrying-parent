@@ -28,7 +28,7 @@ class SystemPropertyChoices extends AbstractPropertyChoices implements PropertyC
 
     @Override
     String getIntervalDurationProperty() {
-        return System.getProperty(INTERVAL_DURATION_PROPERTY);
+        return System.getProperty(INTERVAL_DURATIONS_PROPERTY);
     }
 
     @Override

@@ -56,7 +56,7 @@ public class OptionsServiceConfigurerTest {
         // Given
         given(retry.value()).willReturn(retries);
         given(retry.interval()).willReturn(interval);
-        given(interval.duration()).willReturn(toPrimitives(intervalDurations));
+        given(interval.durations()).willReturn(toPrimitives(intervalDurations));
         given(interval.unit()).willReturn(intervalUnit);
         given(retry.includes()).willReturn(includes);
         given(retry.excludes()).willReturn(excludes);
@@ -83,7 +83,7 @@ public class OptionsServiceConfigurerTest {
         // Given
         given(retry.value()).willReturn(someNegativeInteger());
         given(retry.interval()).willReturn(interval);
-        given(interval.duration()).willReturn(new long[0]);
+        given(interval.durations()).willReturn(new long[0]);
         given(interval.unit()).willReturn(someEnum(TimeUnit.class));
         given(retry.includes()).willReturn(new Class[0]);
         given(retry.excludes()).willReturn(new Class[0]);

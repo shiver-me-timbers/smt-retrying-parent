@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
@@ -37,7 +36,7 @@ import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
 import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.matchers.Matchers.hasField;
-import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATIONS_PROPERTY;
 import static shiver.me.timbers.retrying.random.RandomExceptions.someThrowable;
 
 public class AbstractPropertyChoicesTest {
@@ -122,7 +121,9 @@ public class AbstractPropertyChoicesTest {
     public void Can_get_the_interval_property() {
 
         // Given
-        final Long duration = someLong();
+        final Long duration1 = someLong();
+        final Long duration2 = someLong();
+        final Long duration3 = someLong();
         final TimeUnit unit = someEnum(TimeUnit.class);
 
         // When
@@ -134,7 +135,7 @@ public class AbstractPropertyChoicesTest {
 
             @Override
             String getIntervalDurationProperty() {
-                return duration.toString();
+                return format("%s,%s,%s", duration1, duration2, duration3);
             }
 
             @Override
@@ -154,7 +155,7 @@ public class AbstractPropertyChoicesTest {
         }.getInterval();
 
         // Then
-        assertThat(actual, hasField("durations", singletonList(duration)));
+        assertThat(actual, hasField("durations", asList(duration1, duration2, duration3)));
         assertThat(actual, hasField("unit", unit));
     }
 
@@ -194,10 +195,45 @@ public class AbstractPropertyChoicesTest {
     }
 
     @Test
+    public void Can_get_no_interval_property_if_the_duration_is_empty() {
+
+        // When
+        final Time actual = new AbstractPropertyChoices() {
+            @Override
+            String getRetriesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalDurationProperty() {
+                return "";
+            }
+
+            @Override
+            String getIntervalUnitProperty() {
+                return someEnum(TimeUnit.class).name();
+            }
+
+            @Override
+            String getIncludesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getExcludesProperty() {
+                throw new UnsupportedOperationException();
+            }
+        }.getInterval();
+
+        // Then
+        assertThat(actual, nullValue());
+    }
+
+    @Test
     public void Can_get_no_interval_property_if_the_unit_is_not_set() {
 
         // Given
-        System.setProperty(INTERVAL_DURATION_PROPERTY, someLong().toString());
+        System.setProperty(INTERVAL_DURATIONS_PROPERTY, someLong().toString());
 
         // When
         final Time actual = new AbstractPropertyChoices() {
@@ -214,6 +250,44 @@ public class AbstractPropertyChoicesTest {
             @Override
             String getIntervalUnitProperty() {
                 return null;
+            }
+
+            @Override
+            String getIncludesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getExcludesProperty() {
+                throw new UnsupportedOperationException();
+            }
+        }.getInterval();
+
+        // Then
+        assertThat(actual, nullValue());
+    }
+
+    @Test
+    public void Can_get_no_interval_property_if_the_unit_is_empty() {
+
+        // Given
+        System.setProperty(INTERVAL_DURATIONS_PROPERTY, someLong().toString());
+
+        // When
+        final Time actual = new AbstractPropertyChoices() {
+            @Override
+            String getRetriesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalDurationProperty() {
+                return someLong().toString();
+            }
+
+            @Override
+            String getIntervalUnitProperty() {
+                return "";
             }
 
             @Override

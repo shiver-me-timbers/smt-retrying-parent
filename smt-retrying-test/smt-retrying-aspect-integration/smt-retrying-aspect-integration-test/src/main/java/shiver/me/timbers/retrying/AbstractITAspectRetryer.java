@@ -44,8 +44,8 @@ public abstract class AbstractITAspectRetryer extends AbstractITRetryer implemen
     }
 
     @Override
-    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... increments) {
-        return intervalIncrementsFactory().create(retries, unit, increments);
+    public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... durations) {
+        return intervalIncrementsFactory().create(retries, unit, durations);
     }
 
     @Override

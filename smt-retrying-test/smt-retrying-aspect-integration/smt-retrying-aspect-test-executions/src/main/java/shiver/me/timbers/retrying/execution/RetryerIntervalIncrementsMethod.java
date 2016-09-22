@@ -15,7 +15,7 @@ public class RetryerIntervalIncrementsMethod implements RetryerIntervalIncrement
 
     @Retry(
         value = INCREMENT_RETRIES,
-        interval = @Interval(duration = {DURATION1, DURATION2, DURATION3}, unit = MILLISECONDS)
+        interval = @Interval(durations = {DURATION1, DURATION2, DURATION3}, unit = MILLISECONDS)
     )
     @Override
     public <T> T intervalIncrementsMethod(Callable<T> callable) throws Exception {

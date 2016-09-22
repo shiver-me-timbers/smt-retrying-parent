@@ -41,15 +41,7 @@ public abstract class AbstractITRetryerIntervalIncrements implements ITRetryerIn
 
         // Given
         stopWatch.start();
-        final Callable callable = new Callable() {
-            @Override
-            public Object call() throws Exception {
-                stopWatch.stop();
-                intervals.add(stopWatch.getLastTaskTimeMillis());
-                stopWatch.start();
-                throw exception;
-            }
-        };
+        final Callable callable = new RecordIncrements(stopWatch, intervals, exception);
 
         // When
         try {
@@ -67,4 +59,24 @@ public abstract class AbstractITRetryerIntervalIncrements implements ITRetryerIn
         assertThat(intervals.get(3), greaterThanOrEqualTo(300L));
     }
 
+    static class RecordIncrements implements Callable {
+
+        private final StopWatch stopWatch;
+        private final List<Long> intervals;
+        private final RuntimeException exception;
+
+        RecordIncrements(StopWatch stopWatch, List<Long> intervals, RuntimeException exception) {
+            this.stopWatch = stopWatch;
+            this.intervals = intervals;
+            this.exception = exception;
+        }
+
+        @Override
+        public Object call() throws Exception {
+            stopWatch.stop();
+            intervals.add(stopWatch.getLastTaskTimeMillis());
+            stopWatch.start();
+            throw exception;
+        }
+    }
 }

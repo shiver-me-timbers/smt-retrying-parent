@@ -13,7 +13,7 @@ import static shiver.me.timbers.retrying.util.Constants.INCREMENT_RETRIES;
 
 @Retry(
     value = INCREMENT_RETRIES,
-    interval = @Interval(duration = {DURATION1, DURATION2, DURATION3}, unit = MILLISECONDS)
+    interval = @Interval(durations = {DURATION1, DURATION2, DURATION3}, unit = MILLISECONDS)
 )
 public class RetryerIntervalIncrementsClass implements RetryerIntervalIncrements {
 

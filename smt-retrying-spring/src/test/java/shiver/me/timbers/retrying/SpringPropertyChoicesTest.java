@@ -31,7 +31,7 @@ import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 import static shiver.me.timbers.retrying.PropertyChoices.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INCLUDES_PROPERTY;
-import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATIONS_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.RETRIES_PROPERTY;
 
@@ -69,7 +69,7 @@ public class SpringPropertyChoicesTest {
 
         // Given
         given(context.getEnvironment()).willReturn(environment);
-        given(environment.getProperty(INTERVAL_DURATION_PROPERTY)).willReturn(expected);
+        given(environment.getProperty(INTERVAL_DURATIONS_PROPERTY)).willReturn(expected);
 
         // When
         final String actual = propertyChoices.getIntervalDurationProperty();

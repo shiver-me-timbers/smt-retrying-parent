@@ -26,7 +26,7 @@ import static shiver.me.timbers.retrying.util.Constants.DURATION2;
 
 public class RetryerIntervalMethod implements RetryerInterval {
 
-    @Retry(interval = @Interval(duration = DURATION2, unit = MILLISECONDS))
+    @Retry(interval = @Interval(durations = DURATION2, unit = MILLISECONDS))
     @Override
     public <T> T intervalMethod(Callable<T> callable) throws Exception {
         return callable.call();

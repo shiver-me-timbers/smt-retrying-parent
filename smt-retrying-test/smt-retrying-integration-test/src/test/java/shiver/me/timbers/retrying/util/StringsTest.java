@@ -19,6 +19,7 @@ package shiver.me.timbers.retrying.util;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -26,7 +27,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
+import static shiver.me.timbers.data.random.RandomThings.someThing;
 import static shiver.me.timbers.retrying.util.Strings.concat;
+import static shiver.me.timbers.retrying.util.Strings.toStrings;
 
 public class StringsTest {
 
@@ -49,5 +52,20 @@ public class StringsTest {
             "%s%s%s%s%s%s%s%s%s",
             string1, delimiter, string2, delimiter, string3, delimiter, string4, delimiter, string5
         )));
+    }
+
+    @Test
+    public void Can_convert_some_objects_to_a_list_of_strings() {
+
+        // Given
+        final Object object1 = someThing();
+        final Object object2 = someThing();
+        final Object object3 = someThing();
+
+        // When
+        final List<String> actual = toStrings(object1, object2, object3);
+
+        // Then
+        assertThat(actual, equalTo(asList(object1.toString(), object2.toString(), object3.toString())));
     }
 }

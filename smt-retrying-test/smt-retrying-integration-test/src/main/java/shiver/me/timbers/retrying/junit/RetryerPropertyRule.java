@@ -24,11 +24,12 @@ import java.util.concurrent.TimeUnit;
 import static java.util.Arrays.asList;
 import static shiver.me.timbers.retrying.PropertyConstants.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INCLUDES_PROPERTY;
-import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATIONS_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.RETRIES_PROPERTY;
 import static shiver.me.timbers.retrying.util.Classes.toClassNames;
 import static shiver.me.timbers.retrying.util.Strings.concat;
+import static shiver.me.timbers.retrying.util.Strings.toStrings;
 
 public class RetryerPropertyRule extends PropertyRule {
 
@@ -51,7 +52,16 @@ public class RetryerPropertyRule extends PropertyRule {
     }
 
     public void setInterval(Long duration, TimeUnit unit) {
-        setProperty(INTERVAL_DURATION_PROPERTY, duration.toString());
+        setIntervals(unit, duration);
+    }
+
+    public RetryerPropertyRule withIntervals(TimeUnit unit, Long... durations) {
+        setIntervals(unit, durations);
+        return this;
+    }
+
+    public void setIntervals(TimeUnit unit, Long... durations) {
+        setProperty(INTERVAL_DURATIONS_PROPERTY, concat(",", toStrings(durations)));
         setProperty(INTERVAL_UNIT_PROPERTY, unit.name());
     }
 

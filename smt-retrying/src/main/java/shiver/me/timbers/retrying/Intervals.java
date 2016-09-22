@@ -21,6 +21,7 @@ class Intervals {
     void sleep() throws InterruptedException {
         if (durations.hasNext()) {
             Thread.sleep(unit.toMillis(duration = durations.next()));
+            return;
         }
         Thread.sleep(unit.toMillis(duration));
     }

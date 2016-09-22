@@ -36,7 +36,7 @@ class SpringPropertyChoices extends AbstractPropertyChoices implements PropertyC
 
     @Override
     String getIntervalDurationProperty() {
-        return getProperty(INTERVAL_DURATION_PROPERTY);
+        return getProperty(INTERVAL_DURATIONS_PROPERTY);
     }
 
     @Override

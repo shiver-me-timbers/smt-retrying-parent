@@ -34,7 +34,7 @@ abstract class AbstractPropertyChoices extends AbstractOverridingChoices impleme
 
     @Override
     public Time getInterval() {
-        final Long duration = toLongOrNull(getIntervalDurationProperty());
+        final Long[] duration = toLongsOrNull(getIntervalDurationProperty());
         final TimeUnit unit = toTimeUnitOrNull(getIntervalUnitProperty());
         if (duration == null || unit == null) {
             return null;
@@ -67,12 +67,21 @@ abstract class AbstractPropertyChoices extends AbstractOverridingChoices impleme
         return string == null ? null : Integer.valueOf(string);
     }
 
-    private static Long toLongOrNull(String string) {
-        return string == null ? null : Long.valueOf(string);
+    private static Long[] toLongsOrNull(String string) {
+        return string == null || string.isEmpty() ? null : toLongs(string);
+    }
+
+    private static Long[] toLongs(String string) {
+        final String[] strings = string.split(",");
+        final Long[] longs = new Long[strings.length];
+        for (int i = 0; i < strings.length; i++) {
+            longs[i] = Long.valueOf(strings[i]);
+        }
+        return longs;
     }
 
     private static TimeUnit toTimeUnitOrNull(String string) {
-        return string == null ? null : TimeUnit.valueOf(string);
+        return string == null || string.isEmpty() ? null : TimeUnit.valueOf(string);
     }
 
     @SuppressWarnings("unchecked")

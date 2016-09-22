@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 import static shiver.me.timbers.retrying.PropertyChoices.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INCLUDES_PROPERTY;
-import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_DURATIONS_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyChoices.RETRIES_PROPERTY;
 
@@ -43,7 +43,7 @@ public class SystemPropertyChoicesTest {
 
     private static void clearAllRetryerProperties() {
         System.clearProperty(RETRIES_PROPERTY);
-        System.clearProperty(INTERVAL_DURATION_PROPERTY);
+        System.clearProperty(INTERVAL_DURATIONS_PROPERTY);
         System.clearProperty(INTERVAL_UNIT_PROPERTY);
         System.clearProperty(INCLUDES_PROPERTY);
         System.clearProperty(EXCLUDES_PROPERTY);
@@ -70,7 +70,7 @@ public class SystemPropertyChoicesTest {
         final String expected = someString();
 
         // Given
-        System.setProperty(INTERVAL_DURATION_PROPERTY, expected);
+        System.setProperty(INTERVAL_DURATIONS_PROPERTY, expected);
 
         // When
         final String actual = new SystemPropertyChoices().getIntervalDurationProperty();

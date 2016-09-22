@@ -52,8 +52,8 @@ public abstract class AbstractITRetryer implements ITRetryer {
 
     private final AbstractITRetryerIntervalIncrements intervalIncrements = new AbstractITRetryerIntervalIncrements() {
         @Override
-        public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... increments) {
-            return AbstractITRetryer.this.intervalIncrements(retries, unit, increments);
+        public RetryerIntervalIncrements intervalIncrements(int retries, TimeUnit unit, Long... durations) {
+            return AbstractITRetryer.this.intervalIncrements(retries, unit, durations);
         }
     };
 

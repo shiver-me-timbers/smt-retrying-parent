@@ -32,12 +32,13 @@ import static shiver.me.timbers.data.random.RandomIntegers.someInteger;
 import static shiver.me.timbers.data.random.RandomLongs.someLong;
 import static shiver.me.timbers.retrying.PropertyConstants.EXCLUDES_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INCLUDES_PROPERTY;
-import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATION_PROPERTY;
+import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_DURATIONS_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.INTERVAL_UNIT_PROPERTY;
 import static shiver.me.timbers.retrying.PropertyConstants.RETRIES_PROPERTY;
 import static shiver.me.timbers.retrying.random.RandomThrowables.SOME_THROWABLES;
 import static shiver.me.timbers.retrying.util.Classes.toClassNames;
 import static shiver.me.timbers.retrying.util.Strings.concat;
+import static shiver.me.timbers.retrying.util.Strings.toStrings;
 
 public class RetryerPropertyRuleTest {
 
@@ -76,7 +77,28 @@ public class RetryerPropertyRuleTest {
 
         // Then
         assertThat(actual, is(rule));
-        verify(propertyManager).setProperty(INTERVAL_DURATION_PROPERTY, duration.toString());
+        verify(propertyManager).setProperty(INTERVAL_DURATIONS_PROPERTY, duration.toString());
+        verify(propertyManager).setProperty(INTERVAL_UNIT_PROPERTY, unit.name());
+    }
+
+    @Test
+    public void Can_build_property_rule_with_some_intervals() {
+
+        // Given
+        final Long duration1 = someLong();
+        final Long duration2 = someLong();
+        final Long duration3 = someLong();
+        final TimeUnit unit = someEnum(TimeUnit.class);
+
+        // When
+        final RetryerPropertyRule actual = rule.withIntervals(unit, duration1, duration2, duration3);
+
+        // Then
+        assertThat(actual, is(rule));
+        verify(propertyManager).setProperty(
+            INTERVAL_DURATIONS_PROPERTY,
+            concat(",", toStrings(duration1, duration2, duration3))
+        );
         verify(propertyManager).setProperty(INTERVAL_UNIT_PROPERTY, unit.name());
     }
 

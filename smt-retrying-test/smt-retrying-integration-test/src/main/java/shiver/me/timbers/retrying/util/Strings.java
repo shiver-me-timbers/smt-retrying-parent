@@ -16,6 +16,7 @@
 
 package shiver.me.timbers.retrying.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Strings {
@@ -34,5 +35,14 @@ public class Strings {
         return stringBuilder.append(strings.remove(0)).append(delimiter)
             .append(concat(new StringBuilder(), delimiter, strings))
             .toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> List<String> toStrings(T... objects) {
+        final List<String> strings = new ArrayList<>(objects.length);
+        for (Object object : objects) {
+            strings.add(object.toString());
+        }
+        return strings;
     }
 }

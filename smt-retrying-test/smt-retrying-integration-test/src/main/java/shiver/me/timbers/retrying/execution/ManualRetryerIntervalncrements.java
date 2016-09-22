@@ -12,18 +12,18 @@ public class ManualRetryerIntervalncrements<R extends Retryer, O extends Options
 
     private final int retries;
     private final TimeUnit unit;
-    private final Long[] increments;
+    private final Long[] durations;
 
-    public ManualRetryerIntervalncrements(int retries, TimeUnit unit, Long... increments) {
+    public ManualRetryerIntervalncrements(int retries, TimeUnit unit, Long... durations) {
         this.retries = retries;
         this.unit = unit;
-        this.increments = increments;
+        this.durations = durations;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T intervalIncrementsMethod(final Callable<T> callable) throws InterruptedException {
-        return retryer((O) options().withRetries(retries).withIntervals(unit, increments)).retry(new Until<T>() {
+        return retryer((O) options().withRetries(retries).withIntervals(unit, durations)).retry(new Until<T>() {
             @Override
             public T success() throws Throwable {
                 return callable.call();
