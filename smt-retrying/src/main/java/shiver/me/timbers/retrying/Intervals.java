@@ -1,5 +1,8 @@
 package shiver.me.timbers.retrying;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -8,6 +11,8 @@ import java.util.concurrent.TimeUnit;
  * @author Karl Bennett
  */
 class Intervals {
+
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     private final Iterator<Long> durations;
     private final TimeUnit unit;
@@ -20,9 +25,9 @@ class Intervals {
 
     void sleep() throws InterruptedException {
         if (durations.hasNext()) {
-            Thread.sleep(unit.toMillis(duration = durations.next()));
-            return;
+            duration = durations.next();
         }
+        log.debug("Sleeping for an interval of {} {}.", duration, unit.name());
         Thread.sleep(unit.toMillis(duration));
     }
 }
