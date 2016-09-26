@@ -28,9 +28,11 @@ import static java.util.Arrays.asList;
  * <p>
  * The {@code Options} can also be configured globally with the following properties.
  * <code>
- * smt.retryer.retries           # Integer
- * smt.retryer.interval.duration # Long
- * smt.retryer.interval.unit     # Name of one of the java.util.concurrent.TimeUnit enums
+ * smt.retryer.retries            # Integer
+ * smt.retryer.interval.durations # A comma separated list of numbers that represent the sequence of durations.
+ * smt.retryer.interval.unit      # Name of one of the java.util.concurrent.TimeUnit enums
+ * smt.retryer.includes           # A comma separated list of fully qualified exception class names.
+ * smt.retryer.excludes           # A comma separated list of fully qualified exception class names.
  * </code>
  *
  * @author Karl Bennett
@@ -66,11 +68,6 @@ public class Options implements OptionsService {
         return this;
     }
 
-    @Override
-    public Options withInterval(Long duration, TimeUnit unit) {
-        return withIntervals(unit, duration);
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public Options includes(Class<? extends Throwable>... includes) {
@@ -86,8 +83,8 @@ public class Options implements OptionsService {
     }
 
     @Override
-    public Options withIntervals(TimeUnit unit, Long... increments) {
-        this.interval = new Time(unit, increments);
+    public Options withIntervals(TimeUnit unit, Long... durations) {
+        this.interval = new Time(unit, durations);
         return this;
     }
 

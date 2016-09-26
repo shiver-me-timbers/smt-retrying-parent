@@ -28,8 +28,7 @@ public @interface Interval {
     /**
      * The number of {@link TimeUnit}s to wait. This can either be one or many values. When more than one value is
      * supplied the durations will be applied in order between each subsequent retry. If the number of retries exceeds
-     * the number of supplied durations then the last duration in the list will be reused for any remaining retry
-     * intervals.
+     * the number of supplied durations then the last duration in the list will be reused for any remaining retries.
      */
     long[] durations();
 

@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
@@ -118,7 +119,47 @@ public class AbstractPropertyChoicesTest {
     }
 
     @Test
-    public void Can_get_the_interval_property() {
+    public void Can_get_the_interval_property_with_a_single_duration() {
+
+        // Given
+        final Long duration = someLong();
+        final TimeUnit unit = someEnum(TimeUnit.class);
+
+        // When
+        final Time actual = new AbstractPropertyChoices() {
+            @Override
+            String getRetriesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getIntervalDurationProperty() {
+                return duration.toString();
+            }
+
+            @Override
+            String getIntervalUnitProperty() {
+                return unit.name();
+            }
+
+            @Override
+            String getIncludesProperty() {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            String getExcludesProperty() {
+                throw new UnsupportedOperationException();
+            }
+        }.getInterval();
+
+        // Then
+        assertThat(actual, hasField("durations", singletonList(duration)));
+        assertThat(actual, hasField("unit", unit));
+    }
+
+    @Test
+    public void Can_get_the_interval_property_with_multiple_durations() {
 
         // Given
         final Long duration1 = someLong();

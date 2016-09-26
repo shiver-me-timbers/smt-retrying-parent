@@ -20,5 +20,9 @@ package shiver.me.timbers.retrying;
  * @author Karl Bennett
  */
 interface RetryerService {
+
+    /**
+     * Retry the supplied code until it either succeeds or fails more than the set retry limit.
+     */
     <T> T retry(Until<T> until) throws InterruptedException;
 }

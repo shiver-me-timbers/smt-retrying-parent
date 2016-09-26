@@ -23,15 +23,28 @@ import java.util.concurrent.TimeUnit;
  */
 interface OptionsService {
 
+    /**
+     * Sets the number of times an execution should be retried.
+     */
     OptionsService withRetries(Integer retries);
 
-    OptionsService withInterval(Long duration, TimeUnit unit);
+    /**
+     * Sets a sequence of sleep time intervals that will be used in order for each subsequent retry. If there are more
+     * retries than durations then the last duration in the sequence will be used repeatedly.
+     */
+    OptionsService withIntervals(TimeUnit unit, Long... durations);
 
-    OptionsService withIntervals(TimeUnit unit, Long... increments);
-
+    /**
+     * Sets the throwables that should produce a retry, any other throwable produced by the executed code will cause an
+     * instant failure.
+     */
     @SuppressWarnings("unchecked")
     OptionsService includes(Class<? extends Throwable>... includes);
 
+    /**
+     * Sets the throwables that should never produce a retry, any other throwable produced by the executed code will
+     * cause a retry. This exclusion list takes precedence over the inclusion list.
+     */
     @SuppressWarnings("unchecked")
     OptionsService excludes(Class<? extends Throwable>... excludes);
 }

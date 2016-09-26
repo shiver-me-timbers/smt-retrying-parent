@@ -76,6 +76,12 @@ public class Retryer implements RetryerService {
             this.throwable = throwable;
         }
 
+        void throwIfNotSuppressed() {
+            if (!choice.isSuppressed(throwable)) {
+                throwRegisteredThrowable();
+            }
+        }
+
         <T> T throwRegisteredThrowable() {
             if (throwable instanceof Error) {
                 throw (Error) throwable;
@@ -86,12 +92,6 @@ public class Retryer implements RetryerService {
             }
 
             throw new RetriedTooManyTimesException(throwable);
-        }
-
-        void throwIfNotSuppressed() {
-            if (!choice.isSuppressed(throwable)) {
-                throwRegisteredThrowable();
-            }
         }
     }
 }

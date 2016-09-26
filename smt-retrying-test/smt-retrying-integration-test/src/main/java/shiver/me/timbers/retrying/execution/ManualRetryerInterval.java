@@ -37,7 +37,7 @@ public class ManualRetryerInterval<R extends Retryer, O extends Options> extends
     @SuppressWarnings("unchecked")
     @Override
     public <T> T intervalMethod(final Callable<T> callable) throws InterruptedException {
-        return retryer((O) options().withInterval(duration, unit)).retry(new Until<T>() {
+        return retryer((O) options().withIntervals(unit, duration)).retry(new Until<T>() {
             @Override
             public T success() throws Throwable {
                 return callable.call();

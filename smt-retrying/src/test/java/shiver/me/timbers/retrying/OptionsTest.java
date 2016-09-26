@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -61,21 +60,6 @@ public class OptionsTest {
 
         // Then
         assertThat(actual, hasField("retries", retries));
-    }
-
-    @Test
-    public void Can_set_the_interval_time_between_retries() {
-
-        // Given
-        final Long duration = someLong();
-        final TimeUnit unit = someEnum(TimeUnit.class);
-
-        // When
-        final OptionsService actual = options.withInterval(duration, unit);
-
-        // Then
-        assertThat(actual, hasProperty("interval.durations", singletonList(duration)));
-        assertThat(actual, hasProperty("interval.unit", unit));
     }
 
     @Test
