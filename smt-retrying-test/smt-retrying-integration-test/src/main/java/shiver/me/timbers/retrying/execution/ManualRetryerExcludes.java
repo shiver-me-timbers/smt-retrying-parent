@@ -22,6 +22,8 @@ import shiver.me.timbers.retrying.Until;
 
 import java.util.concurrent.Callable;
 
+import static shiver.me.timbers.retrying.util.IncludesExcludes.addExcludes;
+
 public class ManualRetryerExcludes<R extends Retryer, O extends Options> extends RetryerCreater<R, O>
     implements RetryerExcludes {
 

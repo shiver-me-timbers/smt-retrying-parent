@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import static shiver.me.timbers.retrying.util.IncludesExcludes.addExcludes;
+import static shiver.me.timbers.retrying.util.IncludesExcludes.addIncludes;
 
 public class ManualRetryerIncludeWithExclude<R extends Retryer, O extends Options> extends RetryerCreater<R, O>
     implements RetryerIncludes, RetryerExcludes {
