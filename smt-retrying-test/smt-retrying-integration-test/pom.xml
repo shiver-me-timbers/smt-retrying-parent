@@ -20,7 +20,7 @@
     <parent>
         <groupId>com.github.shiver-me-timbers</groupId>
         <artifactId>smt-retrying-test</artifactId>
-        <version>3.0</version>
+        <version>3.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>smt-retrying-integration-test</artifactId>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.github.shiver-me-timbers</groupId>
             <artifactId>smt-retrying</artifactId>
-            <version>3.0</version>
+            <version>3.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

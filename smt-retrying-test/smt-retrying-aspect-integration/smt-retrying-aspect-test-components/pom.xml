@@ -20,7 +20,7 @@
     <parent>
         <groupId>com.github.shiver-me-timbers</groupId>
         <artifactId>smt-retrying-aspect-integration</artifactId>
-        <version>3.0</version>
+        <version>3.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>smt-retrying-aspect-test-components</artifactId>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.github.shiver-me-timbers</groupId>
             <artifactId>smt-retrying-aspect-test-executions</artifactId>
-            <version>3.0</version>
+            <version>3.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
