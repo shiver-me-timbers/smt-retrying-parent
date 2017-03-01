@@ -26,7 +26,7 @@ public class ManualRetryerDefaults<R extends Retryer, O extends Options> extends
     implements RetryerDefaults {
 
     @Override
-    public <T> T defaultsMethod(final Callable<T> callable) throws Exception {
+    public <T> T defaultsMethod(final Callable<T> callable) throws Throwable {
         return retryer().retry(new Until<T>() {
             @Override
             public T success() throws Throwable {

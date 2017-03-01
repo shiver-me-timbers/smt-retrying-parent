@@ -20,5 +20,5 @@ import java.util.concurrent.Callable;
 
 public interface RetryerDefaults {
 
-    <T> T defaultsMethod(Callable<T> callable) throws Exception;
+    <T> T defaultsMethod(Callable<T> callable) throws Throwable;
 }

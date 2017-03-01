@@ -41,7 +41,7 @@ public abstract class AbstractITRetryerIncludesProperty extends AbstractITRetrye
     public RetryerIncludes includes(final int retries, final Throwable... includes) {
         return new RetryerIncludes() {
             @Override
-            public <T> T includeMethod(Callable<T> callable) throws Exception {
+            public <T> T includeMethod(Callable<T> callable) throws Throwable {
                 properties().setRetries(retries);
                 properties().setIncludes(includes);
                 return defaults().defaultsMethod(callable);

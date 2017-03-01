@@ -22,8 +22,6 @@ import shiver.me.timbers.retrying.Until;
 
 import java.util.concurrent.Callable;
 
-import static shiver.me.timbers.retrying.util.IncludesExcludes.addIncludes;
-
 /**
  * @author Karl Bennett
  */
@@ -40,7 +38,7 @@ public class ManualRetryerIncludes<R extends Retryer, O extends Options> extends
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T includeMethod(final Callable<T> callable) throws InterruptedException {
+    public <T> T includeMethod(final Callable<T> callable) throws Throwable {
         return retryer((O) addIncludes(options(), includes).withRetries(retries)).retry(new Until<T>() {
             @Override
             public T success() throws Throwable {

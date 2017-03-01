@@ -169,7 +169,7 @@ public class RetryerTest {
     }
 
     @Test
-    public void Can_throw_a_wrapped_checked_exception_for_a_failing_execution() throws Throwable {
+    public void Can_directly_throw_a_checked_exception_for_a_failing_execution() throws Throwable {
 
         final Options options = mock(Options.class);
         final Until until = mock(Until.class);
@@ -187,8 +187,7 @@ public class RetryerTest {
         given(choice.getIntervals()).willReturn(mock(Intervals.class));
         given(until.success()).willThrow(exception);
         given(choice.isSuppressed(exception)).willReturn(true);
-        expectedException.expect(RetriedTooManyTimesException.class);
-        expectedException.expectCause(is(exception));
+        expectedException.expect(is(exception));
 
         // When
         new Retryer(options).retry(until);

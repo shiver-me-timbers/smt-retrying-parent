@@ -52,7 +52,7 @@ public abstract class AbstractITRetryerIntervalIncrementsProperty extends Abstra
     public RetryerIntervalIncrements intervalIncrements(final int retries, final TimeUnit unit, final Long... durations) {
         return new RetryerIntervalIncrements() {
             @Override
-            public <T> T intervalIncrementsMethod(Callable<T> callable) throws Exception {
+            public <T> T intervalIncrementsMethod(Callable<T> callable) throws Throwable {
                 properties().setRetries(retries);
                 properties().setIntervals(unit, durations);
                 return defaults().defaultsMethod(callable);

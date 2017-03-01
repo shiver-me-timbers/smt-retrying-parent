@@ -47,7 +47,7 @@ public abstract class AbstractITRetryerIntervalProperty extends AbstractITRetrye
     public RetryerInterval interval(final Long duration, final TimeUnit unit) {
         return new RetryerInterval() {
             @Override
-            public <T> T intervalMethod(Callable<T> callable) throws Exception {
+            public <T> T intervalMethod(Callable<T> callable) throws Throwable {
                 properties().setInterval(duration, unit);
                 return defaults().defaultsMethod(callable);
             }

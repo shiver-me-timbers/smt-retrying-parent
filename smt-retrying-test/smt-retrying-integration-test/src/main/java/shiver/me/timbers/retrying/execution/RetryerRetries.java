@@ -20,5 +20,5 @@ import java.util.concurrent.Callable;
 
 public interface RetryerRetries {
 
-    <T> T retryMethod(Callable<T> callable) throws Exception;
+    <T> T retryMethod(Callable<T> callable) throws Throwable;
 }

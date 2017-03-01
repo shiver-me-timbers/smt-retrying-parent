@@ -29,16 +29,16 @@ public class PropertyIncludesWithExcludesRetryerExcludes implements RetryerInclu
     }
 
     @Override
-    public <T> T excludeMethod(Callable<T> callable) throws Exception {
+    public <T> T excludeMethod(Callable<T> callable) throws Throwable {
         return method(callable);
     }
 
     @Override
-    public <T> T includeMethod(Callable<T> callable) throws Exception {
+    public <T> T includeMethod(Callable<T> callable) throws Throwable {
         return method(callable);
     }
 
-    private <T> T method(Callable<T> callable) throws Exception {
+    private <T> T method(Callable<T> callable) throws Throwable {
         propertyRule.setRetries(retries);
         propertyRule.setIncludes(includes);
         propertyRule.setExcludes(excludes);

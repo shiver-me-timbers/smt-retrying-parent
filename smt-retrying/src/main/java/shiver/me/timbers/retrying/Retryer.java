@@ -37,7 +37,7 @@ public class Retryer implements RetryerService {
     }
 
     @Override
-    public <T> T retry(Until<T> until) throws InterruptedException {
+    public <T> T retry(Until<T> until) throws Throwable {
         final Choice choice = choices.choose();
 
         final int retries = choice.getRetries();
@@ -76,22 +76,14 @@ public class Retryer implements RetryerService {
             this.throwable = throwable;
         }
 
-        void throwIfNotSuppressed() {
+        void throwIfNotSuppressed() throws Throwable {
             if (!choice.isSuppressed(throwable)) {
                 throwRegisteredThrowable();
             }
         }
 
-        <T> T throwRegisteredThrowable() {
-            if (throwable instanceof Error) {
-                throw (Error) throwable;
-            }
-
-            if (throwable instanceof RuntimeException) {
-                throw (RuntimeException) throwable;
-            }
-
-            throw new RetriedTooManyTimesException(throwable);
+        <T> T throwRegisteredThrowable() throws Throwable {
+            throw throwable;
         }
     }
 }

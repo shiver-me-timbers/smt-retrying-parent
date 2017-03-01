@@ -33,7 +33,7 @@ public class ManualRetryerRetries<R extends Retryer, O extends Options> extends 
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T retryMethod(final Callable<T> callable) throws InterruptedException {
+    public <T> T retryMethod(final Callable<T> callable) throws Throwable {
         return retryer((O) options().withRetries(retries)).retry(new Until<T>() {
             @Override
             public T success() throws Throwable {

@@ -42,7 +42,7 @@ public abstract class AbstractITRetryerExcludesProperty extends AbstractITRetrye
     public RetryerExcludes excludes(final int retries, final Throwable... excludes) {
         return new RetryerExcludes() {
             @Override
-            public <T> T excludeMethod(Callable<T> callable) throws Exception {
+            public <T> T excludeMethod(Callable<T> callable) throws Throwable {
                 properties().setRetries(retries);
                 properties().setExcludes(excludes);
                 return defaults().defaultsMethod(callable);

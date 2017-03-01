@@ -20,5 +20,5 @@ import java.util.concurrent.Callable;
 
 public interface RetryerInterval {
 
-    <T> T intervalMethod(Callable<T> callable) throws Exception;
+    <T> T intervalMethod(Callable<T> callable) throws Throwable;
 }

@@ -67,7 +67,7 @@ public class RetryerAspect {
     }
 
     @Around("@annotation(retry) && isMethod()")
-    public Object retryOnMethod(ProceedingJoinPoint joinPoint, Retry retry) throws Exception {
+    public Object retryOnMethod(ProceedingJoinPoint joinPoint, Retry retry) throws Throwable {
         return retry(joinPoint, retry);
     }
 
@@ -76,7 +76,7 @@ public class RetryerAspect {
     }
 
     @SuppressWarnings("unchecked")
-    private Object retry(final ProceedingJoinPoint joinPoint, Retry retry) throws Exception {
+    private Object retry(final ProceedingJoinPoint joinPoint, Retry retry) throws Throwable {
         return retryerLoader.create(optionsLoader.create(retry)).retry(new Until() {
             @Override
             public Object success() throws Throwable {

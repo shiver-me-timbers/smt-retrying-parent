@@ -22,7 +22,7 @@ public class ManualRetryerIntervalncrements<R extends Retryer, O extends Options
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T intervalIncrementsMethod(final Callable<T> callable) throws InterruptedException {
+    public <T> T intervalIncrementsMethod(final Callable<T> callable) throws Throwable {
         return retryer((O) options().withRetries(retries).withIntervals(unit, durations)).retry(new Until<T>() {
             @Override
             public T success() throws Throwable {

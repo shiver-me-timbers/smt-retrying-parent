@@ -39,7 +39,7 @@ public abstract class AbstractITRetryerRetriesProperty extends AbstractITRetryer
     public RetryerRetries retries(final int retries) {
         return new RetryerRetries() {
             @Override
-            public <T> T retryMethod(Callable<T> callable) throws Exception {
+            public <T> T retryMethod(Callable<T> callable) throws Throwable {
                 properties().setRetries(retries);
                 return defaults().defaultsMethod(callable);
             }

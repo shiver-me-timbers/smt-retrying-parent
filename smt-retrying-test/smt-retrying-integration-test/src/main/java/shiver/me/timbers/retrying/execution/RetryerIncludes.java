@@ -20,5 +20,5 @@ import java.util.concurrent.Callable;
 
 public interface RetryerIncludes {
 
-    <T> T includeMethod(Callable<T> callable) throws Exception;
+    <T> T includeMethod(Callable<T> callable) throws Throwable;
 }

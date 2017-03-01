@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import static shiver.me.timbers.retrying.util.IncludesExcludes.addExcludes;
-import static shiver.me.timbers.retrying.util.IncludesExcludes.addIncludes;
 
 public class ManualRetryerIncludeWithExclude<R extends Retryer, O extends Options> extends RetryerCreater<R, O>
     implements RetryerIncludes, RetryerExcludes {
@@ -40,17 +39,17 @@ public class ManualRetryerIncludeWithExclude<R extends Retryer, O extends Option
     }
 
     @Override
-    public <T> T excludeMethod(final Callable<T> callable) throws InterruptedException {
+    public <T> T excludeMethod(final Callable<T> callable) throws Throwable {
         return method(callable);
     }
 
     @Override
-    public <T> T includeMethod(Callable<T> callable) throws Exception {
+    public <T> T includeMethod(Callable<T> callable) throws Throwable {
         return method(callable);
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T method(final Callable<T> callable) throws InterruptedException {
+    private <T> T method(final Callable<T> callable) throws Throwable {
         return retryer((O) addExcludes(addIncludes(options(), includes), excludes).withRetries(retries))
             .retry(new Until<T>() {
                 @Override
